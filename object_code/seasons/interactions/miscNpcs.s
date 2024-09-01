@@ -28,7 +28,7 @@ interactionCode3a:
 interactionCode3c:
 interactionCode3d:
 interactionCode3f:
-	ld e,$44
+	ld e,Interaction.state;$44
 	ld a,(de)
 	rst_jumpTable
 	.dw miscNPC_state0
@@ -37,15 +37,39 @@ miscNPC_state0:
 	ld a,$01
 	ld (de),a
 	ld h,d
-	ld l,$42
+	ld l,Interaction.subid;$42
 	ldi a,(hl)
 	bit 7,a
 	jr z,+
 	; bit 7 in subid checked for in state1
-	ldd (hl),a
+	ldd (hl),a ;[var03]
 	and $7f
 	ld (hl),a
 +
+	and $40 ;bits 5 or 6
+	jr z,@noDayNightCheck
+	; if bit 6 set, then delete at night
+	; or day, depending on inside or outside
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_OUTDOORS ;$01
+	ld b,a
+	ld a,(wTimeOfDay)
+	and TIME_NIGHT ;02
+	or b
+; $00 if day and indoors
+; $01 if day and outdoors
+; $02 if night and indoors
+; $03 if night and outdoors
+	cpa $00
+	jp z,interactionDelete
+	cpa $03
+	jp z,interactionDelete
+
+	ld l,Interaction.subid
+	ld a,(hl)
+	and $3f
+	ld (hl),a
+@noDayNightCheck:
 	call checkHoronVillageNPCShouldBeSeen
 	jr nz,+
 	jp nc,interactionDelete
@@ -53,37 +77,37 @@ miscNPC_state0:
 +
 	call getSunkenCityNPCVisibleSubId
 	jr nz,+++
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	cp b
 	jp nz,interactionDelete
 ++
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,b
 	ld (de),a
 +++
 	call interactionInitGraphics
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	cp INTERAC_MAYORS_HOUSE_NPC
 	jr nz,+
 	call checkMayorsHouseNPCshouldBeSeen
 	jp z,interactionDelete
 +
-	sub $24
+	sub INTERAC_MAYORS_HOUSE_NPC;$24
 	ld hl,miscNPC_scriptTable
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
 	call interactionSetScript
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	cp INTERAC_DUNGEON_WISE_OLD_MAN
 	jp z,dungeonWiseOldMan_textLookup
@@ -91,14 +115,14 @@ miscNPC_state0:
 	jp z,mrWrite_spawnLightableTorch
 	cp INTERAC_BATHING_SUBROSIANS
 	call z,func_572c
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	cp INTERAC_MASTER_DIVERS_SON
 	call z,func_572c
 func_5723:
 	xor a
 	ld h,d
-	ld l,$78
+	ld l,Interaction.var38;$78
 	ldi (hl),a
 	ld (hl),a
 	jp interactionAnimateAsNpc
@@ -109,22 +133,22 @@ func_572c:
 
 mrWrite_spawnLightableTorch:
 	call getThisRoomFlags
-	and $40
+	and ROOMFLAG_40;$40
 	jr z,+
 	jp func_5723
 +
 	call getFreePartSlot
 	jr nz,+
 	ld (hl),PART_LIGHTABLE_TORCH
-	ld l,$cb
+	ld l,Part.yh;$cb
 	ld (hl),$38
-	ld l,$cd
+	ld l,Part.xh;$cd
 	ld (hl),$68
 +
 	jp func_5723
 
 dungeonWiseOldMan_textLookup:
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	or a
 	jr nz,@ret
@@ -154,18 +178,18 @@ dungeonWiseOldMan_textLookup:
 checkMayorsHouseNPCshouldBeSeen:
 	; mayor disappears if unlinked game beat
 	; or seen villagers, but not zelda kidnapped
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	ld b,a
-	call checkIsLinkedGame
-	jr z,@unlinked
-	ld a,GLOBALFLAG_ZELDA_VILLAGERS_SEEN
-	call checkGlobalFlag
-	jr z,@xor01IfMayorElsexorA
-	ld a,GLOBALFLAG_ZELDA_KIDNAPPED_SEEN
-	call checkGlobalFlag
-	jr z,@xorARet
-	jr @xor01IfMayorElsexorA
+	;call checkIsLinkedGame
+	;jr z,@unlinked
+	;ld a,GLOBALFLAG_ZELDA_VILLAGERS_SEEN
+	;call checkGlobalFlag
+	;jr z,@xor01IfMayorElsexorA
+	;ld a,GLOBALFLAG_ZELDA_KIDNAPPED_SEEN
+	;call checkGlobalFlag
+	;jr z,@xorARet
+	;jr @xor01IfMayorElsexorA
 @unlinked:
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
@@ -180,7 +204,7 @@ checkMayorsHouseNPCshouldBeSeen:
 	cp $03
 	jr z,@xorARet
 @xor01:
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	xor $01
 	ret
@@ -190,14 +214,14 @@ checkMayorsHouseNPCshouldBeSeen:
 
 miscNPC_state1:
 	call interactionRunScript
-	ld e,$43
+	ld e,Interaction.var03;$43
 	ld a,(de)
 	and $80
 	jp nz,interactionAnimateAsNpc
 	jp npcFaceLinkAndAnimate
 
 checkHoronVillageNPCShouldBeSeen:
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	ld b,$00
 	cp INTERAC_FICKLE_LADY
@@ -205,7 +229,7 @@ checkHoronVillageNPCShouldBeSeen:
 	inc b
 	cp INTERAC_FICKLE_MAN
 	jr nz,checkHoronVillageNPCShouldBeSeen_body
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	cp $06
 	jr nz,checkHoronVillageNPCShouldBeSeen_body@main
@@ -218,10 +242,10 @@ checkHoronVillageNPCShouldBeSeen:
 checkHoronVillageNPCShouldBeSeen_body:
 	; non interactioncode2d/37 - b = $01
 	inc b
-	cp $3c
+	cp INTERAC_OLD_LADY_FARMER;$3c
 	jr z,@main
 	inc b
-	cp $3d
+	cp INTERAC_FOUNTAIN_OLD_MAN;$3d
 	ret nz
 
 ; This label is used directly in a number of places.
@@ -241,7 +265,7 @@ checkHoronVillageNPCShouldBeSeen_body:
 	push hl
 	call checkNPCStage
 	pop hl
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -271,7 +295,59 @@ checkHoronVillageNPCShouldBeSeen_body:
 ;			$02 if at least 1st essence gotten
 ;			$01 if no essences, but met maku tree
 ;			$00 if no essences, and not met maku tree
+
+; @param[out]	b	$0c if game finished
+;			$0b if have boss key
+;			$0a if have cape
+;			$09 if have X jewel
+;			$08 if have L-2 sword
+;			$07 if have flippers
+;			$06 if have pyramid jewel
+;			$05 if have treasure map
+;			$04 if have shovel
+;			$03 if have round jewel
+;			$02 if have key
+;			$01 if have satchel
+;			$00 if have nothing/sword
+
 checkNPCStage:
+	ld a,GLOBALFLAG_FINISHEDGAME
+	call checkGlobalFlag
+	ld b,$0c
+	jr nz,@done
+	dec b
+	ld hl,@treasuresObtained
+--
+	ldi a,(hl)
+	call checkTreasureObtained
+	jr c,@done
+-
+	dec b
+	jr z,@done
+
+	ld a,$09
+	cp b
+	jr nz,--
+
+; check Sword
+	ld a,(wSwordLevel)
+	cp $02
+	jr c,-
+
+@done:
+	ld a,b ; temp
+	ld (wSecond-1),a ; temp
+	xor a
+	ret
+
+@treasuresObtained:
+	.db TREASURE_BOSS_KEY, TREASURE_FEATHER
+	.db TREASURE_X_SHAPED_JEWEL, TREASURE_FLIPPERS
+	.db TREASURE_PYRAMID_JEWEL, TREASURE_TREASURE_MAP
+	.db TREASURE_SHOVEL, TREASURE_ROUND_JEWEL,
+	.db TREASURE_GNARLED_KEY, TREASURE_SEED_SATCHEL, TREASURE_NONE
+
+/*
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	ld b,$0a
@@ -296,6 +372,7 @@ checkNPCStage:
 	ld c,a
 	call checkIsLinkedGame
 	jr nz,@linkedGameCheck
+*/
 @regularCheck:
 	ld a,c
 	ld b,$05
@@ -311,6 +388,7 @@ checkNPCStage:
 	ret nc
 	dec b
 	ret
+
 @linkedGameCheck:
 	ld a,GLOBALFLAG_ZELDA_KIDNAPPED_SEEN
 	call checkGlobalFlag
@@ -346,8 +424,17 @@ checkNPCStage:
 ;			$01 if 4th essence gotten
 ;			$00 if none of the above
 ;			$ff if not interaction $36 or $39
+
+;;
+; @param[out]	zflag	nz if not interactioncode36/39
+; @param[out]	b	$04 if game finished
+;			$03 if have cape
+;			$02 if have flippers
+;			$01 if have gnarled root key
+;			$00 if none of the above
+;			$ff if not interaction $36 or $39
 getSunkenCityNPCVisibleSubId:
-	ld e,$41
+	ld e,Interaction.id;$41
 	ld a,(de)
 	cp INTERAC_MASTER_DIVERS_SON
 	jr z,@main
@@ -358,6 +445,25 @@ getSunkenCityNPCVisibleSubId:
 
 ; This label is used directly in a number of places.
 @main:
+	ld hl,@treasuresObtained
+	ld b,$04
+-
+	ldi a,(hl)
+	call checkTreasureObtained
+	jr c,@xorARet
+	dec b
+	jr nz,-
+
+@xorARet:
+	ld a,b ; temp
+	ld (wSecond-2),a ;temp
+	xor a
+	ret
+
+@treasuresObtained:
+	.db TREASURE_FEATHER, TREASURE_FLIPPERS
+	.db TREASURE_GNARLED_KEY TREASURE_NONE
+/*
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	ld b,$04
@@ -387,6 +493,7 @@ getSunkenCityNPCVisibleSubId:
 @xorARet:
 	xor a
 	ret
+*/
 
 conditionalHoronNPCLookupTable:
 	.dw @fickleLady
@@ -419,7 +526,7 @@ conditionalHoronNPCLookupTable:
 @@subid5:
 	.db $09 $00
 @@subid6:
-	.db $0b $00
+	.db $0b $0c $0d $00
 
 @fickleMan:
 	.dw @@subid0
@@ -427,19 +534,21 @@ conditionalHoronNPCLookupTable:
 	.dw @@subid2
 	.dw @@subid3
 	.dw @@subid4
-	.dw @@subid5
+	;.dw @@subid5
 @@subid0:
-	.db $01 $02 $0b $00
+	.db $01 $09 $0a $00
 @@subid1:
-	.db $03 $00
-@@subid2:
 	.db $04 $00
+@@subid2:
+	.db $06 $08 $0c $00
 @@subid3:
-	.db $0a $00
+	.db $02 $03 $07 $0d $00
 @@subid4:
-	.db $05 $00
+	.db $05 $0b $00
+/*
 @@subid5:
 	.db $06 $07 $08 $09 $00
+*/
 
 @oldLadyFarmer:
 @fountainOldMan:
@@ -448,7 +557,7 @@ conditionalHoronNPCLookupTable:
 
 @@subid0:
 	.db $01 $02 $03 $04 $0a $05 $06 $07
-	.db $08 $09 $0b $00
+	.db $08 $09 $0b $0c $0d $00
 
 @horonVillageBoy:
 	.dw @@table_590a
@@ -463,10 +572,10 @@ conditionalHoronNPCLookupTable:
 	.db $03 $04 $0a $05 $06 $0b $00
 
 @@table_5914:
-	.db $07 $08 $00
+	.db $07 $08 $0d $00
 
 @@table_5917:
-	.db $09 $00
+	.db $09 $0c $00
 
 @boyWithDog:
 	.dw @@table_5923
@@ -482,7 +591,7 @@ conditionalHoronNPCLookupTable:
 	.db $04 $00
 
 @@table_5929:
-	.db $0a $00
+	.db $0a $0c $0d $00
 
 @@table_592b:
 	.db $05 $06 $0b $00
@@ -491,22 +600,22 @@ conditionalHoronNPCLookupTable:
 	.db $07 $08 $09 $00
 
 @otherOldMan:
-	.dw @@table_593b
-	.dw @@table_5941
-	.dw @@table_5943
-	.dw @@table_5948
+	.dw @@subid00;table_593b
+	.dw @@subid01;table_5941
+	.dw @@subid02;table_5943
+	.dw @@subid03;table_5948
 
-@@table_593b:
+@@subid00:;table_593b:
 	.db $01 $02 $03 $04 $0a $00
 
-@@table_5941:
+@@subid01:;table_5941:
 	.db $05 $00
 
-@@table_5943:
-	.db $06 $07 $08 $09 $00
+@@subid02:;table_5943:
+	.db $06 $07 $0c $00
 
-@@table_5948:
-	.db $0b $00
+@@subid03:;table_5948:
+	.db $08 $09 $0b $0d $00
 
 miscNPC_scriptTable:
 	.dw @mayorsHouseScripts
@@ -552,17 +661,20 @@ miscNPC_scriptTable:
 	.dw mainScripts.mrWriteScript
 
 @fickleLadyScripts:
-	.dw mainScripts.fickleLadyScript_text1
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text3
-	.dw mainScripts.fickleLadyScript_text4
-	.dw mainScripts.fickleLadyScript_text5
-	.dw mainScripts.fickleLadyScript_text5
-	.dw mainScripts.fickleLadyScript_text6
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text7
+	.dw mainScripts.fickleLadyScript_welcome ;$00
+	.dw mainScripts.fickleLadyScript_monsters ;$01
+	.dw mainScripts.fickleLadyScript_monsters ;$02
+	.dw mainScripts.fickleLadyScript_nightTerrors ;$03
+	.dw mainScripts.fickleLadyScript_membersCard ;$04
+	.dw mainScripts.fickleLadyScript_membersCard ;$05 
+	.dw mainScripts.fickleLadyScript_worldPeace ;$06
+	.dw mainScripts.fickleLadyScript_strongMan ;$07
+	.dw mainScripts.fickleLadyScript_EeeLink ;$08
+	.dw mainScripts.fickleLadyScript_strongMan ;$09
+	.dw mainScripts.fickleLadyScript_EeeLink ;$0a 
+	.dw mainScripts.fickleLadyScript_EeeLink ;$0b
+	.dw mainScripts.fickleLadyScript_gameBeat ;$0c
+
 
 @malonScripts:
 	.dw mainScripts.malonScript
@@ -576,61 +688,73 @@ miscNPC_scriptTable:
 	.dw mainScripts.bathingSubrosianScript_stub
 
 @masterDiversSonScripts:
-	.dw mainScripts.masterDiversSonScript
-	.dw mainScripts.masterDiversSonScript_4thEssenceGotten
-	.dw mainScripts.masterDiversSonScript_8thEssenceGotten
-	.dw mainScripts.masterDiversSonScript_ZeldaKidnapped
+	.dw mainScripts.masterDiversSonScript			
+	.dw mainScripts.masterDiversSonScript_haveKey;4thEssenceGotten
+	.dw mainScripts.masterDiversSonScript_haveFlippers;8thEssenceGotten
+	.dw mainScripts.masterDiversSonScript_haveCape;ZeldaKidnapped
 	.dw mainScripts.masterDiversSonScript_gameFinished
 
 @fickleManScripts:
-	.dw mainScripts.ficklManScript_text1
-	.dw mainScripts.ficklManScript_text1
-	.dw mainScripts.ficklManScript_text2
-	.dw mainScripts.ficklManScript_text4
-	.dw mainScripts.ficklManScript_text5
-	.dw mainScripts.ficklManScript_text6
-	.dw mainScripts.ficklManScript_text7
-	.dw mainScripts.ficklManScript_text7
-	.dw mainScripts.ficklManScript_text8
-	.dw mainScripts.ficklManScript_text3
-	.dw mainScripts.ficklManScript_text9
-	.dw mainScripts.ficklManScript_textA
+	.dw mainScripts.ficklManScript_gateHit ;$00
+	.dw mainScripts.ficklManScript_galeSeeds ;$01
+	.dw mainScripts.ficklManScript_flowers ;$02
+	.dw mainScripts.ficklManScript_shovelBeach ;$03
+	.dw mainScripts.ficklManScript_shovelBeach ;$04
+	.dw mainScripts.ficklManScript_mapBeach ;$05
+	.dw mainScripts.ficklManScript_jewelGeneral ;$06
+	.dw mainScripts.ficklManScript_flippers ;$07
+	.dw mainScripts.ficklManScript_L2Sword ;$08
+	.dw mainScripts.ficklManScript_jewelGeneral ;$09
+	.dw mainScripts.ficklManScript_cape ;$0a
+	.dw mainScripts.ficklManScript_bossKey ;$0b
+	.dw mainScripts.ficklManScript_gameBeat ;$0c
+	;.dw mainScripts.ficklManScript_textA
 
 @dungeonWiseOldManScripts:
 	.dw mainScripts.dungeonWiseOldManScript
 
 @sunkenCityTreasureHunterScripts:
-	.dw mainScripts.treasureHunterScript_text1
-	.dw mainScripts.treasureHunterScript_text2
-	.dw mainScripts.treasureHunterScript_text3
-	.dw mainScripts.treasureHunterScript_text4
-	.dw mainScripts.treasureHunterScript_text3
+	.dw mainScripts.treasureHunterScript_givePyramidJewel ;$00
+	.dw mainScripts.treasureHunterScript_givePyramidJewel ;$01
+	.dw mainScripts.treasureHunterScript_givePyramidJewel ;$02
+	.dw mainScripts.treasureHunterScript_text1 ;$03
+	.dw mainScripts.treasureHunterScript_text2 ;$04
+
+	;.dw mainScripts.treasureHunterScript_text1
+	;.dw mainScripts.treasureHunterScript_text2
+	;.dw mainScripts.treasureHunterScript_text3
+	;.dw mainScripts.treasureHunterScript_text4
+	;.dw mainScripts.treasureHunterScript_text3
 
 @villageFarmerScripts:
-	.dw mainScripts.oldLadyFarmerScript_text1
-	.dw mainScripts.oldLadyFarmerScript_text1
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text3
-	.dw mainScripts.oldLadyFarmerScript_text4
-	.dw mainScripts.oldLadyFarmerScript_text5
-	.dw mainScripts.oldLadyFarmerScript_text5
-	.dw mainScripts.oldLadyFarmerScript_text6
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text7
+	.dw mainScripts.oldLadyFarmerScript_text1 ;$00
+	.dw mainScripts.oldLadyFarmerScript_text1 ;$01
+	.dw mainScripts.oldLadyFarmerScript_text2 ;$02
+	.dw mainScripts.oldLadyFarmerScript_text2 ;$03
+	.dw mainScripts.oldLadyFarmerScript_text3 ;$04
+	.dw mainScripts.oldLadyFarmerScript_text2 ;$05
+	.dw mainScripts.oldLadyFarmerScript_text4 ;$06
+	.dw mainScripts.oldLadyFarmerScript_text4 ;$07
+	.dw mainScripts.oldLadyFarmerScript_text5 ;$08
+	.dw mainScripts.oldLadyFarmerScript_text5 ;$09
+	.dw mainScripts.oldLadyFarmerScript_text6 ;$0a
+	.dw mainScripts.oldLadyFarmerScript_text8 ;$0b
+	.dw mainScripts.oldLadyFarmerScript_text7 ;$0c
 
 @villageFountainManScripts:
-	.dw mainScripts.fountainOldManScript_text1
-	.dw mainScripts.fountainOldManScript_text2
-	.dw mainScripts.fountainOldManScript_text3
-	.dw mainScripts.fountainOldManScript_text4
-	.dw mainScripts.fountainOldManScript_text6
-	.dw mainScripts.fountainOldManScript_text7
-	.dw mainScripts.fountainOldManScript_text8
-	.dw mainScripts.fountainOldManScript_text8
-	.dw mainScripts.fountainOldManScript_text9
-	.dw mainScripts.fountainOldManScript_text5
-	.dw mainScripts.fountainOldManScript_textA
+	.dw mainScripts.fountainOldManScript_herosCave ;$00
+	.dw mainScripts.fountainOldManScript_gnarledRoot ;$01
+	.dw mainScripts.fountainOldManScript_gnarledRoot ;$02
+	.dw mainScripts.fountainOldManScript_shovelBeach ;$03
+	.dw mainScripts.fountainOldManScript_shovelBeach ;$04
+	.dw mainScripts.fountainOldManScript_gate ;$05
+	.dw mainScripts.fountainOldManScript_evilByTree ;$06
+	.dw mainScripts.fountainOldManScript_tower ;$07
+	.dw mainScripts.fountainOldManScript_L2Sword ;$08
+	.dw mainScripts.fountainOldManScript_worried ;$09
+	.dw mainScripts.fountainOldManScript_worried ;$0a
+	.dw mainScripts.fountainOldManScript_rudeToLink ;$0b
+	.dw mainScripts.fountainOldManScript_gameBeat ;$0c
 
 @tickTockScripts:
 	.dw mainScripts.tickTockScript

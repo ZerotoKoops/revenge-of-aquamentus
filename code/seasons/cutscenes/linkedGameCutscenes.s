@@ -4,26 +4,32 @@
 ;;
 ; CUTSCENE_S_FLAME_OF_DESTRUCTION
 flameOfDestructionCutsceneBody:
+/*
 	ld a,(wCutsceneState)
 	rst_jumpTable
 	.dw bank3Cutscene_state0
 	.dw flameOfDestructionCutscene_state1
+*/
 
 ;;
 ; CUTSCENE_S_ZELDA_VILLAGERS
 zeldaAndVillagersCutsceneBody:
+/*
 	ld a,(wCutsceneState)
 	rst_jumpTable
 	.dw bank3Cutscene_state0
 	.dw zeldaAndVillagersCutscene_state1
+*/
 
 ;;
 ; CUTSCENE_S_ZELDA_KIDNAPPED
 zeldaKidnappedCutsceneBody:
+/*
 	ld a,(wCutsceneState)
 	rst_jumpTable
 	.dw bank3Cutscene_state0
 	.dw zeldaKidnappedCutscene_state1
+*/
 
 bank3Cutscene_state0:
 	ld b,$10
@@ -39,6 +45,7 @@ bank3Cutscene_state0:
 	ret
 
 flameOfDestructionCutscene_state1:
+/*
 	ld a,(wGenericCutscene.cbb3)
 	rst_jumpTable
 	.dw @fadeToBlack
@@ -197,9 +204,10 @@ flameOfDestructionCutscene_state1:
 @warpDest:
 	; d5 overworld entrance
 	m_HardcodedWarpA ROOM_SEASONS_08a, $00, $25, $83
-
+*/
 
 zeldaAndVillagersCutscene_state1:
+/*
 	ld a,(wGenericCutscene.cbb3)
 	rst_jumpTable
 	.dw @start
@@ -284,17 +292,20 @@ zeldaAndVillagersCutscene_state1:
 @warpDest:
 	; first room of d8
 	m_HardcodedWarpA ROOM_SEASONS_587, $93 $ff $01
-
+*/
 
 zeldaKidnappedCutscene_state1:
+/*
 	call zeldaKidnappedCutscene_state1Handler
 	ld hl,wGenericCutscene.cbb3
 	ld a,(hl)
 	cp $10
 	jp c,updateStatusBar
 	ret
+*/
 
 zeldaKidnappedCutscene_state1Handler:
+/*
 	ld a,(wGenericCutscene.cbb3)
 	rst_jumpTable
 	.dw @startByFadingOut
@@ -531,9 +542,10 @@ zeldaKidnappedCutscene_state1Handler:
 @warpDest:
     ; 1st screen on path to Onox?
 	.db $c0 $23 $00 $45 $83
-
+*/
 
 zeldaKidnappedFlashFadeoutToWhite:
+/*
 	ld a,(wGenericCutscene.cbb4)
 	rst_jumpTable
 	.dw @func0
@@ -568,7 +580,7 @@ zeldaKidnappedFlashFadeoutToWhite:
 	jr -
 @func5:
 	jp waitUntilFadeIsDone
-
+*/
 showCutscene50xxText:
 	ld b,$50
 	call showText

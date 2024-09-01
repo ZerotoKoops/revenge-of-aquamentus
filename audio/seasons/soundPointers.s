@@ -9,7 +9,8 @@ soundPointers:
 	/* 0x05 */ m_soundPointer musTarmRuins
 	/* 0x06 */ m_soundPointer musEssence
 	/* 0x07 */ m_soundPointer musUnused1
-	/* 0x08 */ m_soundPointer musCarnival
+	/* 0x08 */ ;m_soundPointer musCarnival
+				m_soundPointer musBellaCiaoShort2
 	/* 0x09 */ m_soundPointer musGameover
 	/* 0x0a */ m_soundPointer musHoronVillage
 	/* 0x0b */ m_soundPointer musHideAndSeek
@@ -20,14 +21,15 @@ soundPointers:
 	/* 0x10 */ m_soundPointer musGetEssence
 	/* 0x11 */ m_soundPointer musFileSelect
 	/* 0x12 */ m_soundPointer musHerosCave
-	/* 0x13 */ m_soundPointer musGnarledRootDungeon
-	/* 0x14 */ m_soundPointer musSnakesRemains
-	/* 0x15 */ m_soundPointer musPoisonMothsLair
-	/* 0x16 */ m_soundPointer musDancingDragonDungeon
-	/* 0x17 */ m_soundPointer musUnicornsCave
-	/* 0x18 */ m_soundPointer musAncientRuins
-	/* 0x19 */ m_soundPointer musExplorersCrypt
-	/* 0x1a */ m_soundPointer musSwordAndShieldMaze
+	/* 0x13 */ m_soundPointer musNone;musGnarledRootDungeon
+	/* 0x14 */ ;m_soundPointer musSnakesRemains
+			   m_soundPointer musRuberoPerTe
+	/* 0x15 */ m_soundPointer musNone;musPoisonMothsLair
+	/* 0x16 */ m_soundPointer musNone;musDancingDragonDungeon
+	/* 0x17 */ m_soundPointer musNone;musUnicornsCave
+	/* 0x18 */ m_soundPointer musNone;musAncientRuins
+	/* 0x19 */ m_soundPointer musNone;musExplorersCrypt
+	/* 0x1a */ m_soundPointer musNone;musSwordAndShieldMaze
 	/* 0x1b */ m_soundPointer musFinalDungeon
 	/* 0x1c */ m_soundPointer musOnoxCastle
 	/* 0x1d */ m_soundPointer musRoomOfRites
@@ -198,37 +200,39 @@ soundPointers:
 	/* 0xc1 */ m_soundPointer sndRestore
 	/* 0xc2 */ m_soundPointer sndFloodgates
 	/* 0xc3 */ m_soundPointer sndRicky
-	/* 0xc4 */ m_soundPointer sndDimitri
-	/* 0xc5 */ m_soundPointer sndMoosh
-	/* 0xc6 */ m_soundPointer sndDekuScrub
-	/* 0xc7 */ m_soundPointer sndGoron
-	/* 0xc8 */ m_soundPointer sndDing
-	/* 0xc9 */ m_soundPointer sndCircling
-	/* 0xca */ m_soundPointer sndDanceMove
-	/* 0xcb */ m_soundPointer sndSeedShooter
-	/* 0xcc */ m_soundPointer sndWhistle
-	/* 0xcd */ m_soundPointer sndGoronDanceB
-	/* 0xce */ m_soundPointer sndMakuTreePast
-	/* 0xcf */ m_soundPointer sndCreepyLaugh
-	/* 0xd0 */ m_soundPointer sndPirateBell
-	/* 0xd1 */ m_soundPointer sndUnknownd1
-	/* 0xd2 */ m_soundPointer sndLightning
-	/* 0xd3 */ m_soundPointer sndWind
-	/* 0xd4 */ m_soundPointer sndd4
-	/* 0xd5 */ m_soundPointer sndd5
-	/* 0xd6 */ m_soundPointer sndd6
-	/* 0xd7 */ m_soundPointer sndd7
-	/* 0xd8 */ m_soundPointer sndd8
-	/* 0xd9 */ m_soundPointer sndd9
-	/* 0xda */ m_soundPointer sndda
-	/* 0xdb */ m_soundPointer snddb
-	/* 0xdc */ m_soundPointer snddc
-	/* 0xdd */ m_soundPointer snddd
+	/* 0xc4 */ ;m_soundPointer sndDimitri
+	/* 0xc5 */ m_soundPointer sndMoosh ;$c4
+	/* 0xc6 */ m_soundPointer sndDekuScrub ;$c5
+	/* 0xc7 */ m_soundPointer sndGoron ;$c6
+	/* 0xc8 */ m_soundPointer sndDing ;$c7
+	/* 0xc9 */ m_soundPointer sndCircling ;$c8
+	/* 0xca */ m_soundPointer sndDanceMove ;$c9
+	/* 0xcb */ m_soundPointer sndSeedShooter ;$ca
+	/* 0xcc */ m_soundPointer sndWhistle ;$cb
+	/* 0xcd */ m_soundPointer sndGoronDanceB ;$cc
+	/* 0xce */ m_soundPointer sndMakuTreePast ;$cd
+	/* 0xcf */ m_soundPointer sndCreepyLaugh ;$ce
+	/* 0xd0 */ m_soundPointer sndPirateBell ;$cf
+	/* 0xd1 */ ;m_soundPointer sndUnknownd1
+	/* 0xd2 */ m_soundPointer sndLightning ;$d0
+	/* 0xd3 */ m_soundPointer sndWind ; $d1
+	/* 0xd4 */ ;m_soundPointer sndd4
 	/* 0xde */ m_soundPointer sndde
+	/* 0xd5 */ ;m_soundPointer sndd5
+	/* 0xd6 */ ;m_soundPointer sndd6
+	/* 0xd7 */ ;m_soundPointer sndd7
+	/* 0xd8 */ ;m_soundPointer sndd8
+	/* 0xd9 */ ;m_soundPointer sndd9
+	/* 0xda */ ;m_soundPointer sndda
+	/* 0xdb */ ;m_soundPointer snddb
+	/* 0xdc */ ;m_soundPointer snddc
+	/* 0xdd */ ;m_soundPointer snddd
+	/* 0xde */ ;m_soundPointer sndde
 
 
 ; This should really be located in "soundChannelPointers.s" but it's positioned differently for
 ; some reason.
+/*
 sndde:
 	.db $00
 	.dw snddeChannel0
@@ -252,3 +256,4 @@ sndde:
 	.dw $5a86
 	.db $ff
 .endif
+*/

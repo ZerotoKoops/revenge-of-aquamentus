@@ -235,4 +235,5 @@ interactionCode12:
 	ret
 @@state2:
 	jp interactionDelete
+
 .endif

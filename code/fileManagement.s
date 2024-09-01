@@ -43,6 +43,9 @@ initializeFile:
 	ld a,$ff
 	call fillMemory
 
+	; Set clock
+	call initializeClockVars
+
 	; If hero game, give victory ring
 	ld a,c
 	cp $02
@@ -136,6 +139,21 @@ eraseFile:
 	xor a
 	ld ($1111),a
 	ret
+
+
+outOfTimeVariables:
+	ld hl,respawnData
+	call initializeFileVariables
+
+initializeClockVars:
+	; Set clock
+	ld b,$05
+	ld hl,wSecond
+	ld de,initialClockVars
+	call copyMemoryReverse
+	ld b,$08
+; hl == wTimeFlags
+	jp clearMemory
 
 ;;
 ; Clear $0550 bytes at hl
@@ -365,6 +383,7 @@ initialFileVariables:
 	; Initial spawn location
 	.db <wDeathRespawnBuffer.group,		$00
 	.db <wDeathRespawnBuffer.room,		$8a
+	.db <wDeathRespawnBuffer.stateModifier, $01
 	.db <wDeathRespawnBuffer.y,		$38
 	.db <wDeathRespawnBuffer.x,		$48
 	.db <wDeathRespawnBuffer.facingDir,	$00
@@ -377,13 +396,20 @@ initialFileVariables:
 	.db <wPirateShipAngle,			$02
 .else ;ROM_SEASONS
 	; Initial spawn location
-	.db <wDeathRespawnBuffer.group,		$00
-	.db <wDeathRespawnBuffer.room,		$a7
+	.db <wDeathRespawnBuffer.group,		>ROOM_SEASONS_055
+	.db <wDeathRespawnBuffer.room,		<ROOM_SEASONS_055
 	.db <wDeathRespawnBuffer.y,		$38
 	.db <wDeathRespawnBuffer.x,		$48
 	.db <wDeathRespawnBuffer.facingDir,	$02
 .endif
 	.db $00
+
+initialClockVars:
+	.db 10 ; seconds
+	.dw $0559 ; hours and minutes
+	.db $00 ; day
+	.db $03 ; dawn
+	.db $00 ; timeflags
 
 ; Standard game (not linked or hero)
 initialFileVariables_standardGame:
@@ -413,6 +439,26 @@ initialFileVariables_linkedGame:
 	.db <wPirateShipX,			$78
 .endif
 	.db $00
+
+respawnData:
+	.db <wDeathRespawnBuffer.group,		>ROOM_SEASONS_035
+	.db <wDeathRespawnBuffer.room,		<ROOM_SEASONS_035
+	.db <wDeathRespawnBuffer.stateModifier, $01
+	.db <wDeathRespawnBuffer.y,		    $48
+	.db <wDeathRespawnBuffer.x,		    $50
+	.db <wDeathRespawnBuffer.facingDir,	DIR_UP
+    ;.db <wSwordLevel,                    $01
+    .db <wNumRupees,                     $00
+    .db <wNumRupees+1,                   $00
+    .db <wNumBombs,                      $00
+    .db <wNumEmberSeeds,                 $00
+    .db <wNumScentSeeds,                 $00
+    .db <wNumPegasusSeeds,               $00
+    .db <wNumGaleSeeds,                  $00
+    .db <wNumMysterySeeds,               $00
+	.db <wDungeonSmallKeys+1,		 $00
+    .db $00
+
 
 ; This string is different in ages and seasons.
 saveVerificationString:

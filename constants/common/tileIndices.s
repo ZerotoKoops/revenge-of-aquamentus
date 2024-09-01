@@ -35,7 +35,11 @@
 .define TILEINDEX_OVERWORLD_DUG_DIRT	$1c ; Overworld only
 .define TILEINDEX_HORIZONTAL_BRIDGE_TOP		$1d ; Overworld only
 .define TILEINDEX_HORIZONTAL_BRIDGE_BOTTOM	$1e ; Overworld only
-.define TILEINDEX_OVERWORLD_STANDARD_GROUND	$3a ; Overworld only
+.ifdef ROM_AGES
+.define TILEINDEX_OVERWORLD_STANDARD_GROUND	$3a ; Overworld Only
+.else ;ROM_SEASONS
+.define TILEINDEX_OVERWORLD_STANDARD_GROUND	$04 ; Overworld Only
+.endif
 .define TILEINDEX_WARP_HOLE		$48 ; Dungeons/indoors; activates a warp to another room
 .define TILEINDEX_CONVEYOR_UP		$54
 .define TILEINDEX_CONVEYOR_RIGHT	$55
@@ -112,9 +116,17 @@
 .define TILEINDEX_PUSHABLE_BLOCK	$1d ; dungeons, indoors only
 .define TILEINDEX_DUNGEON_BUSH		$20 ; dungeons, indoors only
 .define TILEINDEX_PUSHABLE_STATUE	$2a ; dungeons only
+
+.ifdef ROM_AGES
 .define TILEINDEX_RED_PUSHABLE_BLOCK	$2c ; dungeons only
 .define TILEINDEX_YELLOW_PUSHABLE_BLOCK	$2d ; dungeons only
 .define TILEINDEX_BLUE_PUSHABLE_BLOCK	$2e ; dungeons only
+.else
+.define TILEINDEX_YELLOW_PUSHABLE_BLOCK	$2a
+.define TILEINDEX_BLUE_PUSHABLE_BLOCK	$2c
+.define TILEINDEX_RED_PUSHABLE_BLOCK	$2d
+.endif
+
 .define TILEINDEX_PUSHABLE_ICE_BLOCK	$2f ; dungeons only
 .define TILEINDEX_INDOOR_UPSTAIRCASE	$44 ; dungeons, indoors only
 .define TILEINDEX_INDOOR_DOWNSTAIRCASE	$45 ; dungeons, indoors only

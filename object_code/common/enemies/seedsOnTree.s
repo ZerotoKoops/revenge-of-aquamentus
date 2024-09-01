@@ -8,7 +8,7 @@ enemyCode5a:
 	ld e,Enemy.state
 	ld a,(de)
 	or a
-	jr nz,@state1
+	jp nz,@state1
 
 
 ; Initialization
@@ -16,11 +16,12 @@ enemyCode5a:
 	ld a,$01
 	ld (de),a ; [state]
 
-.ifdef ROM_AGES
+;.ifdef ROM_AGES
+
 	; Locate tree
-	ld a,TILEINDEX_MYSTICAL_TREE_TL
+	ld a,$73;TILEINDEX_MYSTICAL_TREE_TL
 	call findTileInRoom
-	jp nz,interactionDelete ; BUG: Wrong function call! (see below)
+	jp nz,enemyDelete;interactionDelete ; BUG: Wrong function call! (see below)
 
 	; Move to that position
 	ld c,l
@@ -33,10 +34,13 @@ enemyCode5a:
 	ld e,Enemy.subid
 	ld a,(de)
 	and $0f
+	ld b,a
+	ld a,$07
+	sub b
 	ld hl,wSeedTreeRefilledBitset
 	call checkFlag
-	jp z,interactionDelete
-
+	jp z,enemyDelete;interactionDelete
+/*
 	; BUG: Above function call is wrong! Should be "enemyDelete"!
 	; If a seed tree's seeds are exhausted, instead of deleting this object, it will
 	; try to delete the interaction in the corresponding spot!
@@ -48,7 +52,8 @@ enemyCode5a:
 	swap a
 	and $0f
 	ldh (<hFF8B),a
-.else
+*/
+;.else
 	ld e,Enemy.subid
 	ld a,(de)
 	ld b,a
@@ -61,6 +66,7 @@ enemyCode5a:
 	ldi a,(hl)
 	ld b,a
 	ld a,(wRoomStateModifier)
+	and SEASON_SUMMER;$01
 	cp b
 	jp nz,enemyDelete
 	ld a,(hl)
@@ -70,7 +76,7 @@ enemyCode5a:
 	ld a,(wSeedTreeRefilledBitset)
 	and (hl)
 	jp z,enemyDelete
-.endif
+;.endif
 
 	; Spawn the 3 seed objects
 	xor a
@@ -120,12 +126,12 @@ enemyCode5a:
 ; - Required season to grow
 ; - Bitmask checked against wSeedTreeRefilledBitset
 @treeDataTable:
-	.db $00, SEASON_WINTER, $80
-	.db $04, SEASON_SUMMER, $40
-	.db $01, SEASON_SPRING, $20
-	.db $02, SEASON_AUTUMN, $10
-	.db $03, SEASON_SUMMER, $08
-	.db $03, SEASON_SUMMER, $04
+	.db $00, SEASON_SPRING, $80 ;SEASON_WINTER ; ember
+	.db $04, SEASON_SPRING, $40 ;SEASON_SUMMER ; mystery
+	.db $01, SEASON_SUMMER, $20	;SEASON_SPRING ; scent
+	.db $02, SEASON_SPRING, $10 ;SEASON_AUTUMN ; pegasus
+	.db $03, SEASON_SUMMER, $08 ;SEASON_SUMMER ; gale
+	.db $03, SEASON_SPRING, $04 ;SEASON_SUMMER
 .endif
 
 
@@ -138,17 +144,20 @@ enemyCode5a:
 	ret z
 
 	; Mark seeds as taken
-.ifdef ROM_AGES
+;.ifdef ROM_AGES
 	ld e,Enemy.subid
 	ld a,(de)
 	and $0f
+	ld b,a
+	ld a,$07
+	sub b
 	ld hl,wSeedTreeRefilledBitset
 	call unsetFlag
-.else
+/*.else
 	ld e,Enemy.direction
 	ld a,(de)
 	ld hl,wSeedTreeRefilledBitset
 	and (hl)
 	ld (hl),a
-.endif
+.endif*/
 	jp enemyDelete

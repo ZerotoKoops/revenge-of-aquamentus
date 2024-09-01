@@ -26,14 +26,16 @@ interactionCode80:
 	call interactionRunScript
 	jp interactionAnimateAsNpc
 @table_7717:
-	.dw mainScripts.fickleOldManScript_text1
-	.dw mainScripts.fickleOldManScript_text1
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text3
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text5
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text6
+	.dw mainScripts.fickleOldManScript_zeldaDream ;$00
+	.dw mainScripts.fickleOldManScript_gateSwordExpo ;$01
+	.dw mainScripts.fickleOldManScript_zeldaDream ;$02
+	.dw mainScripts.fickleOldManScript_towerExpo ;$03
+	.dw mainScripts.fickleOldManScript_zeldaDream ;$04
+	.dw mainScripts.fickleOldManScript_towerExpo ;$05
+	.dw mainScripts.fickleOldManScript_hiddenTreasure ;$06
+	.dw mainScripts.fickleOldManScript_zeldaDream ;$07
+	.dw mainScripts.fickleOldManScript_towerExpo ;$08
+	.dw mainScripts.fickleOldManScript_vastWorld ;$09
+	.dw mainScripts.fickleOldManScript_badClouds ;$0a
+	.dw mainScripts.fickleOldManScript_vastWorld ;$0b
+	.dw mainScripts.fickleOldManScript_gameBeat ;$0c

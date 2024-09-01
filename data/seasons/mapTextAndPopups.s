@@ -1,12 +1,13 @@
 ; Each number corresponds to TX_03XX (see text.txt).
 ; If bit 7 is set, that indicates special behaviour; see the "mapGetRoomText" function.
 presentMapTextIndices: ; Actually "overworld"
-	.db $b1 $2b $2b $c9 $03 $03 $03 $03 $18 $04 $04 $05 $05 $05 $05 $05
-	.db $2b $2b $2b $02 $03 $03 $03 $03 $04 $04 $04 $05 $05 $a1 $05 $05
-	.db $2b $2b $2b $02 $03 $03 $03 $03 $04 $04 $04 $05 $05 $05 $05 $05
-	.db $2b $2b $2b $03 $03 $03 $03 $03 $04 $04 $04 $05 $05 $05 $0d $0d
-	.db $06 $06 $2b $2b $03 $03 $83 $83 $83 $83 $83 $05 $05 $19 $0d $0d
-	.db $06 $06 $2b $2b $07 $83 $83 $83 $83 $83 $83 $82 $82 $1a $1b $0d
+	.db $99 $06 $04 $05 $22 $05    $03 $03 $18 $04 $04 $05 $05 $05 $05 $05
+	.db $06 $06 $04 $25 $05 $23    $03 $03 $04 $04 $04 $05 $05 $a1 $05 $05
+	.db $91 $24 $04 $05 $27 $05    $03 $03 $04 $04 $04 $05 $05 $05 $05 $05
+	.db $04 $04 $03 $03 $03 $05    $03 $03 $04 $04 $04 $05 $05 $05 $0d $0d
+	.db $02 $02 $02 $03 $03 $03    $83 $83 $83 $83 $83 $05 $05 $19 $0d $0d
+	.db $89 $02 $28 $07 $07 $81    $83 $83 $83 $83 $83 $82 $82 $1a $1b $0d
+	
 	.db $99 $0e $1c $2b $07 $07 $0f $0f $0f $83 $83 $82 $82 $0d $0d $0d
 	.db $0e $0e $0e $07 $07 $07 $0f $0f $1d $83 $83 $82 $11 $11 $11 $1e
 	.db $0e $0e $0e $07 $07 $07 $0f $0f $29 $10 $a9 $11 $11 $91 $11 $11
@@ -37,6 +38,22 @@ pastMapTextIndices: ; Actually "subrosia"
 ; b1: popup behaviour. Each digit represents a different popup; screens with only one
 ;     popup use the same digit twice. (see the "mapMenu_LoadPopupData" function)
 presentMinimapPopups:
+	.db <ROOM_SEASONS_000 $8f
+	.db <ROOM_SEASONS_004 $11
+	.db <ROOM_SEASONS_005 $ff
+	.db <ROOM_SEASONS_013 $cc
+	.db <ROOM_SEASONS_015 $11
+	.db <ROOM_SEASONS_020 $88
+	.db <ROOM_SEASONS_021 $11
+	.db <ROOM_SEASONS_024 $11
+	.db <ROOM_SEASONS_032 $ff
+	.db <ROOM_SEASONS_034 $88
+	.db <ROOM_SEASONS_050 $8f
+	.db <ROOM_SEASONS_052 $11
+	.db <ROOM_SEASONS_055 $8f
+	.db $ff
+
+/*
 	.db $d4 $88
 	.db $96 $88
 	.db $8d $88
@@ -116,6 +133,7 @@ presentMinimapPopups:
 	.db $f6 $11
 	.db $f7 $a3
 	.db $f9 $11
+*/
 	.db $ff
 
 pastMinimapPopups:

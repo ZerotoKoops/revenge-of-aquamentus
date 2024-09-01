@@ -39,6 +39,7 @@
 .include "constants/common/treasureSpawnModes.s"
 .include "constants/common/treeGfxHeaders.s"
 .include "constants/common/uncmpGfxHeaders.s"
+.include "constants/common/times.s"
 
 .ifdef ROM_AGES
 

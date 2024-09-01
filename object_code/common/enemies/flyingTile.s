@@ -241,11 +241,20 @@ flyingTile_layoutData:
 .else
 flyingTile_layoutData:
 	.dw @subid0
+/*
 	.dw @subid1
 	.dw @subid2
 	.dw @subid3
+*/
 
 @subid0:
+	.db $80
+	.db $3c $69 $56 $37 $77 $8a $7c $6c
+	.db $29 $27 $6a $5c $76 $4a $66 $88
+	.db $4c $46 $58 $28 $2b $48 $36 $87
+	.db $8b $5a $89 $49 $3b $68 $2a $7b
+	.db $00
+/*
 	.db $82
 	.db $34 $66 $44 $56 $54 $46 $64 $36
 	.db $35 $65 $45 $55
@@ -268,4 +277,5 @@ flyingTile_layoutData:
 	.db $63 $4b $37 $87 $77 $27 $53 $34
 	.db $7a $74 $3a $28 $86 $5b
 	.db $00
+*/
 .endif

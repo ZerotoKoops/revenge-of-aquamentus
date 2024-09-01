@@ -659,7 +659,7 @@ animationData19cf7:
 	.db $1e $2e $01
 	.db $7f $2e $ff
 
-animationDataHarp: ; CROSSITEMS: Harp animation
+animationDataHarp:
 	.db $14 $34 $00
 	.db $14 $35 $00
 	.db $0c $34 $00
@@ -675,8 +675,9 @@ animationDataHarp: ; CROSSITEMS: Harp animation
 	.db $14 $36 $01
 	.db $14 $37 $01
 	.db $0c $36 $01
-	.db $01 $36 $81
-	.db $7f $1c $ff
+	;.db $01 $36 $81
+	;.db $7f $1c $ff
+	m_AnimationLoop animationDataHarp
 
 animationData19d0c:
 	.db $06 $b4 $44

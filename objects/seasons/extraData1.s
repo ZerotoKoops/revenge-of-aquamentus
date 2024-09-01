@@ -33,7 +33,6 @@ objectData4037:
 
 ; Replenishable bombs
 objectData_respawningBushBombs:
-	obj_Interaction $c7 $04 $0f $14
 	obj_EndPointer
 
 ; Replenishable ember seeds
@@ -49,7 +48,6 @@ objectData_respawningBushMysterySeeds:
 
 ; Damaging cacti
 objectData_makeCactiDamaging:
-	obj_Interaction $c7 $bc $2f $10
 	obj_EndPointer
 
 ; Unused

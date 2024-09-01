@@ -83,6 +83,7 @@ musUnused1:
 	.dw musUnused1Channel6
 	.db $ff
 
+/*
 musCarnival:
 	.db $00
 	.dw musCarnivalChannel0
@@ -92,6 +93,17 @@ musCarnival:
 	.dw musCarnivalChannel4
 	.db $06
 	.dw musCarnivalChannel6
+	.db $ff
+*/
+musBellaCiaoShort2:
+	.db $00
+	.dw musBellaCiaoShort2Channel0
+	.db $01
+	.dw musBellaCiaoShort2Channel1
+	.db $04
+	.dw musBellaCiaoShort2Channel4
+	.db $06
+	.dw musBellaCiaoShort2Channel6
 	.db $ff
 
 musGameover:
@@ -204,6 +216,7 @@ musHerosCave:
 	.dw musHerosCaveChannel6
 	.db $ff
 
+/*
 musGnarledRootDungeon:
 	.db $00
 	.dw musGnarledRootDungeonChannel0
@@ -214,7 +227,19 @@ musGnarledRootDungeon:
 	.db $06
 	.dw musGnarledRootDungeonChannel6
 	.db $ff
+*/
 
+musRuberoPerTe:
+	.db $00
+	.dw musRuberoPerTeChannel0
+	.db $01
+	.dw musRuberoPerTeChannel1
+	.db $04
+	.dw musRuberoPerTeChannel4
+	.db $06
+	.dw musRuberoPerTeChannel6
+	.db $ff
+/*
 musSnakesRemains:
 	.db $00
 	.dw musSnakesRemainsChannel0
@@ -291,7 +316,7 @@ musSwordAndShieldMaze:
 	.db $06
 	.dw musSwordAndShieldMazeChannel6
 	.db $ff
-
+*/
 musFinalDungeon:
 	.db $00
 	.dw musFinalDungeonChannel0

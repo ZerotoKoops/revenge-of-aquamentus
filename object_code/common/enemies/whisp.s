@@ -166,11 +166,29 @@ spark_checkWallInDirection:
 
 	push hl
 	push bc
+	ld e,Enemy.subid
+	ld a,(de)
+	rst_jumpTable
+	.dw @disallowHoles
+	.dw @allowHoles
+
+@disallowHoles:
 	call checkTileCollisionAt_disallowHoles
 	pop bc
 	pop hl
 	ret c
+	call @nextTile
+	jp checkTileCollisionAt_disallowHoles
 
+@allowHoles:
+	call checkTileCollisionAt_allowHoles
+	pop bc
+	pop hl
+	ret c
+	call @nextTile
+	jp checkTileCollisionAt_allowHoles
+
+@nextTile:
 	inc hl
 	ldi a,(hl)
 	add b
@@ -178,7 +196,7 @@ spark_checkWallInDirection:
 	ld a,(hl)
 	add c
 	ld c,a
-	jp checkTileCollisionAt_disallowHoles
+	ret
 
 
 ; Each direction lists two position offsets to check for collisions at.

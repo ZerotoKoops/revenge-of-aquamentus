@@ -289,8 +289,12 @@ linkApplyTileTypes:
 	ld hl,wLastActiveTileType
 	ldd a,(hl)
 	cp (hl)
-	jr nz,++
-
+	;jr nz,++
+	jr z,+
+	ld a,$01
+	ld (wFallDownHoleWarp),a
+	jr ++
++
 	; Jump if Link's position has not changed
 	ld l,<wActiveTilePos
 	ldi a,(hl)
@@ -301,6 +305,7 @@ linkApplyTileTypes:
 	inc l
 	ld a,$0e
 	ld (hl),a
+
 ++
 	ld a,$80
 	ld (wcc92),a

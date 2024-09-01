@@ -469,7 +469,7 @@ decPushingAgainstTileCounter:
 ;;
 nextToOverworldKeyhole:
 	call getThisRoomFlags
-	and $80
+	and ROOMFLAG_80;$80
 	ret nz
 
 	call specialObjectCheckPushingAgainstTile
@@ -503,7 +503,7 @@ nextToOverworldKeyhole:
 
 	; Remember that the keyhole has been opened
 	call getThisRoomFlags
-	set 7,(hl)
+	set ROOMFLAG_BIT_80,(hl)
 
 	; Trigger the associated cutscene
 	ld hl,$cfc0
@@ -567,7 +567,7 @@ nextToOverworldKeyhole:
 	.dw @group0
 
 @group0:
-	.db <ROOM_SEASONS_096 TREASURE_GNARLED_KEY
+	.db <ROOM_SEASONS_050 TREASURE_GNARLED_KEY
 	.db <ROOM_SEASONS_081 TREASURE_FLOODGATE_KEY
 	.db <ROOM_SEASONS_00d TREASURE_DRAGON_KEY
 	.db $00

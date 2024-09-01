@@ -43,7 +43,7 @@ treasureObjectData:
 	/* $0e */ m_TreasureSubid   $0a, $0c, $3b, $23, TREASURE_OBJECT_FLUTE_00
 	/* $0f */ m_TreasureSubid   $38, $01, <TX_00_GET_SEEDSHOOTER, $80, TREASURE_OBJECT_SHOOTER_00
 	/* $10 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_10_00
-	/* $11 */ m_TreasureSubid   $38, $00, <TX_00_GET_HARP, $81, TREASURE_OBJECT_HARP_00
+	/* $11 */ m_TreasureSubid   $0a, $00, <TX_00_GET_HARP, $81, TREASURE_OBJECT_HARP_00
 	/* $12 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_12_00
 	/* $13 */ m_TreasurePointer treasureObjectData13
 	/* $14 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_14_00
@@ -72,7 +72,7 @@ treasureObjectData:
 	/* $2b */ m_TreasurePointer treasureObjectData2b
 	/* $2c */ m_TreasurePointer treasureObjectData2c
 	/* $2d */ m_TreasurePointer treasureObjectData2d
-	/* $2e */ m_TreasureSubid   $02, $00, $31, $31, TREASURE_OBJECT_FLIPPERS_00
+	/* $2e */ m_TreasureSubid   $32, $00, $31, $31, TREASURE_OBJECT_FLIPPERS_00
 	/* $2f */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_POTION_00
 	/* $30 */ m_TreasurePointer treasureObjectData30
 	/* $31 */ m_TreasurePointer treasureObjectData31
@@ -102,14 +102,14 @@ treasureObjectData:
 	/* $49 */ m_TreasureSubid   $0a, $00, $3c, $56, TREASURE_OBJECT_BOMB_FLOWER_00
 	/* $4a */ m_TreasurePointer treasureObjectData4a
 	/* $4b */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_TREASURE_MAP_00
-	/* $4c */ m_TreasureSubid   $0a, $00, $47, $36, TREASURE_OBJECT_ROUND_JEWEL_00
+	/* $4c */ m_TreasureSubid   $68, $00, $47, $36, TREASURE_OBJECT_ROUND_JEWEL_00
 	/* $4d */ m_TreasurePointer treasureObjectData4d
 	/* $4e */ m_TreasureSubid   $38, $00, $48, $38, TREASURE_OBJECT_SQUARE_JEWEL_00
 	/* $4f */ m_TreasureSubid   $38, $00, $49, $39, TREASURE_OBJECT_X_SHAPED_JEWEL_00
 	/* $50 */ m_TreasureSubid   $38, $00, $3f, $59, TREASURE_OBJECT_RED_ORE_00
 	/* $51 */ m_TreasureSubid   $38, $00, $3e, $58, TREASURE_OBJECT_BLUE_ORE_00
 	/* $52 */ m_TreasureSubid   $0a, $00, $3d, $5a, TREASURE_OBJECT_HARD_ORE_00
-	/* $53 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_MEMBERS_CARD_00
+	/* $53 */ m_TreasureSubid   $5a, $00, <TX_0045, $27, TREASURE_OBJECT_MEMBERS_CARD_00
 	/* $54 */ m_TreasureSubid   $38, $00, $70, $26, TREASURE_OBJECT_MASTERS_PLAQUE_00
 	/* $55 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_55_00
 	/* $56 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_56_00
@@ -135,7 +135,7 @@ treasureObjectData16:
 treasureObjectData19:
 	m_BeginTreasureSubids TREASURE_SEED_SATCHEL
 	m_TreasureSubid $0a, $01, $2d, $20, TREASURE_OBJECT_SEED_SATCHEL_00
-	m_TreasureSubid $01, $00, $46, $20, TREASURE_OBJECT_SEED_SATCHEL_UPGRADE
+	m_TreasureSubid $09, $00, $46, $20, TREASURE_OBJECT_SEED_SATCHEL_UPGRADE
 
 treasureObjectData01:
 	m_BeginTreasureSubids TREASURE_SHIELD
@@ -229,6 +229,7 @@ treasureObjectData28:
 	m_TreasureSubid $08, $05, $ff, $2b, TREASURE_OBJECT_RUPEES_0b
 	m_TreasureSubid $08, $07, $05, $2b, TREASURE_OBJECT_RUPEES_0c
 	m_TreasureSubid $30, $04, $03, $2a, TREASURE_OBJECT_RUPEES_0d
+	m_TreasureSubid $08, $0f, $08, $2d, TREASURE_OBJECT_RUPEES_0e
 
 treasureObjectData2b:
 	m_BeginTreasureSubids TREASURE_HEART_PIECE
@@ -276,6 +277,7 @@ treasureObjectData30:
 	m_TreasureSubid $28, $01, $ff, $42, TREASURE_OBJECT_SMALL_KEY_01
 	m_TreasureSubid $49, $01, $1a, $42, TREASURE_OBJECT_SMALL_KEY_02
 	m_TreasureSubid $38, $01, $1a, $42, TREASURE_OBJECT_SMALL_KEY_03
+	m_TreasureSubid $08, $01, $1a, $42, TREASURE_OBJECT_SMALL_KEY_04
 
 treasureObjectData31:
 	m_BeginTreasureSubids TREASURE_BOSS_KEY
@@ -313,7 +315,7 @@ treasureObjectData41:
 
 treasureObjectData42:
 	m_BeginTreasureSubids TREASURE_GNARLED_KEY
-	m_TreasureSubid $29, $00, $42, $44, TREASURE_OBJECT_GNARLED_KEY_00
+	m_TreasureSubid $69, $00, $42, $44, TREASURE_OBJECT_GNARLED_KEY_00
 	m_TreasureSubid $09, $00, $42, $44, TREASURE_OBJECT_GNARLED_KEY_01
 
 treasureObjectData4a:
@@ -324,7 +326,7 @@ treasureObjectData4a:
 
 treasureObjectData4d:
 	m_BeginTreasureSubids TREASURE_PYRAMID_JEWEL
-	m_TreasureSubid $08, $00, $4a, $37, TREASURE_OBJECT_PYRAMID_JEWEL_00
+	m_TreasureSubid $68, $00, $4a, $37, TREASURE_OBJECT_PYRAMID_JEWEL_00
 	m_TreasureSubid $02, $00, $4a, $37, TREASURE_OBJECT_PYRAMID_JEWEL_01
 
 .ends

@@ -78,9 +78,17 @@ partCode06:
 	ld l,Part.collisionType
 	res 7,(hl)
 
+	ld l,Part.var03
+	ld a,(hl)
+	or a
 	; [counter1] = [counter2]
 	ld l,Part.counter2
+	jr z,+
+	ldd (hl),a
+	jr ++
++
 	ldd a,(hl)
+++
 	ld (hl),a
 
 	ld hl,wNumTorchesLit
@@ -133,8 +141,10 @@ partCode06:
 	ld h,d
 	ld l,Part.state
 	inc (hl)
+	ld e,Part.var03
+	ld a,(de)
 	ld l,Part.counter1
-	ld (hl),$f0
+	ld (hl),a ;$f0
 	ret
 
 @subid2State2:

@@ -2,7 +2,7 @@
 ; INTERAC_FICKLE_GIRL
 ; ==================================================================================================
 interactionCode2e:
-	ld e,$44
+	ld e,Interaction.state;$44
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -10,21 +10,40 @@ interactionCode2e:
 @state0:
 	ld a,$01
 	ld (de),a
+
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_OUTDOORS ;$01
+	ld b,a
+	ld a,(wTimeOfDay)
+	and TIME_NIGHT ;02
+	or b
+; $00 if day and indoors
+; $01 if day and outdoors
+; $02 if night and indoors
+; $03 if night and outdoors
+	cpa $00
+	jp z,interactionDelete
+	cpa $03
+	jp z,interactionDelete	
+
 	call getSunkenCityNPCVisibleSubId@main
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	cp b
 	jp nz,interactionDelete
 	call interactionInitGraphics
 	ld a,(wActiveRoom)
-	cp <ROOM_SEASONS_06d
+	cp <ROOM_SEASONS_003;06d
 	jr z,+
-	ld a,$01
-	ld e,$48
+	cp <ROOM_SEASONS_392
+	jr nz,++
++
+	ld a,DIR_RIGHT;$01
+	ld e,Interaction.direction;$48
 	ld (de),a
 	call interactionSetAnimation
-+
-	ld e,$42
+++
+	ld e,Interaction.subid;$42
 	ld a,(de)
 	ld hl,table_5f7e
 	rst_addDoubleIndex
@@ -37,15 +56,15 @@ interactionCode2e:
 	ld (hl),INTERAC_8e
 	inc l
 	ld (hl),$00
-	ld l,$57
+	ld l,Interaction.relatedObj1+1;$57
 	ld (hl),d
-	ld l,$49
+	ld l,Interaction.angle;$49
 	call @func_5f4e
 +
 	jr @var03_00
 @state1:
 	call interactionRunScript
-	ld e,$43
+	ld e,Interaction.var03;$43
 	ld a,(de)
 	rst_jumpTable
 	.dw @var03_00
@@ -54,7 +73,7 @@ interactionCode2e:
 	.dw @var03_03
 @var03_00:
 	call interactionAnimate
-	ld e,$61
+	ld e,Interaction.animParameter;$61
 	ld a,(de)
 	inc a
 	jr nz,@pushLinkAwayUpdateDrawPriority
@@ -64,7 +83,7 @@ interactionCode2e:
 	jp interactionPushLinkAwayAndUpdateDrawPriority
 @var03_01:
 	call interactionAnimate
-	ld e,$61
+	ld e,Interaction.animParameter;$61
 	ld a,(de)
 	or a
 	jr z,@pushLinkAwayUpdateDrawPriority
@@ -77,7 +96,7 @@ interactionCode2e:
 @var03_02:
 @var03_03:
 	call interactionAnimate
-	ld e,$61
+	ld e,Interaction.animParameter;$61
 	ld a,(de)
 	cp $02
 	jr nz,@pushLinkAwayUpdateDrawPriority
@@ -87,7 +106,7 @@ interactionCode2e:
 	ld (hl),PART_POPPABLE_BUBBLE
 	inc l
 	ld (hl),$01
-	ld l,$c9
+	ld l,Part.angle;$c9
 	call @func_5f4e
 +
 	call getRandomNumber_noPreserveVars
@@ -103,14 +122,14 @@ interactionCode2e:
 	ld (hl),PART_POPPABLE_BUBBLE
 	inc l
 	ld (hl),$00
-	ld l,$c9
+	ld l,Part.angle;$c9
 	call @func_5f4e
 	dec b
 	jr nz,-
 	ret
 @func_5f4e:
 	push bc
-	ld e,$48
+	ld e,Interaction.direction;$48
 	ld a,(de)
 	rrca
 	ld c,$f8
@@ -125,24 +144,24 @@ interactionCode2e:
 	pop bc
 	ret
 @func_5f65:
-	ld e,$48
+	ld e,Interaction.direction;$48
 	ld a,(de)
 	and $01
 	call interactionSetAnimation
 	call @func_5efa
 func_5f70:
-	ld e,$76
+	ld e,Interaction.var36;$76
 	ld a,$01
 	ld (de),a
 	call getRandomNumber_noPreserveVars
 	and $03
-	ld e,$43
+	ld e,Interaction.var03;$43
 	ld (de),a
 	ret
 
 table_5f7e:
-	.dw mainScripts.sunkenCityFickleGirlScript_text1
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
-	.dw mainScripts.sunkenCityFickleGirlScript_text3
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
+	.dw mainScripts.sunkenCityFickleGirlScript_text1 ;$00
+	.dw mainScripts.sunkenCityFickleGirlScript_text2 ;$01
+	.dw mainScripts.sunkenCityFickleGirlScript_text2 ;$02
+	.dw mainScripts.sunkenCityFickleGirlScript_text3 ;$03
+	.dw mainScripts.sunkenCityFickleGirlScript_text2 ;$04

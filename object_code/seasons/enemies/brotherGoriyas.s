@@ -98,13 +98,13 @@ enemyCode70:
 	.dw @@@substate2
 	
 @@@substate0:
-	ld a,($d00b)
+	ld a,(w1Link.yh);$d00b)
 	cp $78
 	ret nc
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$a4
+	ld l,Enemy.collisionType;$a4
 	set 7,(hl)
 	; You cannot pass
 	ld bc,TX_2f00
@@ -113,22 +113,22 @@ enemyCode70:
 @@@substate1:
 	ld a,$02
 	ld (de),a
-	ld a,$2d
+	ld a,MUS_BOSS;$2d
 	ld (wActiveMusic),a
 	call playSound
 	
 @@@substate2:
-	ld a,($d00d)
+	ld a,(w1Link.xh);$d00d)
 	sub $28
 	ld c,a
 
 @@func_4646:
-	ld a,($d00b)
+	ld a,(w1Link.yh);$d00b)
 	ld b,a
-	ld e,$8b
+	ld e,Enemy.yh;$8b
 	ld a,(de)
 	ldh (<hFF8F),a
-	ld e,$8d
+	ld e,Enemy.xh;$8d
 	ld a,(de)
 	ldh (<hFF8E),a
 	sub $18
@@ -149,14 +149,14 @@ enemyCode70:
 	and $30
 	add $60
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state;$84
 	inc (hl)
-	ld l,$b1
+	ld l,Enemy.var31;$b1
 	ld (hl),$08
-	ld l,$86
+	ld l,Enemy.counter1;$86
 	ld (hl),a
 	inc l
-	ld (hl),$3c
+	ld (hl),60;$3c
 	ret
 	
 @@func_4682:
@@ -168,15 +168,15 @@ enemyCode70:
 @@state9:
 	call func_4809
 	jr z,@@animate
-	ld e,$90
-	ld a,$23
+	ld e,Enemy.speed;$90
+	ld a,SPEED_e0;$23
 	ld (de),a
 	call func_4797
 	jr c,@@func_46af
 @@func_469a:
 	call ecom_decCounter2
 	jr nz,+
-	ld (hl),$3c
+	ld (hl),60;$3c
 	call @@func_46a9
 +
 	call ecom_applyVelocityForSideviewEnemyNoHoles
@@ -187,7 +187,7 @@ enemyCode70:
 	jp ecom_updateAnimationFromAngle
 	
 @@func_46af:
-	ld a,$09
+	ld a,ObjectStruct.angle;$09
 	call objectGetRelatedObject1Var
 	ld e,l
 	ld a,(de)
@@ -197,22 +197,22 @@ enemyCode70:
 	and $1f
 	ld c,$28
 	jr z,+
-	ld c,$32
+	ld c,SPEED_140;50;$32
 	cp $10
 	jr c,+
-	ld c,$1e
+	ld c,SPEED_c0;30;$1e
 +
-	ld e,$90
+	ld e,Enemy.speed;$90
 	ld a,c
 	ld (de),a
 	call func_47c0
 	call objectGetRelativeAngle
 	ld b,a
-	ld e,$b1
+	ld e,Enemy.var31;$b1
 	ld a,(de)
 	add b
 	and $1f
-	ld e,$89
+	ld e,Enemy.angle;$89
 	ld (de),a
 	call ecom_updateAnimationFromAngle
 	call ecom_applyVelocityForSideviewEnemyNoHoles
@@ -220,11 +220,11 @@ enemyCode70:
 	jr @@animate2
 
 @@stateA:
-	ld e,$b0
+	ld e,Enemy.var30;$b0
 	ld a,(de)
 	or a
 	jr nz,+
-	ld e,$84
+	ld e,Enemy.state;$84
 	ld a,$09
 	ld (de),a
 	jr @@animate2
@@ -261,7 +261,7 @@ enemyCode70:
 	jp enemyAnimate
 
 @@stateB:
-	ld e,$99
+	ld e,Enemy.relatedObj2+1;$99
 	ld a,(de)
 	or a
 	jr z,+
@@ -269,10 +269,10 @@ enemyCode70:
 	call z,func_47a5
 	jr @@animate2
 +
-	ld a,$19
+	ld a,ObjectStruct.relatedObj2+1;$19
 	call objectGetRelatedObject1Var
 	dec (hl)
-	ld l,$84
+	ld l,Enemy.state;$84
 	ld a,$09
 	ld (hl),a
 	ld e,l
@@ -319,16 +319,16 @@ enemyCode70:
 	jp @subid0@func_469a
 
 @dead:
-	ld e,$97
+	ld e,Enemy.relatedObj1+1;$97
 	ld a,(de)
 	or a
 	jr z,+
 	call ecom_killRelatedObj1
-	ld e,$97
+	ld e,Enemy.relatedObj1+1;$97
 	xor a
 	ld (de),a
 +
-	ld e,$99
+	ld e,Enemy.relatedObj2+1;$99
 	ld a,(de)
 	sub $02
 	jr c,+

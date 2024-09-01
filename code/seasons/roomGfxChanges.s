@@ -44,20 +44,23 @@ gashaSpotRooms:
 ;;
 applyRoomSpecificTileChangesAfterGfxLoad:
 	ld a,(wActiveRoom)
+	cpa <ROOM_SEASONS_000
+	jp z,roomTileChangesAfterLoad09_ages
+
 	ld hl,@tileChangesGroupTable
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
 	.dw roomTileChangesAfterLoad00
 	.dw roomTileChangesAfterLoad01
-	.dw  roomTileChangesAfterLoad02 ; Located in bank 0 / bank 9 for some reason
+	.dw roomTileChangesAfterLoad02 ; Located in bank 0 / bank 9 for some reason
 	.dw roomTileChangesAfterLoad03
 	.dw roomTileChangesAfterLoad04
 	.dw roomTileChangesAfterLoad05
 	.dw roomTileChangesAfterLoad06
 	.dw roomTileChangesAfterLoad07
 	.dw roomTileChangesAfterLoad08
-	.dw roomTileChangesAfterLoad09
+	.dw roomTileChangesAfterLoad09_ages
 	.dw roomTileChangesAfterLoad0a
 	.dw roomTileChangesAfterLoad0b
 	.dw roomTileChangesAfterLoad0c
@@ -85,7 +88,7 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 ; $06: Blaino's gym (draws gloves on roof)
 ; $07: Vasu's shop (draws ring sign)
 ; $08: Gasha spot (draws the tree or the plant if something has been planted)
-; $09: Load scent tree graphics (north horon)
+; $09: Load tree graphics --- OLD: Load scent tree graphics (north horon)
 ; $0a: Load pegasus tree graphics (spool swamp)
 ; $0b: Load gale tree graphics (tarm ruins)
 ; $0c: Load gale tree graphics (sunken city)
@@ -94,6 +97,7 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 ; $0f: Maku tree entrance & one screen south: forbid digging up enemies
 
 @group0:
+/*
 	.db $98 $03
 	.db $78 $06
 	.db $e8 $07
@@ -115,15 +119,18 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 	.db $ef $08
 	.db $f0 $08
 	.db $c8 $08
-	.db $67 $09
-	.db $72 $0a
-	.db $10 $0b
-	.db $5f $0c
-	.db $9e $0d
+*/
+	.db <ROOM_SEASONS_055 $09
+	.db <ROOM_SEASONS_050 $09
+	.db <ROOM_SEASONS_032 $09
+	;.db $5f $0c
+	;.db <ROOM_SEASONS_000 $09 ; already checked above
+/*
 	.db $97 $0e
 	.db $d9 $0f
 	.db $e9 $0f
-	.db $00
+*/
+	.db $00 $00
 @group1:
 @group2:
 @group3:
@@ -212,6 +219,97 @@ roomTileChangesAfterLoad0d:
 	.db $23 $02 $24 $02 $25 $02
 	.db $26 $02 $27 $02 $28 $02
 	.db $29 $02 $2a $03 $2b $02
+
+
+;;;new
+;;
+; Each screen with a tree on it calls this to load the tree's graphics.
+;
+roomTileChangesAfterLoad09_ages:
+	ld hl,treeGfxLocationsTable
+	ld a,(wActiveRoom)
+	ld b,a
+--
+	ld a,(hl)
+	inc a ;or a
+	ret z
+	ldi a,(hl)
+	cp b
+	jr z,+
+	inc hl
+	inc hl
+	inc hl
+	jr --
++
+	; Tree found
+	ldi a,(hl)
+	ld b,a
+	ldi a,(hl)
+	ld d,(hl)
+	ld e,a
+	ld a,b
+	ldh (<hFF93),a
+
+	; Draw the tile mapping
+	ld hl,treeTilesTable
+	rst_addDoubleIndex
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld bc,$0304
+	call drawRectangleToVramTiles_withParameters
+
+	; Load the graphics
+	ldh a,(<hFF93)
+	add TREE_GFXH_07
+	jp loadTreeGfx
+
+
+; Data format:
+; b0: Room index
+; b1: Tree type
+; w2: Start of tree gfx in w3VramTiles to overwrite
+
+treeGfxLocationsTable:
+	dbbw <ROOM_SEASONS_000 $03 w3VramTiles+$102
+	dbbw <ROOM_SEASONS_032 $02 w3VramTiles+$0c6
+	dbbw <ROOM_SEASONS_050 $01 w3VramTiles+$08e
+	dbbw <ROOM_SEASONS_055 $00 w3VramTiles+$082
+/*
+	dbbw $08 $01 w3VramTiles+$086
+	dbbw $13 $02 w3VramTiles+$0c8
+	dbbw $ac $00 w3VramTiles+$0c6
+	dbbw $c1 $02 w3VramTiles+$08a
+	dbbw $08 $01 w3VramTiles+$086
+	dbbw $25 $00 w3VramTiles+$0ca
+	dbbw $2d $03 w3VramTiles+$10c
+	dbbw $80 $03 w3VramTiles+$088
+	dbbw $c1 $02 w3VramTiles+$08a
+*/
+	.db $ff
+
+
+treeTilesTable:
+	.dw @tree0
+	.dw @tree1
+	.dw @tree2
+	.dw @tree3
+
+@tree0: ; Scent tree
+@tree1: ; Pegasus tree (mapping is the same as the scent tree)
+	.db $20 $02 $21 $02 $22 $02 $23 $02
+	.db $24 $02 $25 $02 $26 $02 $27 $02
+	.db $28 $03 $29 $03 $2a $03 $2b $03
+
+@tree2: ; Gale tree
+	.db $20 $02 $21 $02 $22 $02 $23 $02
+	.db $24 $02 $25 $02 $26 $02 $27 $02
+	.db $28 $04 $29 $03 $2a $03 $2b $04
+
+@tree3: ; Mystery tree
+	.db $20 $02 $21 $02 $22 $02 $23 $02
+	.db $24 $02 $25 $02 $26 $02 $27 $02
+	.db $28 $02 $29 $02 $2a $03 $2b $03
 
 ;;
 ; $00: Pirate ship bow (at beach)

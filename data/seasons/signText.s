@@ -16,6 +16,20 @@ signTextGroupTable:
 
 signTextGroup0Data:
 signTextGroup3Data:
+	.db $47, <ROOM_SEASONS_035, <TX_2e00
+	.db $28, <ROOM_SEASONS_022, <TX_2e01
+	.db $68, <ROOM_SEASONS_031, <TX_2e05
+	.db $53, <ROOM_SEASONS_042, <TX_2e07
+	.db $16, <ROOM_SEASONS_044, <TX_2e08
+	.db $24, <ROOM_SEASONS_002, <TX_2e09
+	.db $15, <ROOM_SEASONS_054, <TX_2e1a
+	.db $24, <ROOM_SEASONS_398, <TX_2e0a
+	.db $37, <ROOM_SEASONS_398, <TX_2e12
+	.db $47, <ROOM_SEASONS_383, <TX_2e0c
+	.db $53, <ROOM_SEASONS_024, <TX_2e0f
+	.db $65, <ROOM_SEASONS_015, <TX_2e10
+	.db $26, <ROOM_SEASONS_053, <TX_2e11
+/*
 	.db $43, $d9, <TX_2e00
 	.db $52, $4d, <TX_2e01
 	.db $17, $0b, <TX_2e03
@@ -41,21 +55,29 @@ signTextGroup3Data:
 	.db $23, $b9, <TX_2e1b
 	.db $33, $f6, <TX_2e1d
 	.db $23, $68, <TX_2e1e
+*/
 	.db $00
 
 signTextGroup1Data:
+/*
 	.db $27, $45, <TX_2e07
 	.db $42, $59, <TX_2e08
 	.db $46, $14, <TX_2e09
+*/
 	.db $00
 
 signTextGroup2Data:
 signTextGroup4Data:
-	.db $17, $04, <TX_2e02
+	.db $23, <ROOM_SEASONS_42e, <TX_2e02
+	.db $62, <ROOM_SEASONS_4fe, <TX_2e0e
+	.db $12, <ROOM_SEASONS_424, <TX_2e13
+	;.db $17, $04, <TX_2e02
 	.db $00
 
 signTextGroup5Data:
-	.db $82, $12, <TX_2e1c
+	.db $38, <ROOM_SEASONS_513, <TX_2e0d
+	.db $3a, <ROOM_SEASONS_5b1, <TX_2e0e
+	;.db $82, $12, <TX_2e1c
 signTextGroup6Data:
 signTextGroup7Data:
 	.db $00

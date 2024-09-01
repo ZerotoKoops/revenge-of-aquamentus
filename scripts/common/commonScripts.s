@@ -476,14 +476,14 @@ shopkeeperScript_purchaseItem:
 	jumptable_objectbyte Interaction.var37
 	.dw @buyUpgradeableItem
 	.dw @buy3Hearts
-	.dw @buyHiddenShopGashaSeed1
+	.dw @buyHeartContainer;@buyHiddenShopGashaSeed1
 	.dw @buyL1Shield
 	.dw @buy10Bombs
 	.dw @buyHiddenShopOtherItem
-	.dw @buyHiddenShopGashaSeed2
+	.dw @buyUpgradedShield;@buyHiddenShopGashaSeed2
+	.dw @buyMagicPotion1;@buyUpgradeableItem
 	.dw @buyUpgradeableItem
-	.dw @buyUpgradeableItem
-	.dw @buyUpgradeableItem
+	.dw @buyMagicPotion1;@buyUpgradeableItem
 	.dw @buyUpgradeableItem
 	.dw @buyUpgradeableItem
 	.dw @buyUpgradeableItem
@@ -535,10 +535,29 @@ shopkeeperScript_purchaseItem:
 	callscript shopkeeperConfirmPurchase
 	scriptend
 
-@buyHiddenShopGashaSeed1:
+@buyHeartContainer:
+;@buyHiddenShopGashaSeed1:
 	showtextnonexitablelowindex <TX_0e1d
 	callscript shopkeeperConfirmPurchase
 	ormemory wBoughtShopItems1, $02
+	scriptend
+
+@buyMagicPotion1:
+	showtextnonexitablelowindex <TX_0e2c
+	callscript shopkeeperConfirmPurchase
+	ormemory wBoughtShopItems1, $10
+	scriptend
+
+@buyMagicPotion2:
+	showtextnonexitablelowindex <TX_0e2c
+	callscript shopkeeperConfirmPurchase
+	ormemory wBoughtShopItems1, $20
+	scriptend
+
+@buyUpgradedShield:
+	showtextnonexitablelowindex <TX_0e2b
+	callscript shopkeeperConfirmPurchase
+	ormemory wBoughtShopItems1, $04
 	scriptend
 
 ; A ring (ages) or treasure map (seasons)
@@ -556,11 +575,13 @@ shopkeeperScript_purchaseItem:
 	scriptend
 .endif
 
+/*
 @buyHiddenShopGashaSeed2:
 	showtextnonexitablelowindex <TX_0e1d
 	callscript shopkeeperConfirmPurchase
 	ormemory wBoughtShopItems1, $04
 	scriptend
+*/
 
 @buyStrangeFlute:
 	showtextnonexitablelowindex <TX_0e1b

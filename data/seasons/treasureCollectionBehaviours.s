@@ -383,22 +383,22 @@ treasureCollectionBehaviourTable:
 
 	; TREASURE_ROUND_JEWEL (0x4c)
 	.db $00
-	.db $00
+	.db $80
 	.db SND_GETITEM
 
 	; TREASURE_PYRAMID_JEWEL (0x4d)
 	.db $00
-	.db $00
+	.db $80
 	.db SND_GETITEM
 
 	; TREASURE_SQUARE_JEWEL (0x4e)
 	.db $00
-	.db $00
+	.db $80
 	.db SND_GETITEM
 
 	; TREASURE_X_SHAPED_JEWEL (0x4f)
 	.db $00
-	.db $00
+	.db $80
 	.db SND_GETITEM
 
 	; TREASURE_RED_ORE (0x50)
@@ -419,7 +419,7 @@ treasureCollectionBehaviourTable:
 	; TREASURE_MEMBERS_CARD (0x53)
 	.db $00
 	.db $00
-	.db SND_NONE
+	.db SND_GETITEM
 
 	; TREASURE_MASTERS_PLAQUE (0x54)
 	.db $00

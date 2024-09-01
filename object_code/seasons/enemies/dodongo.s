@@ -11,7 +11,18 @@ enemyCode79:
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c
-	jp z,enemyBoss_dead
+	jr nz,@normalStatus
+
+	; dead
+	ld e,Enemy.collisionType;$a4
+	ld a,(de)
+	or a
+	call nz,dead
+	ld e,Enemy.subid;$82
+	ld a,(de)
+	or a
+	jp nz,enemyDie
+	jp enemyBoss_dead
 
 @normalStatus:
 	ld e,Enemy.state
@@ -233,6 +244,34 @@ dodongo_state9:
 	.db 160, 160, 120, 160, 120, 120, 120, 120
 
 
+spawnBeetle:
+	ld b,ENEMY_BEETLE
+	call ecom_spawnEnemyWithSubid01
+	ret nz
+
+	ld l,Enemy.relatedObj1;$96
+	ld a,Enemy.start;$80
+	ldi (hl),a
+	ld (hl),d
+	ld e,Enemy.var30;$b0
+	ld a,(de)
+	inc a
+	ld (de),a
+	call getRandomNumber
+	ld c,a
+	and $70
+	add $20
+	ld l,Enemy.yh;$8b
+	ldi (hl),a
+	inc l
+	ld a,c
+	and $07
+	swap a
+	add $40
+	ld (hl),a ; Enemy.xh
+	ret
+
+
 ; Walking
 dodongo_stateA:
 	call dodongo_playStompSoundAtInterval
@@ -241,7 +280,13 @@ dodongo_stateA:
 
 	call dodongo_updateAngleTowardLink
 	jp c,dodongo_initiateNextAttack
-
+	
+; get beetle to spawn?
+	ld h,d
+	ld l,Enemy.var30
+	ld a,(hl)
+	cp $05
+	call c,spawnBeetle
 	; Reset movement if Link is no longer lined up well
 	jp dodongo_resetMovement
 
@@ -263,7 +308,6 @@ dodongo_doubleAnimate:
 	call enemyAnimate
 dodongo_animate:
 	jp enemyAnimate
-
 
 ; Opening mouth, preparing to fire
 dodongo_stateB:
@@ -693,4 +737,17 @@ dodongo_updateAnimationWhileHeld:
 
 	call dodongo_updateAnimation
 	or d
+	ret
+
+dead:
+	ldhl $d0, Enemy.start;$80
+-
+	ld l,Enemy.id;$81
+	ld a,(hl)
+	cp ENEMY_BEETLE;$51
+	call z,ecom_killObjectH
+	inc h
+	ld a,h
+	cp $e0
+	jr c,-
 	ret

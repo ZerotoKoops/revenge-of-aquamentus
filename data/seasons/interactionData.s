@@ -252,7 +252,7 @@ interaction60SubidData:
 	m_InteractionSubidData $5d $0a $10
 	m_InteractionSubidData $5d $08 $00
 	m_InteractionSubidData $00 $00 $00
-	m_InteractionSubidData $60 $00 $00
+	m_InteractionSubidData $60 $00 $00 ; $10
 	m_InteractionSubidData $60 $02 $50
 	m_InteractionSubidData $60 $04 $40
 	m_InteractionSubidData $60 $06 $00
@@ -268,23 +268,23 @@ interaction60SubidData:
 	m_InteractionSubidData $67 $04 $40 ; CROSSITEMS: Changed magic boomerang to use spr_boomerang.png
 	m_InteractionSubidData $60 $10 $20
 	m_InteractionSubidData $60 $1e $40
-	m_InteractionSubidData $5f $00 $50
+	m_InteractionSubidData $5f $00 $50 ; $20
 	m_InteractionSubidData $5f $02 $40
 	m_InteractionSubidData $c7 $00 $50 ; CROSSITEMS: Changed hyper slingshot similarly
 	m_InteractionSubidData $5f $16 $03
 	m_InteractionSubidData $61 $00 $50
 	m_InteractionSubidData $61 $02 $33
 	m_InteractionSubidData $5d $0c $33
-	m_InteractionSubidData $00 $00 $00
+	m_InteractionSubidData $5d $0c $13 ;$00 $00 $00
 	m_InteractionSubidData $5c $04 $00
 	m_InteractionSubidData $5c $04 $10
-	m_InteractionSubidData $5c $04 $20
+	m_InteractionSubidData $5c $04 $20 ; $2a
 	m_InteractionSubidData $5c $06 $40
 	m_InteractionSubidData $5c $06 $50
 	m_InteractionSubidData $5c $08 $43
 	m_InteractionSubidData $5c $08 $53
 	m_InteractionSubidData $5c $0c $30
-	m_InteractionSubidData $5d $00 $00
+	m_InteractionSubidData $5d $00 $00 ; $30
 	m_InteractionSubidData $5d $04 $53
 	m_InteractionSubidData $5d $04 $00
 	m_InteractionSubidData $5d $14 $00
@@ -301,7 +301,7 @@ interaction92SubidData:
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
-	m_InteractionSubidData $5e $00 $33
+	m_InteractionSubidData $5e $00 $33 ; $40
 	m_InteractionSubidData $5e $04 $13
 interaction17SubidData:
 	m_InteractionSubidData $5e $0c $50
@@ -319,7 +319,7 @@ interaction18SubidData:
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
-	m_InteractionSubidData $00 $00 $00
+	m_InteractionSubidData $00 $00 $00 ; $50
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
 	m_InteractionSubidData $00 $00 $00
@@ -490,11 +490,11 @@ interaction44SubidData:
 interaction47SubidData:
 	m_InteractionSubidData $5f $00 $50
 	m_InteractionSubidData $5c $02 $59
-	m_InteractionSubidData $5d $0a $10
+	m_InteractionSubidData $5d $12 $52;$5d $0a $10 ; $02
 	m_InteractionSubidData $60 $06 $00
 	m_InteractionSubidData $5c $10 $40
 	m_InteractionSubidData $65 $14 $33
-	m_InteractionSubidData $5d $0a $10
+	m_InteractionSubidData $60 $08 $50;$5d $0a $10
 	m_InteractionSubidData $5d $00 $23
 	m_InteractionSubidData $5d $0a $10
 	m_InteractionSubidData $5d $00 $23

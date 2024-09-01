@@ -81,6 +81,10 @@ interactionCode13:
 @state3:
 	call interactionDecCounter1
 	ret nz
+	ld a,(wNumEnemies)
+	dec a;xor a
+	jr nc,+
 	xor a
++
 	ld (wNumEnemies),a
 	jp interactionDelete

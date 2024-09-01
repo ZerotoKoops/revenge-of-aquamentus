@@ -32,12 +32,32 @@ interactionCode8f:
 	jp npcFaceLinkAndAnimate
 
 @checkHaveEssences:
-	ld a,(wEssencesObtained)
-	call getNumSetBits
 	ld h,d
 	ld l,Interaction.var38
-	cp $05
 	ld (hl),$00
-	ret c
+	;ld a,(wEssencesObtained)
+	;call getNumSetBits
+	ld a,TREASURE_ROUND_JEWEL
+	call checkTreasureObtained
+	ret nc
+	ld a,TREASURE_PYRAMID_JEWEL
+	call checkTreasureObtained
+	ret nc
+	ld a,TREASURE_SQUARE_JEWEL
+	call checkTreasureObtained
+	ret nc
+	ld a,(wSwordLevel)
+	cp $02
+	ret nz
+
 	inc (hl)
 	ret
+/*
+	ld h,d
+	ld l,Interaction.var38
+	;cp $05
+	ld (hl),$00
+	;ret c
+	inc (hl)
+	ret
+*/

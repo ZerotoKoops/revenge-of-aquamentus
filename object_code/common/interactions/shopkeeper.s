@@ -74,8 +74,8 @@ shopkeeperState0:
 
 	; Set bit 7 of subid if the chest game should be run
 	ld a,(wBoughtShopItems1)
-	and $0f
-	cp $0f
+	and $3f
+	cp $3f
 	jr nz,++
 	set 7,(hl)
 ++

@@ -41,7 +41,7 @@ partCode13:
 @state2:
 	call partCommon_decCounter1IfNonzero
 	jr nz,+
-	ld (hl),$1e
+	ld (hl),30;$1e
 	ld l,e
 	inc (hl)
 	ld a,$01
@@ -89,5 +89,5 @@ partCode13:
 	ret nz
 	ld l,Part.subid
 	ld c,(hl)
-	ld b,$39
+	ld b,>TX_3900;$39
 	jp showText

@@ -627,10 +627,16 @@ checkDarkenRoom:
 	jr nz,++
 	ld a,(wActiveRoom)
 	cp <ROOM_SEASONS_439
+	jr z,+
+	cp <ROOM_SEASONS_42c
+	jr z,+
+	cp <ROOM_SEASONS_41e
 	jr nz,++
++
 	call getThisRoomFlags
-	and $80
+	and ROOMFLAG_80;$80
 	ret nz
+
 ++
 
 .endif
@@ -1498,6 +1504,7 @@ updateTilesetPalette:
 	ret z
 
 	ld (wLoadedTilesetPalette),a
+	call updateTimeOfDayPalette
 	jp loadPaletteHeader
 
 ;;
@@ -3585,7 +3592,10 @@ standardGameState:
 	.dw cutscene20
 	.dw cutscene21
 .endif
-
+	.dw cutsceneTimeOfDay ; time of day; clock
+	.dw cutsceneWallRetraction
+	.dw cutsceneOutOfTime ; clock
+	.dw cutsceneSongOfTime ; clock
 
 ;;
 ; Cutscene 0 = not in a cutscene; loading a room
@@ -3644,7 +3654,25 @@ cutscene01:
 .else; ROM_SEASONS
 	call updateAllObjects
 .endif
-
+	ld a,GLOBALFLAG_INTRO_DONE
+	call checkGlobalFlag
+	jr z,++
+; Don't update clock if in end room
+	ld a,(wActiveGroup)
+	cp >ROOM_SEASONS_398
+	jr nz,+
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_398
+	jr z,++
++
+	ld a,(w1ParentItem5.id)
+	cp ITEM_HARP
+	jr z,++
+	ld a,(wLinkDeathTrigger)
+	or a
+	call z,updateClock ; clock
+	call c,updateDayOrNight ; clock
+++
 	call updateStatusBar
 
 .ifdef ROM_AGES
@@ -3777,6 +3805,7 @@ func_5c18:
 	call initializeRoom
 	call checkDisplayEraOrSeasonInfo
 	call checkDarkenRoomAndClearPaletteFadeState
+
 	call fadeinFromWhiteToRoom
 	call checkPlayRoomMusic
 	xor a
@@ -4077,6 +4106,8 @@ cutscene16:
 ;;
 ; For some reason, Ages's version of this function is further down than Season's version.
 checkDisplayEraOrSeasonInfo:
+	ret ;stubbed
+/*
 	ld a,GLOBALFLAG_DONT_DISPLAY_SEASON_INFO
 	call checkGlobalFlag
 	jr z,+
@@ -4090,6 +4121,7 @@ checkDisplayEraOrSeasonInfo:
 	ret nz
 	ld (hl),INTERAC_ERA_OR_SEASON_INFO
 	ret
+*/
 .endif
 
 ;;
@@ -4139,12 +4171,15 @@ setCutsceneIndexIfCutsceneTriggerSet:
 	ld (wCutsceneState),a
 	ret
 
+
+
 ;;
 checkPlayRoomMusic:
-	ld a, GLOBALFLAG_INTRO_DONE
+	/*ld a, GLOBALFLAG_INTRO_DONE
 	call checkGlobalFlag
-	ret z
+	ret z*/
 
++
 .ifdef ROM_SEASONS
 	; Override subrosia music if on a date with Rosa
 	ld a,GLOBALFLAG_DATING_ROSA
@@ -4158,11 +4193,6 @@ checkPlayRoomMusic:
 	jr @setMusic
 +
 .endif
-
-	ld a,(wActiveMusic)
-	or a
-	ret z
-
 .ifdef ROM_AGES
 	; Override symmetry city present music if it hasn't been restored yet
 	ld a,(wActiveMusic2)
@@ -4180,15 +4210,53 @@ checkPlayRoomMusic:
 	ld a, MUS_SADNESS
 	ld (wActiveMusic2),a
 ++
+.else ; ROM_SEASONS
+	ld a,(wActiveGroup)
+	cp >ROOM_SEASONS_021
+	jr nz,++
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_021
+	jr nz,++
+	ld a,MUS_CARNIVAL
+	ld (wActiveMusic2),a
+	jr @setMusic
+++
 .endif
+; clock music
+	ld a,(wActiveGroup)
+	cpa >ROOM_SEASONS_000
+	jr nz,@dayMusic
 
+	ld a,(wTimeOfDay)
+	rst_jumpTable
+	.dw @dayMusic
+	.dw @dawnDuskNoMusic
+	.dw @nightMusic
+	.dw @dawnDuskNoMusic
+
+@dawnDuskNoMusic:
+	ld a,(wActiveMusic)
+	and $7f
+	jr z,+
+	ld a,SNDCTRL_FAST_FADEOUT
+	jr @setMusic
++
+	ld a,(wActiveMusic)
+	cpa MUS_NONE
+	ret z
+	
+
+@nightMusic:
+	lda MUS_SADNESS
+	ld (wActiveMusic2),a
+	jr @setMusic
+@dayMusic:
+	call loadScreenMusic
 	ld a,(wActiveMusic2)
-
 @setMusic:
 	ld hl,wActiveMusic
 	cp (hl)
 	ret z
-
 	ld (hl),a
 	jp playSound
 
@@ -4229,7 +4297,21 @@ checkDisplayEraOrSeasonInfo:
 ; In Ages, it's always $00 (green).
 ;
 updateGrassAnimationModifier:
-
+	ld a,(wActiveGroup)
+	cpa >ROOM_SEASONS_000
+	jr nz,++
+	ld a,(wTimeOfDay)
+	rrca
+	jr nc,+
+	ld a,$02
++
+	ld hl,@grassAnimationValues
+	rst_addAToHl
+	ld a,(hl)
+++
+	ld (wGrassAnimationModifier),a
+	ret
+/*
 .ifdef ROM_AGES
 	ld a,$00
 	ld (wGrassAnimationModifier),a
@@ -4255,6 +4337,7 @@ updateGrassAnimationModifier:
 	ld a,(hl)
 	ld (wGrassAnimationModifier),a
 	ret
+*/
 
 @grassAnimationValues:
 
@@ -4263,7 +4346,7 @@ updateGrassAnimationModifier:
 .db terrainEffects.orangeGrassAnimationFrame0 - terrainEffects.greenGrassAnimationFrame0
 .db terrainEffects.blueGrassAnimationFrame0   - terrainEffects.greenGrassAnimationFrame0
 
-.endif
+;.endif
 
 
 ;;
@@ -4480,8 +4563,8 @@ clearEyePuzzleVars:
 		.dw mapTransitionGroup7Data
 
 	mapTransitionGroup0Data:
-		.db $40 $00 ; LostWoods
-		.db $c9 $01 ; SwordUpgrade
+		;.db $40 $00 ; LostWoods
+		;.db $c9 $01 ; SwordUpgrade
 
 	mapTransitionGroup1Data:
 	mapTransitionGroup2Data:
@@ -4841,7 +4924,7 @@ checkSeedTreeRefillIndex:
 
 	ld a,(wActiveRoom)
 	ld b,a
-	ld c,$08
+	ld c,$04;$08
 --
 	ld a,(de)
 	or a
@@ -4899,9 +4982,9 @@ checkSeedTreeRefillIndex:
 
 .else; ROM_SEASONS
 
-	ld c,$08
+	ld c,$04;$08
 --
-	ld a,(de)
+	ld a,(de) ;wxSeedTreeRefillData
 	or a
 	jr z,+
 	inc e
@@ -4943,7 +5026,7 @@ initializeSeedTreeRefillData:
 
 .else; ROM_SEASONS
 
-	ld a,$fc
+	ld a,$ff
 	ld (wSeedTreeRefilledBitset),a
 .endif
 
@@ -5153,8 +5236,13 @@ checkTileWarps:
 	jr nc,noWarpInitiated
 
 .ifdef ROM_SEASONS
-	dec a
-	jr z,@chimney
+	ld hl,@warpTileTypes
+	rst_jumpTable
+@warpTileTypes:
+	.dw @normal
+	.dw @chimney
+
+@normal:
 .endif
 
 	ld a,(wLinkGrabState)
@@ -5179,11 +5267,11 @@ checkTileWarps:
 	ld a,(hl)
 	or a
 	ret nz
+@@resetVariables:
 	call clearAllParentItems
 	call dropLinkHeldItem
 	call resetLinkInvincibility
 	jr @initiateWarp
-
 .endif ; ROM_SEASONS
 
 ;;
@@ -5426,7 +5514,7 @@ func_7b93:
 	ld hl,wGenericCutscene.cbb3
 	inc (hl)
 	ld a,$03
-	ld ($d000),a
+	ld (w1Link.enabled),a
 	ld a,LINK_STATE_WARPING
 	ld (wLinkForceState),a
 	ld a,$0b
@@ -5461,6 +5549,7 @@ func_7b93:
 	ld (wDisabledObjects),a
 	ld a,GLOBALFLAG_PREGAME_INTRO_DONE
 	call setGlobalFlag
+	call determineSeasonForRoomPack
 	jp initializeRoom
 
 
@@ -5496,9 +5585,28 @@ checkRoomPack:
 	or a
 	jr z,setHoronVillageSeason
 
+updateSeasonByRoomPack:
+	ld a,(wRoomPack)
 ;;
 ; @param	a	Room pack value
 determineSeasonForRoomPack:
+	dec a ; don't use room pack $00
+; multiply by 6
+	add a
+	ld b,a
+	add a
+	add b
+	ld hl,roomPackSeasonTable
+	rst_addAToHl
+	call getDayNightCombination
+	rst_addAToHl
+	ld a,(hl)	
+
+/*
+	ld a,(wTimeOfDay) ; clock
+	rra	;$00 if day, $01 if night
+*/
+/*
 	cp $f0
 	jr nc,determineCompanionRegionSeason
 
@@ -5511,11 +5619,11 @@ determineSeasonForRoomPack:
 	ld hl,roomPackSeasonTable
 	rst_addAToHl
 	ld a,(hl)
-
+*/
 ;;
 setSeason:
 	ld (wRoomStateModifier),a
-	or $01
+	;or $01
 	ret
 
 
@@ -5561,9 +5669,12 @@ determineCompanionRegionSeason:
 checkRoomPackAfterWarp_body:
 	ld a,GLOBALFLAG_SEASON_ALWAYS_SPRING
 	call checkGlobalFlag
+	jr z,+
+	;jp nz,determineSeasonForRoomPack
+	lda $00
+	jr ++
++
 	ld a,(wRoomPack)
-	jp nz,determineSeasonForRoomPack
-
 	cp $f0
 	jp nc,determineCompanionRegionSeason
 
@@ -5571,9 +5682,11 @@ checkRoomPackAfterWarp_body:
 	or a
 	ret z
 
-	ld hl,roomPackSeasonTable
-	rst_addAToHl
-	ld a,(hl)
+	call determineSeasonForRoomPack
+	;ld hl,roomPackSeasonTable
+	;rst_addAToHl
+	;ld a,(hl)
+++
 	ld (wRoomStateModifier),a
 	ret
 
@@ -5611,5 +5724,7 @@ cutscene1f:
 	jp updateAllObjects
 
 .endif ; ROM_AGES
+
+	.include "code/bank1Clock.s"
 
 .ends

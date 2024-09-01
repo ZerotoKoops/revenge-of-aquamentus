@@ -598,3 +598,7 @@
 	m_GfxData spr_caravan ; $0e3ca0
 
 	m_GfxData gfx_harp_inventory
+	m_GfxDataSimple map_dungeon_wall_retraction
+	m_GfxDataSimple flg_dungeon_wall_retraction
+	m_GfxData map_zerotokoops_screen
+	m_GfxData flg_zerotokoops_screen

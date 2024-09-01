@@ -1,6 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.define NUM_GFX_HEADERS $bb
+.define NUM_GFX_HEADERS $bd;$bb
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -410,15 +410,17 @@ m_GfxHeaderStart $41, GFXH_TILESET_OVERWORLD_SUMMER
 m_GfxHeaderStart $42, GFXH_TILESET_OVERWORLD_AUTUMN
 	m_GfxHeader gfx_tileset_overworld_standard_1, $8801
 	m_GfxHeader gfx_tileset_overworld_standard_2, $9001
-	m_GfxHeader gfx_tileset_autumn_standard, $9201
+	m_GfxHeader gfx_tileset_spring_standard, $9201
+	;m_GfxHeader gfx_tileset_autumn_standard, $9201
 	m_GfxHeader gfx_tileset_horon_village, $9601
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $43, GFXH_TILESET_OVERWORLD_WINTER
 	m_GfxHeader gfx_tileset_overworld_standard_1, $8801
 	m_GfxHeader gfx_tileset_overworld_standard_2, $9001
-	m_GfxHeader gfx_tileset_winter_standard, $9201
-	m_GfxHeader gfx_tileset_winter_tree_replacement, $8f01
+	m_GfxHeader gfx_tileset_summer_standard, $9201
+	;m_GfxHeader gfx_tileset_winter_standard, $9201
+	;m_GfxHeader gfx_tileset_winter_tree_replacement, $8f01
 	m_GfxHeader gfx_tileset_horon_village, $9601
 	m_GfxHeaderEnd
 
@@ -1137,4 +1139,19 @@ m_GfxHeaderStart $b8, GFXH_TWINROVA_LAVA_LAYOUT
 
 m_GfxHeaderStart $b9, GFXH_TWINROVA_NORMAL_LAYOUT
 	m_GfxHeader oth_twinrova_normal_layout, $cf00
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $bb, GFXH_DUNGEON_WALL_RETRACTION
+	m_GfxHeader map_dungeon_wall_retraction, w2TmpGfxBuffer
+	m_GfxHeader flg_dungeon_wall_retraction, w2TmpAttrBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $bc, GFXH_ZEROTOKOOPS_SCREEN
+	m_GfxHeader spr_aquamentus_1, $8000
+	m_GfxHeader spr_aquamentus_2, $8200
+	m_GfxHeader spr_aquamentus_3, $8400
+	m_GfxHeader spr_credits_font, $8600 ;sprites
+	m_GfxHeader spr_credits_font, $8a00 ;background
+	m_GfxHeader map_zerotokoops_screen, $9800
+	m_GfxHeader flg_zerotokoops_screen, $9801
 	m_GfxHeaderEnd

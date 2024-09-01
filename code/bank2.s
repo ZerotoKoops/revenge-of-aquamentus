@@ -3016,10 +3016,10 @@ b2_updateMenus:
 	jr z,+
 
 	; Return if you haven't seen the opening cutscene yet
-	ld a,(wGlobalFlags+GLOBALFLAG_INTRO_DONE/8)
-	bit GLOBALFLAG_INTRO_DONE&7,a
-	ld a, SND_ERROR
-	jp z,playSound
+	;ld a,(wGlobalFlags+GLOBALFLAG_INTRO_DONE/8)
+	;bit GLOBALFLAG_INTRO_DONE&7,a
+	;ld a, SND_ERROR
+	;jp z,playSound
 +
 	ld a,(wMenuDisabled)
 	ld b,a
@@ -3227,7 +3227,7 @@ playHeartBeepAtInterval:
 	ret z
 
 	ld a,(wFrameCounter)
-	and $3f
+	and $7f;$3f
 	ret nz
 
 	ld hl,wLinkHealth
@@ -3445,6 +3445,53 @@ updateStatusBar_body:
 	ld a,(wStatusBarNeedsRefresh)
 	bit 2,a
 	call nz,inGameDrawHeartDisplay
+
+; clock
+	ld a,GLOBALFLAG_INTRO_DONE
+	call checkGlobalFlag
+	jr z,++
+	;ld hl,w4StatusBarTileMap+$28
+	;ld b,($34-$28+1)
+	;call clearMemory
+; actual clock
+	ld a,(wStatusBarNeedsRefresh)
+	bit 5,a
+	jr z,++
+	ld hl,w4StatusBarTileMap+$34
+	call correctAddressForExtraHeart
+	ld c,$10
+	ld e,$01
+	ld a,(wMinute)
+-
+	ld b,a
+	and $0f
+	add c
+	ldd (hl),a
+	ld a,b
+	swap a
+	and $0f
+	add c
+	ldd (hl),a
+	
+	ld a,(wHour)
+	dec e
+	jr z,-
+
+	ld hl,w4StatusBarTileMap+$14
+	call correctAddressForExtraHeart
+	ld a,(wDay)
+	add c
+	ldd (hl),a
+	ld a,$1e
+	ldd (hl),a
+	dec a
+	ldd (hl),a
+	dec a
+	ldd (hl),a
+
+	;ld hl,wStatusBarNeedsRefresh
+	;res 5,(hl)
+++
 	ld hl,w4StatusBarTileMap+$0a
 	call correctAddressForExtraHeart
 	ld (hl),$04
@@ -3637,7 +3684,6 @@ func_02_52f6:
 ; @param[out]	cflag	Set if the data was loaded correctly (there is something to draw)
 loadEquippedItemSpriteData:
 	call loadTreasureDisplayData
-
 	; [wItemTreasure] = the treasure ID to use for level/quantity data
 	ldi a,(hl)
 	ld (de),a
@@ -4025,7 +4071,7 @@ inGameDrawHeartDisplay:
 ; @param hFF8B
 drawHeartDisplay:
 	; e = hearts per row (7 normally, 8 if you have 15+ hearts)
-	ld e,$07
+	ld e,$04;$07
 	cp 14*4+1
 	jr c,+
 	inc e
@@ -4238,6 +4284,7 @@ loadItemIconGfx:
 	jr c,+
 	cp $af ; Power Glove sprite was moved to be after the harp
 	jr z,+
+	jr @clear
 	add $02
 +
 
@@ -4257,10 +4304,11 @@ loadItemIconGfx:
 ;;
 loadStatusBarMap:
 	ld c,$10
+	inc c
 	ld a,(wLinkMaxHealth)
 	cp 14*4+1
 	jr c,+
-	inc c
+	;inc c
 +
 	; Check if biggoron's sword equipped
 	ld a,(wInventoryB)
@@ -4277,7 +4325,8 @@ loadStatusBarMap:
 	cp (hl)
 	ret z
 +
-	ldi (hl),a
+
+	ldi (hl),a ; wcbe8
 
 	; [wStatusBarNeedsRefresh] = $ff; should trigger complete redrawing, including
 	; reloading item graphics?
@@ -4855,7 +4904,6 @@ inventoryMenuState2:
 	inc a
 	jr ++
 +
-
 	ld a,(wInventory.selectedItem)
 	ld e,<wSatchelSelectedSeeds
 	cp ITEM_SEED_SATCHEL
@@ -5032,6 +5080,7 @@ inventorySubmenu1CheckDirectionButtons:
 	call getDirectionButtonOffsetFromHl
 	ret nc
 
+; lowest set bit in the input
 	ld c,a
 	ld b,a
 	inc b
@@ -5039,7 +5088,7 @@ inventorySubmenu1CheckDirectionButtons:
 	; Calculate number of selectable positions in total (depends on the level of the
 	; ring box). Store the number of selectable positions in 'd'.
 	call getRingBoxCapacity
-	ld e,$0f
+	ld e,$06;$0f
 	jr z,+
 	inc a
 +
@@ -5113,7 +5162,7 @@ inventorySubmenu1CheckDirectionButtons:
 
 ; Cursor offsets when the corresponding direction button is pressed
 @offsets:
-	.db $01 $ff $fb $05
+	.db $01 $ff $fe $02;$fb $05
 
 ;;
 inventorySubmenu2CheckDirectionButtons:
@@ -5271,7 +5320,7 @@ inventorySubmenu1_drawCursor:
 
 	dec d
 +
-	ld a,d
+	ld a,$00;d
 	ld hl,@spritesTable
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -5280,9 +5329,15 @@ inventorySubmenu1_drawCursor:
 	jp addSpritesToOam_withOffset
 
 @data:
+	.db $52 $55
+	.db $82 $85
+	.db $b2 $b5
+	.db $e0 $e3 $e6 $e9 $ec $ef
+/*
 	.db $52 $55 $58 $5b $5e $82 $85 $88
 	.db $8b $8e $b2 $b5 $b8 $bb $be $e0
 	.db $e3 $e6 $e9 $ec $ef
+*/
 
 @spritesTable:
 	.dw @sprites0
@@ -5381,11 +5436,15 @@ func_02_5a35:
 	ld a,d
 	call func_02_5afc
 	ld a,e
+	cp $05
+	jr nc,+
+
 	ld hl,seedAndHarpSpriteTable
 	rst_addAToHl
 	ld a,(hl)
 	rst_addAToHl
 	call addSpritesToOam_withOffset
++
 	pop de
 
 	; If this is for the harp, skip over some of the following code
@@ -5477,16 +5536,19 @@ seedAndHarpSpriteTable:
 	.db $14 $0c $0e $08
 
 @sprite5:
+	;.db $00 ; harp edit
 	.db $02
 	.db $14 $08 $46 $08
 	.db $14 $10 $48 $08
 
 @sprite6:
+	;.db $00 ; harp edit
 	.db $02
 	.db $14 $08 $4e $0b
 	.db $14 $10 $50 $0b
 
 @sprite7:
+	;.db $00 ; harp edit
 	.db $02
 	.db $14 $08 $56 $09
 	.db $14 $10 $58 $09
@@ -5648,6 +5710,12 @@ inventorySubscreen0_drawStoredItems:
 ; Modifies the tilemap and displayed text for subscreen 1 based on obtained treasures.
 ;
 inventorySubscreen1_drawTreasures:
+; draw blocks over unused sections
+	ld hl,w4TileMap+$4a
+	ldbc $0a,$09
+	call fillRectangleInTileMapWithMenuBlock
+
+
 	ld hl,subscreen1TreasureData
 @drawTreasure:
 	ldi a,(hl) ; Read treasure index
@@ -6213,13 +6281,16 @@ inventoryMenuDrawHarpSprites:
 	add c
 	ld c,a
 @drawSprite:
+; harp edit
+	ret
+/*
 	ld a,(wSelectedHarpSong)
 	ld hl,seedAndHarpSpriteTable+4
 	rst_addAToHl
 	ld a,(hl)
 	rst_addAToHl
 	jp addSpritesToOam_withOffset
-
+*/
 
 ;;
 ; While an item submenu is up (for harp or satchel), this creates a bunch of "blank
@@ -6350,43 +6421,54 @@ subscreen1TreasureData:
 		.db $00
 
 	.else; ROM_SEASONS
-
+/*
 		; Row 1
-		.db TREASURE_MASTERS_PLAQUE		$01 $00
+		;.db TREASURE_MASTERS_PLAQUE		$01 $00
 		.db TREASURE_FLIPPERS			$01 $00
 		.db TREASURE_MERMAID_SUIT		$01 $00
-		.db TREASURE_POTION			$04 $01
-		.db TREASURE_TRADEITEM			$07 $02
-		.db TREASURE_MAKU_SEED			$0a $03
-		.db TREASURE_GASHA_SEED			$0d $04
+		.db TREASURE_POTION				$04 $01
+		;.db TREASURE_TRADEITEM			$07 $02
+		;.db TREASURE_MAKU_SEED			$0a $03
+		;.db TREASURE_GASHA_SEED			$0d $04
 
 		; Row 2
-		.db TREASURE_GNARLED_KEY		$31 $05
-		.db TREASURE_RICKY_GLOVES		$34 $06
-		.db TREASURE_FLOODGATE_KEY		$34 $06
-		.db TREASURE_BOMB_FLOWER		$27 $07
-		.db TREASURE_BOMB_FLOWER_LOWER_HALF	$47 $07
-		.db TREASURE_PIRATES_BELL		$37 $07
-		.db TREASURE_TREASURE_MAP		$3a $08
-		.db TREASURE_ROUND_JEWEL		$3d $09
-		.db TREASURE_PYRAMID_JEWEL		$3e $09
-		.db TREASURE_SQUARE_JEWEL		$4d $09
-		.db TREASURE_X_SHAPED_JEWEL		$4e $09
-
+		.db TREASURE_GNARLED_KEY		$31 $02
+		;.db TREASURE_RICKY_GLOVES		$34 $06
+		;.db TREASURE_FLOODGATE_KEY		$34 $06
+		;.db TREASURE_BOMB_FLOWER		$27 $07
+		;.db TREASURE_BOMB_FLOWER_LOWER_HALF	$47 $07
+		;.db TREASURE_PIRATES_BELL		$37 $07
+		.db TREASURE_ROUND_JEWEL		$34 $03;$3d $09
+		.db TREASURE_PYRAMID_JEWEL		$35 $03;$3e $09
+		.db TREASURE_SQUARE_JEWEL		$44 $03;$4d $09
+		.db TREASURE_X_SHAPED_JEWEL		$45 $03;$4e $09
+		.db TREASURE_TREASURE_MAP		$61 $04;$3a $08
 		; Row 3
-		.db TREASURE_STAR_ORE			$61 $0a
-		.db TREASURE_RIBBON			$61 $0a
-		.db TREASURE_STAR_ORE			$61 $0a
-		.db TREASURE_SPRING_BANANA		$61 $0a
-		.db TREASURE_DRAGON_KEY			$61 $0a
-		.db TREASURE_RED_ORE			$64 $0b
-		.db TREASURE_HARD_ORE			$64 $0b
-		.db TREASURE_BLUE_ORE			$67 $0c
-		.db TREASURE_MEMBERS_CARD		$6a $0d
-		.db TREASURE_RING			$6d $0e
+		;.db TREASURE_STAR_ORE			$61 $0a
+		;.db TREASURE_RIBBON			$61 $0a
+		;.db TREASURE_STAR_ORE			$61 $0a
+		;.db TREASURE_SPRING_BANANA		$61 $0a
+		;.db TREASURE_DRAGON_KEY			$61 $0a
+		;.db TREASURE_RED_ORE			$64 $0b
+		;.db TREASURE_HARD_ORE			$64 $0b
+		;.db TREASURE_BLUE_ORE			$67 $0c
+		;.db TREASURE_MEMBERS_CARD		$64 $05;$6a $0d
+		;.db TREASURE_RING			$6d $0e
 		.db $00
-
-
+*/
+; Row 1
+		.db TREASURE_MEMBERS_CARD	$01 $00
+		.db TREASURE_POTION			$04 $01
+; Row 2
+		.db TREASURE_TREASURE_MAP	$31 $02
+		.db TREASURE_ROUND_JEWEL	$34 $03
+		.db TREASURE_PYRAMID_JEWEL	$35 $03
+		.db TREASURE_SQUARE_JEWEL	$44 $03
+		.db TREASURE_X_SHAPED_JEWEL	$45 $03
+; Row 3
+		.db TREASURE_GNARLED_KEY	$61 $04
+		.db TREASURE_FLIPPERS		$64 $05
+		.db $00
 	.endif
 
 
@@ -6519,6 +6601,19 @@ galeSeedMenu_state1:
 
 @aPressed:
 	call mapGetRoomTextOrReturn
+	ld a,(wMapMenu.cursorIndex)
+	cpa <ROOM_SEASONS_000
+	jr nz,+
+	ld c,<TX_0306
++
+	cpa <ROOM_SEASONS_050
+	jr nz,+
+	ld c,<TX_0302
++
+	cpa <ROOM_SEASONS_055
+	jr nz,+
+	ld c,<TX_0303
++
 	ld a,c
 	ld (wTextSubstitutions+2),a
 	ld c,<TX_0300 ; Warp prompt
@@ -6597,7 +6692,7 @@ galeSeedMenu_addOffsetToWarpIndex:
 	ld d,a
 	call getTreeWarpDataIndex
 	ld a,(hl)
-	or a
+	cpa $ff;or a
 	jr z,--
 
 	; We can only use entry if we've visited the room.
@@ -6948,8 +7043,9 @@ mapMenu_state1:
 .else; ROM_SEASONS
 
 	; In seasons, 'd' is a bitset to AND the position with instead of a maximum value.
+	; Ztk: made like Ages for smaller overworld
 	ld c,a
-	ldde $f0, OVERWORLD_WIDTH
+	ldde OVERWORLD_HEIGHT*16, OVERWORLD_WIDTH
 
 	; Check for subrosia
 	ld a,(wMapMenu.mode)
@@ -6984,7 +7080,7 @@ mapMenu_state1:
 
 @verticalMove:
 
-.ifdef ROM_AGES
+;.ifdef ROM_AGES
 	ld a,h
 	@loop2:
 		add c
@@ -6993,13 +7089,14 @@ mapMenu_state1:
 		jr nc,@loop2
 	ld h,a
 
-.else; ROM_SEASONS
+/*.else; ROM_SEASONS
 
 	ld a,h
 	add c
 	and d
 	ld h,a
 .endif
+*/
 
 @setNewCursorIndex:
 	ld a,h
@@ -7155,6 +7252,12 @@ mapGetRoomText:
 	and $7f
 	ld c,a
 	ret
++
+; only Dungeons 0 and 1 exist
+	ld a,c
+	or a
+	jr z,+
+	ld c,<TX_0201
 +
 	ld b,>TX_0200
 	ret
@@ -7354,22 +7457,22 @@ getMinimapPopupType:
 
 .else; ROM_SEASONS
 
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_advanceShop
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_normal
-	.dw minimapPopupType_cave
-	.dw minimapPopupType_gashaSpot
-	.dw minimapPopupType_portalSpot
-	.dw minimapPopupType_pirateShip
-	.dw minimapPopupType_shop
-	.dw minimapPopupType_moblinsKeep
-	.dw minimapPopupType_templeOfSeasons
-	.dw minimapPopupType_seedTree
+	/*$00*/ .dw minimapPopupType_normal
+	/*$01*/ .dw minimapPopupType_normal
+	/*$02*/ .dw minimapPopupType_advanceShop
+	/*$03*/ .dw minimapPopupType_normal
+	/*$04*/ .dw minimapPopupType_normal
+	/*$05*/ .dw minimapPopupType_normal
+	/*$06*/ .dw minimapPopupType_normal
+	/*$07*/ .dw minimapPopupType_normal
+	/*$08*/ .dw minimapPopupType_cave
+	/*$09*/ .dw minimapPopupType_gashaSpot
+	/*$0a*/ .dw minimapPopupType_portalSpot
+	/*$0b*/ .dw minimapPopupType_pirateShip
+	/*$0c*/ .dw minimapPopupType_shop
+	/*$0d*/ .dw minimapPopupType_moblinsKeep
+	/*$0e*/ .dw minimapPopupType_templeOfSeasons
+	/*$0f*/ .dw minimapPopupType_seedTree
 .endif
 
 minimapPopupType_normal:
@@ -7387,7 +7490,7 @@ minimapPopupType_advanceShop:
 minimapPopupType_cave:
 	ld a,(wMapMenu.cursorIndex)
 	call mapGetRoomText
-	ld a,$02
+	ld a,>TX_0200;$02
 	cp b
 	jr nz,minimapNoPopup
 	ld a,e
@@ -7889,6 +7992,7 @@ mapMenu_drawSprites:
 
 @dungeon:
 	call dungeonMap_drawItemSprites
+	call dungeonMap_drawJewelLocations
 	call dungeonMap_drawLinkIcons
 	call dungeonMap_drawCursor
 	call dungeonMap_drawArrows
@@ -8333,7 +8437,7 @@ mapMenu_drawWarpSites:
 	ld a,c
 	call getTreeWarpDataIndex
 	ldi a,(hl)
-	or a
+	cpa $ff;or a
 	ret z
 
 	; Check if we've visited this room
@@ -8377,17 +8481,25 @@ getTreeWarpDataIndex:
 ; @param[out]	cflag	Set on failure (no tree exists for this room)
 getTreeWarpDataForRoom:
 	ld c,a
+	or a
+	jr z,@room00
 	call getWarpTreeData
 --
 	ldi a,(hl)
-	or a
+	cpa $ff;or a
 	scf
 	ret z
+; used for other rooms
 	cp c
 	ret z
 	inc hl
 	inc hl
 	jr --
+
+@room00:
+	call getWarpTreeData
+	ldi a,(hl)
+	ret
 
 ;;
 ; See data/[game]/treeWarps.s.
@@ -8461,6 +8573,108 @@ mapMenu_drawTimePortal:
 
 .else; ROM_SEASONS
 
+dungeonMap_drawJewelLocations:
+	ret ; don't let this go
+
+	ld de,@sprite
+	ld hl,wTmpcec0
+	ld b,$05
+	call copyMemoryReverse
+
+	; Decide on the frame of animation
+	ld l,<wTmpcec0+3
+	ld a,(wFrameCounter)
+	add a
+	swap a
+	and $03
+	add a
+	add (hl)
+	ld (hl),a
+
+	; Return if not in dungeon
+	ld a,(wMapMenu.mode)
+	cp $02
+	ret nz
+
+	; Return if Link doesn't have the treasure map
+/* temp
+	ld a,TREASURE_TREASURE_MAP
+	call checkTreasureObtained
+	ret nc
+*/
+	; Loop through all 4 jewels
+	ldbc $04,$00
+@drawTreasure:
+	;ld b,b
+	; Don't draw it if Link has the jewel
+/*
+	ld a,c
+	add TREASURE_ROUND_JEWEL
+	call checkTreasureObtained
+	jr nc,@nextTreasure
+*/
+	; Don't draw it if the jewel has been inserted into a hole.
+	ld a,c
+	ld hl,wInsertedJewels
+	call checkFlag
+	jr z,@nextTreasure
+
+	; Get the location, draw the treasure
+	push bc
+	ld hl,wJewelRooms
+	rst_addAToHl
+	ld d,(hl)
+	call getDungeonRoomIfOnFloor
+	jr nc,+
+
+	ld hl,wTmpcec0
+	call addSpritesToOam_withOffset;mapMenu_drawSpriteAtRoomIndex
+
++
+	pop bc
+@nextTreasure
+	inc c
+	dec b
+	jr nz,@drawTreasure
+	ret
+
+@sprite:
+	.db $01
+	.db $0c $08 $18 $07	
+
+;;
+; d jewel room being checked
+getDungeonRoomIfOnFloor:
+	ld a,($ff00+R_SVBK)
+	push af
+
+	ld a,:w2DungeonLayout
+	ld ($ff00+R_SVBK),a
+	ld a,(wMapMenu.floorIndex)
+	inc a
+	call dungeonMap_getFloorAddress
+	ld e,$40
+-
+	ldi a,(hl)
+	cp d
+	jr z,@foundRoom
+
+
+	dec e
+	jr nz,-
+
+	xor a
+	jr +
+
+@foundRoom:
+	ld b,h
+	ld c,l
+	scf
++
+	pop hl
+	ld a,h
+	ld ($ff00+R_SVBK),a
+	ret
 
 ;;
 ; Seasons only: draw the locations of the jewels if Link has the treasure map.
@@ -8528,7 +8742,7 @@ mapMenu_drawJewelLocations:
 	ret
 
 @jewelLocations:
-	.db $b5 $1d $c2 $f4 ; Normal locations
+	.db <ROOM_SEASONS_000, <ROOM_SEASONS_031, <ROOM_SEASONS_005, <ROOM_SEASONS_054  ;$b5 $1d $c2 $f4 ; Normal locations
 	.db $b5 $7e $a7 $f4 ; Linked game locations
 
 @sprite:
@@ -9450,10 +9664,10 @@ mapMenu_tileSubstitutionTable:
 mapMenu_dungeonEntranceText:
 
 	.ifdef ROM_AGES
-		.db $04, $80|(<TX_0307)
-		.db $24, $80|(<TX_0309)
-		.db $46, $80|(<TX_0337)
-		.db $66, $80|(<TX_0311)
+		.db <ROOM_SEASONS_404, $80|(<TX_0303)
+		.db <ROOM_SEASONS_43a, $80|(<TX_0302)
+		.db <ROOM_SEASONS_423, $80|(<TX_0304)
+		.db <ROOM_SEASONS_41c, $80|(<TX_0306)
 		.db $91, $80|(<TX_0303)
 		.db $bb, $80|(<TX_0305)
 		.db $26,     (<TX_0306)
@@ -9468,11 +9682,10 @@ mapMenu_dungeonEntranceText:
 		.db $01, $80|(<TX_0332)
 
 	.else; ROM_SEASONS
-
-		.db $04, $80|(<TX_0313)
-		.db $1c, $80|(<TX_030f)
-		.db $39, $80|(<TX_0311)
-		.db $4b, $80|(<TX_030e)
+		.db <ROOM_SEASONS_404, $80|(<TX_0303)
+		.db <ROOM_SEASONS_43a, $80|(<TX_0302)
+		.db <ROOM_SEASONS_423, $80|(<TX_0304)
+		.db <ROOM_SEASONS_41c, $80|(<TX_0306)
 		.db $81, $80|(<TX_0305)
 		.db $a7, $80|(<TX_0310)
 		.db $ba, $80|(<TX_032b)

@@ -57,9 +57,12 @@ interactionCode5f:
 
 	; In the past or indoors; "Your song just echoes..."
 	ld bc,TX_510f
-	ld a,(wFluteIcon)
-	or a
+	ld a,GLOBALFLAG_FINISHEDGAME
+	call checkGlobalFlag
 	jp z,@showTextAndDelete
+	;ld a,(wFluteIcon)
+	;or a
+	;jp z,@showTextAndDelete
 
 	; If in the present, check if companion is callable in this room
 	ld a,(wActiveRoom)

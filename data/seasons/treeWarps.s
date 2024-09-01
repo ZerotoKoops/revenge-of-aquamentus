@@ -7,11 +7,20 @@
 ;   b2: map popup index (should show the tree type)
 
 treeWarps:
+	.db <ROOM_SEASONS_000 $62 $19 ;mystery
+	.db <ROOM_SEASONS_005 $53 $15 ;ember
+	.db <ROOM_SEASONS_032 $45 $18 ;gale
+	.db <ROOM_SEASONS_050 $48 $17 ;pegasus
+	.db <ROOM_SEASONS_055 $33 $16 ;scent
+/*
 	.db $10 $34 $18
 	.db $5f $43 $18
 	.db $67 $23 $16
 	.db $72 $44 $17
 	.db $9e $45 $19
 	.db $f8 $33 $15
-	.db $00 $00 $00
-	.db $00 $00 $00
+*/
+	.db $ff $ff $ff
+	.db $ff $ff $ff
+	.db $ff $ff $ff
+	.db $ff

@@ -1,0 +1,23 @@
+.enum $00
+	TIME_DAY	db ; $00
+	TIME_DUSK	db ; $01
+	TIME_NIGHT	db ; $02
+	TIME_DAWN	db ; $03
+.ende
+
+	.define TIME_03_59 $0359
+	.define TIME_05_59 $0559
+	.define TIME_15_59 $1559
+	.define TIME_17_59 $1759
+	.define TIME_23_59 $2359
+
+	.define TIMEFLAG_SLOW_TIME $01
+	.define TIMEFLAG_SUNS_SONG $02
+	.define TIMEFLAG_SONG_OF_HEALING_USED $04
+
+	.define TIMEFLAG_BIT_SLOW_TIME 0
+	.define TIMEFLAG_BIT_SUNS_SONG 1
+	.define TIMEFLAG_BIT_SONG_OF_HEALING_USED 3
+
+	.define NUM_SONGS $0a
+	.define SONG_LENGTH $08

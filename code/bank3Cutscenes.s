@@ -464,9 +464,14 @@ intro_japaneseOnlyScreen:
 intro_capcomScreen:
 	ld a,(wIntroVar)
 	rst_jumpTable
-	.dw @state0
-	.dw @state1
-	.dw @state2
+	.dw @state0 ; $00
+	.dw @state1 ; $01
+	.dw @zerotokoopsScreen_00 ; $02
+	.dw @zerotokoopsScreen_01 ; $03
+	.dw @zerotokoopsScreen_02 ; $04
+	.dw @zerotokoopsScreen_03 ; $05
+	.dw @state1 ; $06
+	.dw @state2 ; $07
 
 ;;
 @state0:
@@ -476,13 +481,12 @@ intro_capcomScreen:
 	ld a,GFXH_NINTENDO_CAPCOM_SCREEN
 	call loadGfxHeader
 	ld a,PALH_01
-	call loadPaletteHeader
 
+	call loadPaletteHeader
 	ld hl,wTmpcbb3
 	ld (hl),208
 	inc hl
 	ld (hl),$00 ; [wTmpcbb4] = 0
-
 	call intro_incState
 	call fadeinFromWhite
 	xor a
@@ -499,12 +503,219 @@ intro_capcomScreen:
 	jp fadeoutToWhite
 
 ;;
+; Initial load in
+@zerotokoopsScreen_00:
+	ld a,(wPaletteThread_mode)
+	or a
+	ret nz
+
+	call clearVram
+
+	ld a,GFXH_ZEROTOKOOPS_SCREEN
+	call loadGfxHeader
+	ld a,GFXH_TILESET_NATZU_PRAIRIE
+	call loadGfxHeader
+	ld a,PALH_SEASONS_91;PALH_06
+	call loadPaletteHeader
+
+	lda $00
+	call @loadAquamentusSprites
+
+	ld a,(wSecond-1)
+	cpa $00
+	call nz,enableIntroInputs
+
+	ld hl,wTmpcbb3
+	ld (hl),$98;208
+	inc hl
+	ld (hl),$00 ; [wTmpcbb4]
+	call intro_incState
+	call fadeinFromWhite
+	ld a,$04
+	jp loadGfxRegisterStateIndex
+
+; Aquamentus screeching
+@zerotokoopsScreen_02:
+	ld b,$02
+	jr +
+
+;;
+; Aquamentus walking
+@zerotokoopsScreen_01:
+@zerotokoopsScreen_03:
+	ld b,$00
++
+	ld a,(wTmpcbb3)
+	and $20
+	swap a
+	rrca
+	add b
+	call @loadAquamentusSprites
+
+	ld hl,@zerotokoopsTextSprites_00
+	ld bc,$182c
+	call addSpritesToOam_withOffset	
+	ld hl,@zerotokoopsTextSprites_01
+	ld bc,$8828
+	call addSpritesToOam_withOffset	
+
+	ld hl,wTmpcbb3
+	call decHlRef16WithCap
+	ret nz
+
+	ld a,(wIntroVar)
+	sub $03 ; @zerotokoopsScreen_01
+	ld hl,@@delay
+	rst_addAToHl
+	ld a,(hl)
+	ld hl,wTmpcbb3
+	ld (hl),a
+	inc hl
+	ld (hl),$00 ; [wTmpcbb4]
+
+	jp intro_incState
+
+@@delay:
+	.db $38 $38 $30
+
+@loadAquamentusSprites:
+	push af
+	call clearOam
+
+	pop af
+	add a
+	ld hl,@@sprites
+	rst_addDoubleIndex
+	push hl
+	call @@loadSprites
+	pop hl
+	inc hl
+	inc hl
+@@loadSprites
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld bc,$5048
+	jp addSpritesToOam_withOffset
+
+@@sprites:
+	.dw @aquamentusHead00Sprites @aquamentusBody00Sprites
+	.dw @aquamentusHead01Sprites @aquamentusBody01Sprites
+	.dw @aquamentusHead02Sprites @aquamentusBody00Sprites
+	.dw @aquamentusHead02Sprites @aquamentusBody01Sprites
+
+
+@aquamentusHead00Sprites:
+	.db 9
+	.db $f8 $02 $00 $00 ;horn
+
+	.db $00 $00 $02 $00 ;head
+	.db $00 $08 $04 $00
+	.db $00 $10 $06 $00
+	.db $10 $00 $0c $00
+	.db $10 $08 $0e $00
+	.db $10 $10 $10 $00
+
+	.db $08 $18 $08 $00 ;wings
+	.db $08 $20 $0a $00
+
+@aquamentusHead01Sprites:
+	.db 9
+	.db $f8 $02 $00 $00 ;horn
+	
+	.db $00 $00 $02 $00 ;head
+	.db $00 $08 $04 $00
+	.db $00 $10 $20 $00
+	.db $10 $00 $0c $00
+	.db $10 $08 $0e $00
+	.db $10 $10 $22 $00
+
+	.db $10 $18 $24 $00 ;wings
+	.db $10 $20 $26 $00
+
+@aquamentusHead02Sprites:
+	.db 9
+	.db $f8 $04 $38 $00
+	
+	.db $00 $fc $3a $00
+	.db $00 $04 $3c $00
+	.db $00 $0c $3e $00
+	.db $10 $00 $40 $00
+	.db $10 $08 $42 $00
+	.db $10 $10 $44 $00
+
+	.db $10 $18 $24 $00 ;wings
+	.db $10 $20 $26 $00
+
+@aquamentusBody00Sprites:
+	.db 7
+	.db $18 $18 $12 $00 ;lower body
+	.db $18 $20 $14 $00
+
+	.db $20 $00 $16 $00
+	.db $20 $08 $18 $00
+	.db $20 $10 $1a $00
+
+	.db $28 $18 $1c $00
+	.db $28 $20 $1e $00
+
+@aquamentusBody01Sprites:
+	.db 5
+	.db $20 $00 $28 $00 ;lower body
+	.db $20 $08 $2a $00
+	.db $20 $10 $2c $00
+	.db $20 $18 $2e $00
+	.db $20 $20 $30 $00
+
+@zerotokoopsTextSprites_00:
+	.db 10
+	.db $00 $00 $82 $04 ; R
+	.db $00 $08 $7c $04 ; O
+	.db $00 $10 $78 $04 ; M
+	.db $00 $18 $6e $04 ; H
+	.db $00 $20 $60 $04 ; A
+	.db $00 $28 $64 $04 ; C
+	.db $00 $30 $74 $04 ; K
+
+	.db $00 $40 $62 $04 ; B
+	.db $00 $48 $90 $04 ; Y
+
+	.db $00 $58 $9a $04 ; ~
+/*
+	.db $18 $20 $92 $00 ; Z
+	.db $18 $28 $68 $00 ; E
+	.db $18 $30 $82 $00 ; R
+	.db $18 $38 $7c $00 ; O
+	.db $18 $40 $86 $00 ; T
+	.db $18 $48 $7c $00 ; O
+	.db $18 $50 $74 $00 ; K
+	.db $18 $58 $7c $00 ; O
+	.db $18 $60 $7c $00 ; O
+	.db $18 $68 $7e $00 ; P
+	.db $18 $70 $84 $00 ; S
+*/
+@zerotokoopsTextSprites_01:
+	.db 9
+	.db $00 $00 $66 $05 ; D
+	.db $00 $0a $7c $05 ; O
+
+	.db $00 $1c $7a $05 ; N
+	.db $00 $26 $7c $05 ; O
+	.db $00 $30 $86 $05 ; T
+
+	.db $00 $42 $84 $05 ; S
+	.db $00 $4c $68 $05 ; E
+	.db $00 $56 $76 $05 ; L
+	.db $00 $60 $76 $05 ; L
+
+;;
 ; Fading out
 @state2:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 
+	call clearOam ; ztk edit
 	xor a
 	ld hl,wIntroStage
 	ld (hl),$02
@@ -538,8 +749,8 @@ intro_titlescreen:
 
 .else; ROM_SEASONS
 
-	ld hl,titlescreenMakuSeedSprite
-	call addSpritesToOam
+	;ld hl,titlescreenMakuSeedSprite
+	;call addSpritesToOam
 
 	ld a,(wTmpcbb3)
 	and $20

@@ -278,47 +278,62 @@ interactionCode31:
 	ld (hl),a
 	jp interactionSetAnimation
 @subid2:
-	ld e,$44
+	ld e,Interaction.state;$44
 	ld a,(de)
 	rst_jumpTable
 	.dw @@state0
 	.dw @@state1
 @@state0:
-	ld a,$01
+	ld a,$01 ; Interaction.state == 1
 	ld (de),a
+	;use this global flag cause why not
 	ld a,GLOBALFLAG_STAR_ORE_FOUND
 	call checkGlobalFlag
-	jp nz,interactionDelete
+	jp c,interactionDelete
 	ld a,(wcc84)
 	or a
 	jp nz,interactionDelete
 	ld a,d
 	ld (wcc84),a
 	ld h,d
-	ld l,$40
-	set 1,(hl)
+	ld l,Interaction.enabled;$40
+	set 1,(hl) ; don't despawn
+
 	call getRandomNumber
 	and $03
-	ld hl,@@table_62d3
+	ld e,a
+	ld a,(wTimeOfDay)
+	and TIME_NIGHT
+	rla ; x4
+	add e
+
+	ld hl,@@rooms
 	rst_addDoubleIndex
-	ld e,$70
+	ld e,Interaction.var30;$70
 	ldi a,(hl)
 	ld (de),a
 	inc e
 	ld a,(hl)
 	ld (de),a
 	ld a,$ff
-	ld e,$72
+	ld e,Interaction.var32;$72
 	ld (de),a
 	ret
-@@table_62d3:
+@@rooms:
 	; var30 - var31
-	.db $65 $57
-	.db $66 $56
-	.db $75 $27
-	.db $76 $24
+; day
+	.db <ROOM_SEASONS_033, $63 ;$65 $57
+	.db <ROOM_SEASONS_034, $37 ;$66 $56
+	.db <ROOM_SEASONS_043, $33 ;$75 $27
+	.db <ROOM_SEASONS_044, $42 ;$76 $24
+;night
+	.db <ROOM_SEASONS_033, $56
+	.db <ROOM_SEASONS_034, $52
+	.db <ROOM_SEASONS_043, $18
+	.db <ROOM_SEASONS_044, $21
+
 @@state1:
-	ld e,$72
+	ld e,Interaction.var32;$72
 	ld a,(de)
 	ld b,a
 	ld a,(wActiveRoom)
@@ -326,7 +341,7 @@ interactionCode31:
 	ret z
 	ld (de),a
 	ld b,a
-	ld e,$70
+	ld e,Interaction.var30;$70
 	ld a,(de)
 	cp b
 	jr nz,+
@@ -334,17 +349,17 @@ interactionCode31:
 	ret nz
 	ld (hl),INTERAC_TREASURE
 	inc l
-	ld (hl),TREASURE_STAR_ORE
-	ld e,$71
+	ld (hl),TREASURE_MEMBERS_CARD;TREASURE_STAR_ORE
+	ld e,Interaction.var31;$71
 	ld a,(de)
-	ld l,$4b
+	ld l,Interaction.yh;$4b
 	jp setShortPosition
 +
-	ld a,TREASURE_STAR_ORE
+	ld a,TREASURE_MEMBERS_CARD;TREASURE_STAR_ORE
 	call checkTreasureObtained
 	jr c,+
 	ld a,b
-	cp $60
+	cp <ROOM_SEASONS_033;$60
 	ret nc
 -
 	xor a

@@ -52,12 +52,64 @@ movingPlatform_scriptTable:
 	.dw @@platform0
 	.dw @@platform1
 	.dw @@platform2
+/*
+	.dw @@platform1
+	.dw @@platform2
 	.dw @@platform3
 	.dw @@platform4
 	.dw @@platform5
 	.dw @@platform6
-
+*/
 @@platform0:
+	plat_setspeed SPEED_100
+--
+	plat_right	$20
+	plat_wait	$10
+	plat_down	$30
+	plat_wait	$10
+	plat_left	$20
+	plat_wait	$10
+	plat_up		$30
+	plat_wait	$10
+	plat_jump	--
+
+@@platform1:
+	plat_setspeed SPEED_080
+--
+	plat_down	$20
+	plat_wait	$10
+	plat_up		$20
+	plat_wait	$10
+	plat_jump	--
+
+@@platform2:
+	plat_setspeed SPEED_100
+--
+	plat_left	$28
+	plat_up		$28
+
+	plat_wait	$30
+	plat_up		$10
+	plat_right	$50
+	plat_down	$10
+	plat_wait	$20
+
+	plat_down	$28
+	plat_left	$50
+	plat_down	$28
+	plat_wait	$18
+
+	plat_down	$10
+	plat_right	$50
+	plat_up		$10
+	plat_wait	$20
+
+	plat_up		$28
+	plat_left	$28
+	plat_jump	--
+
+
+/*
 	plat_wait  $10
 	plat_left  $40
 --
@@ -66,7 +118,8 @@ movingPlatform_scriptTable:
 	plat_wait  $10
 	plat_left  $a0
 	plat_jump --
-
+*/
+/*
 @@platform1:
 	plat_wait  $10
 	plat_up    $40
@@ -124,7 +177,7 @@ movingPlatform_scriptTable:
 	plat_wait  $10
 	plat_right $e0
 	plat_jump --
-
+*/
 @dungeon03:
 	.dw @@platform00
 	.dw @@platform01

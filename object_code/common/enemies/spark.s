@@ -2,9 +2,22 @@
 ; ENEMY_SPARK
 ; ==================================================================================================
 enemyCode13:
+	push af
+	ld e,Enemy.subid
+	ld a,(de)
+	or a
+	jr nz,@subid1
+@subid0:
+	pop af
 	call ecom_checkHazards
 	jr z,@normalStatus
+	jr @notNormalStatus
 
+@subid1:
+	pop af
+	jr z,@normalStatus
+
+@notNormalStatus:
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c
 	ld e,Enemy.var2a

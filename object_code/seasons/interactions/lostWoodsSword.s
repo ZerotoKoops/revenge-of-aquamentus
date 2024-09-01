@@ -26,8 +26,8 @@ interactionCode59:
 	call objectSetVisible80
 	ld hl,mainScripts.lostWoodsSwordScript
 	call interactionSetScript
-	ld a,$4d
-	call playSound
+	;ld a,$4d
+	;call playSound
 	ldbc INTERAC_SPARKLE $04
 	jp objectCreateInteraction
 @state1:

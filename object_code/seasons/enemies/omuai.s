@@ -2,18 +2,19 @@
 ; ENEMY_OMUAI
 ; ==================================================================================================
 enemyCode72:
+; normal code
 	jr z,@normalStatus
 	sub $03
 	ret c
 	jr nz,@justHitOrKnockback
-	ld e,$a4
+	ld e,Enemy.state;$a4
 	ld a,(de)
 	or a
 	jr z,@dead
 	ld hl,$d081
 -
 	ld a,(hl)
-	cp $72
+	cp ENEMY_OMUAI;$72
 	jr nz,+
 	ld a,h
 	cp d
@@ -27,7 +28,7 @@ enemyCode72:
 	jp enemyBoss_dead
 
 @justHitOrKnockback:
-	ld e,$aa
+	ld e,Enemy.var2a;$aa
 	ld a,(de)
 	res 7,a
 	cp $04
@@ -36,7 +37,16 @@ enemyCode72:
 	ld a,$01
 	ld (de),a
 @normalStatus:
-	ld e,$84
+; stop enemy code if Link is in the top corner from stairs
+	ld a,(wEnteredWarpPosition)
+	cp $ff
+	ret nz
+
+	ld a,(wLinkLocalRespawnY)
+	cp $32
+	ret c
+
+	ld e,Enemy.state;$84
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -60,7 +70,7 @@ enemyCode72:
 
 @state0:
 	ld b,$00
-	ld a,$72
+	ld a,ENEMY_OMUAI;$72
 	call enemyBoss_initializeRoom
 	jp ecom_setSpeedAndState8
 
@@ -354,6 +364,8 @@ enemyCode72:
 	jp enemyAnimate
 	
 @stateH:
+	ld a,$97 ;spr_omuai_2
+	callab bank3f.addIndexToLoadedObjectGfx
 	ld e,$a1
 	ld a,(de)
 	inc a

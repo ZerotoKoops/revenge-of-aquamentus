@@ -32,12 +32,12 @@
 	.define NUM_DUNGEONS_DIV_8	2 ; Above value divided by 8, rounded up
 
 .else; ROM_SEASONS
-	.define OVERWORLD_WIDTH		16
-	.define OVERWORLD_HEIGHT	16
+	.define OVERWORLD_WIDTH		6;16
+	.define OVERWORLD_HEIGHT	6;16
 
 	; The starting X/Y positions of the tile grid on the map screen.
-	.define OVERWORLD_MAP_START_X	2
-	.define OVERWORLD_MAP_START_Y	1
+	.define OVERWORLD_MAP_START_X	7;2
+	.define OVERWORLD_MAP_START_Y	6;1
 
 	.define OVERWORD_MAP_POPUP_SHIFT_INDEX_X	8
 	.define OVERWORD_MAP_POPUP_SHIFT_INDEX_Y	8

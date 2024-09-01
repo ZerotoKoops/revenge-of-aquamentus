@@ -7841,6 +7841,7 @@ objectFindSameTypeObjectWithID:
 	ldh a,(<hActiveObjectType)
 	inc a
 	ld l,a
+objectFindObject_paramC:
 --
 	ld a,(hl)
 	cp c
@@ -8195,6 +8196,7 @@ cpInteractionSubstate:
 ;;
 checkInteractionState:
 	ld e,Interaction.state
+-
 	ld a,(de)
 	or a
 	ret
@@ -8205,6 +8207,9 @@ checkInteractionSubstate:
 	or a
 	ret
 
+checkItemState:
+	ld e,Item.state
+	jr -
 
 .include {"{GAME_DATA_DIR}/tile_properties/hazards.s"}
 
@@ -8250,10 +8255,11 @@ objectSetCollideRadius:
 ; @param	b	Collide radius Y
 ; @param	c	Collide radius X
 objectSetCollideRadii:
+	ld h,d
+objectHSetCollideRadii:
 	ldh a,(<hActiveObjectType)
 	add Object.collisionRadiusY
 	ld l,a
-	ld h,d
 	ld (hl),b
 	inc l
 	ld (hl),c
@@ -9098,6 +9104,21 @@ interactionSetMiniScript:
 	inc e
 	ld a,h
 	ld (de),a
+	ret
+
+.else ; ROM_SEASONS
+;;
+; @param	bc	Position
+interactionSetPosition:
+	ld h,d
+
+;;
+; @param	bc	Position
+interactionHSetPosition:
+	ld l,Interaction.yh
+	ld (hl),b
+	ld l,Interaction.xh
+	ld (hl),c
 	ret
 
 .endif
@@ -10554,6 +10575,15 @@ initializeDungeonStuff:
 
 ;;
 setVisitedRoomFlag:
+	ld a,(wActiveGroup)
+	cp >ROOM_SEASONS_398
+	jr nz,+
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_398
+	jr nz,+
+	ld a,GLOBALFLAG_FINISHEDGAME
+	call setGlobalFlag
++
 	call getThisRoomFlags
 	set ROOMFLAG_BIT_VISITED, (hl)
 	ret
@@ -12027,6 +12057,24 @@ clearParts:
 	ret
 
 ;;
+clearInteractions:
+	ldde FIRST_INTERACTION_INDEX, Interaction.start
+--
+	ld h,d
+.ifdef AGES_ENGINE
+	ld l,e
+.else
+	ld l,Interaction.start
+.endif
+	ld b,$40
+	call clearMemory
+	inc d
+	ld a,d
+	cp $e0
+	jr c,--
+	ret
+
+;;
 setEnemyTargetToLinkPosition:
 	ld a,(wLinkObjectIndex)
 	ld h,a
@@ -12266,6 +12314,7 @@ forceLoadRoom:
 	ld (wActiveGroup),a
 	ld a,c
 	ld (wActiveRoom),a
+forceReloadRoom:
 	call loadScreenMusicAndSetRoomPack
 	call loadTilesetData
 	call loadTilesetGraphics
@@ -12333,6 +12382,7 @@ lookupExpandedTilesetTable:
 	; Seasonal tileset, do another table lookup
 	ld h,c
 	ld a,(wRoomStateModifier)
+	and SEASON_SUMMER ; added for clock, edited
 	ld b,a
 	rst_addDoubleIndex
 	ld a,b
@@ -12343,6 +12393,28 @@ lookupExpandedTilesetTable:
 	ld c,(hl) ; Bank
 	ld h,d
 	ld l,a
+	ret
+
+loadTilesetUniqueGfx:
+	ld b,a
+	ldh a,(<hRomBank)
+	push af
+
+	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
+	setrombank
+
+	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
+	rst_addDoubleIndex
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+-
+	call loadUniqueGfxHeaderEntry
+	add a
+	jr c,-
+
+	pop af
+	setrombank
 	ret
 
 ;;
@@ -12356,6 +12428,63 @@ loadUniqueGfxHeader:
 	jp panic
 
 ;;
+; Loads a single gfx header entry at hl. This should be called multiple times until all
+; entries are read.
+;
+; If the first byte (bank+mode) is zero, it loads a palette instead.
+;
+; @param[out]	a	Last byte of the entry (bit 7 set if there's another entry)
+loadUniqueGfxHeaderEntry:
+	ldi a,(hl)
+	or a
+	jr z,@loadPaletteIndex
+
+	ld c,a
+	ldh (<hFF8C),a
+	ldi a,(hl)
+	ld b,a
+	ldi a,(hl)
+	ld c,a
+	ldi a,(hl)
+	ld d,a
+	ldi a,(hl)
+	ld e,a
+	ld a,(hl)
+	and $7f
+	ldh (<hFF8D),a
+	push hl
+	push de
+	ld l,c
+	ld h,b
+	ld b,a
+	ldh a,(<hFF8C)
+	ld c,a
+	ld de, w7d800 | :w7d800
+	call decompressGraphics
+	pop de
+	ld hl,w7d800
+	ld c,:w7d800
+	ldh a,(<hFF8D)
+	ld b,a
+	call queueDmaTransfer
+	pop hl
+	ld a,$00
+	ld ($ff00+R_SVBK),a
+	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
+	setrombank
+	ldi a,(hl)
+	ret
+
+@loadPaletteIndex:
+	push hl
+	ld a,(hl)
+	and $7f
+	call loadPaletteHeader
+	pop hl
+	ldi a,(hl)
+	ret
+
+;;
 ; Load all graphics based on wTileset variables.
 ;
 ; HACK-BASE: Modified this function for the expanded tilesets patch.
@@ -12364,6 +12493,7 @@ loadTilesetGraphics:
 	push af
 
 	ld a,(wTilesetPalette)
+	call updateTimeOfDayPalette ; clock
 	call loadPaletteHeader
 
 	call          loadTilesetGfx
@@ -12410,7 +12540,24 @@ updateTilesetUniqueGfx:
 ;
 ; @param	a	Unique gfx header index
 uniqueGfxFunc_380b:
-	jp panic
+	ld b,a
+	ldh a,(<hRomBank)
+	push af
+
+	ld a,:animationAndUniqueGfxData.uniqueGfxHeadersStart
+	setrombank
+	ld a,b
+	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
+	rst_addDoubleIndex
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	call loadUniqueGfxHeaderEntry
+
+	pop af
+	setrombank
+	ret
+	;jp panic
 
 
 ;;
@@ -12481,6 +12628,20 @@ loadTilesetGfx:
 	ld a,(wTilesetIndex)
 	and $7f
 	ld (wLoadedTilesetIndex),a
+
+; loads the closed Gnarled Root Dungeon entrance
+	ld a,(wActiveGroup)
+	or a;cpa >ROOM_SEASONS_050
+	jr nz,+
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_050
+	jr nz,+
+	call getThisRoomFlags
+	and ROOMFLAG_80
+	jr nz,+
+	ld a,UNIQUE_GFXH_GNARLED_ROOT_ENTRANCE_CLOSED
+	call uniqueGfxFunc_380b
++
 
 	pop af
 	setrombank
@@ -13015,7 +13176,7 @@ setTile:
 	ret
 
 
-.ifdef ROM_AGES
+;.ifdef ROM_AGES
 ;;
 ; Calls "setTile" and "setTileInRoomLayoutBuffer".
 ;
@@ -13027,7 +13188,7 @@ setTileInAllBuffers:
 	call setTileInRoomLayoutBuffer
 	ld a,e
 	jp setTile
-.endif
+;.endif
 
 ;;
 ; Mixes two tiles together by using some subtiles from one, and some subtiles from the
@@ -13817,7 +13978,7 @@ getSomariaBlockIndex:
 	ret
 .endif
 
-
+.include "code/bank0Clock.s"
 .include "code/debug.s"
 
 .ENDS

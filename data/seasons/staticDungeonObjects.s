@@ -19,7 +19,9 @@ dungeon0StaticObjects:
 	.db $ff
 
 dungeon1StaticObjects:
-	.db $03, $15, INTERAC_MINECART, $00, $28, $78
+	.db $03, <ROOM_SEASONS_432, INTERAC_MINECART, $00, $88, $68
+	.db $03, <ROOM_SEASONS_41d, INTERAC_MINECART, $00, $78, $58
+	;.db $03, $15, INTERAC_MINECART, $00, $28, $78
 	.db $ff
 
 dungeon2StaticObjects:

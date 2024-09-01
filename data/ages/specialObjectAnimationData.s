@@ -2,7 +2,7 @@
 specialObject00GfxPointers:
 specialObject01GfxPointers:
 specialObject08GfxPointers:
-	m_SpecialObjectGfxPointer $00 spr_link $0000 $04
+	m_SpecialObjectGfxPointer $00 spr_link $0000 $04 ; $00
 	m_SpecialObjectGfxPointer $01 spr_link $0080 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0200 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0080 $04
@@ -10,7 +10,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $0da0 $04
 	m_SpecialObjectGfxPointer $04 spr_link $0de0 $02
 	m_SpecialObjectGfxPointer $01 spr_link $0da0 $04
-	m_SpecialObjectGfxPointer $00 spr_link $0100 $04
+	m_SpecialObjectGfxPointer $00 spr_link $0100 $04 ; $08
 	m_SpecialObjectGfxPointer $06 spr_link $0140 $02
 	m_SpecialObjectGfxPointer $06 spr_link $0160 $02
 	m_SpecialObjectGfxPointer $12 spr_link $0f40 $02
@@ -18,7 +18,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $1980 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1a80 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1dc0 $04
-	m_SpecialObjectGfxPointer $04 spr_link $0900 $02
+	m_SpecialObjectGfxPointer $04 spr_link $0900 $02 ; $10
 	m_SpecialObjectGfxPointer $00 spr_link $0920 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0960 $04
 	m_SpecialObjectGfxPointer $00 spr_link $09a0 $04
@@ -26,7 +26,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $01 spr_link $09a0 $04
 	m_SpecialObjectGfxPointer $01 spr_link $0960 $04
 	m_SpecialObjectGfxPointer $01 spr_link $0920 $04
-	m_SpecialObjectGfxPointer $08 spr_link $1040 $04
+	m_SpecialObjectGfxPointer $08 spr_link $1040 $04 ; $18
 	m_SpecialObjectGfxPointer $09 spr_link $02c0 $04
 	m_SpecialObjectGfxPointer $0a spr_link $10c0 $04
 	m_SpecialObjectGfxPointer $0b spr_link $02c0 $04
@@ -34,7 +34,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $0d60 $04
 	m_SpecialObjectGfxPointer $01 spr_link $0d60 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0000 $04
-	m_SpecialObjectGfxPointer $14 spr_link $1c00 $14
+	m_SpecialObjectGfxPointer $14 spr_link $1c00 $14 ; $20
 	m_SpecialObjectGfxPointer $13 spr_link $1c00 $14
 	m_SpecialObjectGfxPointer $00 spr_link $1580 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1580 $04
@@ -42,7 +42,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $1380 $04
 	m_SpecialObjectGfxPointer $00 spr_link $13c0 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1ac0 $04
-	m_SpecialObjectGfxPointer $00 spr_link $1b00 $04
+	m_SpecialObjectGfxPointer $00 spr_link $1b00 $04 ; $28
 	m_SpecialObjectGfxPointer $00 spr_link $1b40 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1b00 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1b40 $04
@@ -50,7 +50,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $0b spr_link $11c0 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1180 $04
 	m_SpecialObjectGfxPointer $09 spr_link $11c0 $04
-	m_SpecialObjectGfxPointer $00 spr_link $0000 $04
+	m_SpecialObjectGfxPointer $00 spr_link $0000 $04 ; $30
 	m_SpecialObjectGfxPointer $05 spr_link $09e0 $02
 	m_SpecialObjectGfxPointer $2d spr_link $0ce0 $04
 	m_SpecialObjectGfxPointer $04 spr_link $03c0 $02
@@ -58,7 +58,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $2e spr_link $0360 $04
 	m_SpecialObjectGfxPointer $2f spr_link $0300 $06
 	m_SpecialObjectGfxPointer $2f spr_link $0360 $04
-	m_SpecialObjectGfxPointer $00 spr_link $1040 $04
+	m_SpecialObjectGfxPointer $00 spr_link $1040 $04 ; $38
 	m_SpecialObjectGfxPointer $00 spr_link $1000 $04
 	m_SpecialObjectGfxPointer $01 spr_link $02c0 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0d20 $04
@@ -66,7 +66,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $1080 $04
 	m_SpecialObjectGfxPointer $00 spr_link $02c0 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1100 $04
-	m_SpecialObjectGfxPointer $00 spr_link $1240 $04
+	m_SpecialObjectGfxPointer $00 spr_link $1240 $04 ; $40
 	m_SpecialObjectGfxPointer $00 spr_link $1200 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1340 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1e00 $04
@@ -74,7 +74,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $1280 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1340 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1300 $04
-	m_SpecialObjectGfxPointer $00 spr_link $1700 $04
+	m_SpecialObjectGfxPointer $00 spr_link $1700 $04 ; $48
 	m_SpecialObjectGfxPointer $00 spr_link $1740 $04
 	m_SpecialObjectGfxPointer $01 spr_link $1840 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1780 $04
@@ -82,7 +82,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $1800 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1840 $04
 	m_SpecialObjectGfxPointer $00 spr_link $1880 $04
-	m_SpecialObjectGfxPointer $08 spr_link $1700 $04
+	m_SpecialObjectGfxPointer $08 spr_link $1700 $04 ; $50
 	m_SpecialObjectGfxPointer $09 spr_link $1840 $04
 	m_SpecialObjectGfxPointer $0a spr_link $17c0 $04
 	m_SpecialObjectGfxPointer $0b spr_link $1840 $04
@@ -90,7 +90,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $01 spr_link $0080 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0200 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0080 $04
-	m_SpecialObjectGfxPointer $04 spr_link $0800 $02
+	m_SpecialObjectGfxPointer $04 spr_link $0800 $02 ; $58
 	m_SpecialObjectGfxPointer $01 spr_link $0840 $04
 	m_SpecialObjectGfxPointer $04 spr_link $0820 $02
 	m_SpecialObjectGfxPointer $00 spr_link $0840 $04
@@ -98,7 +98,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $01 spr_link $01c0 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0180 $04
 	m_SpecialObjectGfxPointer $00 spr_link $01c0 $04
-	m_SpecialObjectGfxPointer $00 spr_link $1940 $04
+	m_SpecialObjectGfxPointer $00 spr_link $1940 $04 ; $60
 	m_SpecialObjectGfxPointer $01 spr_link $19c0 $04
 	m_SpecialObjectGfxPointer $04 spr_link $03a0 $02
 	m_SpecialObjectGfxPointer $00 spr_link $19c0 $04
@@ -106,7 +106,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $01 spr_link $0b00 $04
 	m_SpecialObjectGfxPointer $04 spr_link $0aa0 $02
 	m_SpecialObjectGfxPointer $00 spr_link $0b00 $04
-	m_SpecialObjectGfxPointer $00 spr_link $0400 $04
+	m_SpecialObjectGfxPointer $00 spr_link $0400 $04 ; $68
 	m_SpecialObjectGfxPointer $00 spr_link $0500 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0480 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0080 $04
@@ -114,7 +114,7 @@ specialObject08GfxPointers:
 	m_SpecialObjectGfxPointer $00 spr_link $0580 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0480 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0080 $04
-	m_SpecialObjectGfxPointer $00 spr_link $0600 $04
+	m_SpecialObjectGfxPointer $00 spr_link $0600 $04 ; $70
 	m_SpecialObjectGfxPointer $00 spr_link $0780 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0680 $04
 	m_SpecialObjectGfxPointer $00 spr_link $0700 $04
@@ -297,7 +297,7 @@ specialObject09AnimationDataPointers:
 	.dw animationData19f84
 	.dw animationData19f90
 	.dw animationData19fa5
-	.dw animationData19faa
+	.dw animationDataHarp ;animationData19faa
 	.dw animationData19faa
 	.dw animationData19fdd
 	.dw animationData19fe6
@@ -686,6 +686,27 @@ animationData19f90:
 animationData19fa5:
 	.db $7f $07 $ff
 	m_AnimationLoop animationData19fa5
+
+animationDataHarp:
+	.db $14 $34 $00
+	.db $14 $35 $00
+	.db $0c $34 $00
+	.db $14 $36 $01
+	.db $14 $37 $01
+	.db $0c $36 $01
+	.db $14 $34 $00
+	.db $14 $35 $00
+	.db $0c $34 $00
+	.db $14 $36 $01
+	.db $14 $37 $01
+	.db $0c $36 $01
+	.db $14 $36 $01
+	.db $14 $37 $01
+	.db $0c $36 $01
+	;.db $01 $36 $81
+	;.db $7f $1c $ff
+	m_AnimationLoop animationDataHarp
+
 
 animationData19faa:
 	.db $14 $34 $00

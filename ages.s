@@ -56,6 +56,7 @@
 		.include "code/bank3Cutscenes.s"
 		.include "code/ages/cutscenes/endgameCutscenes.s"
 		.include "code/ages/cutscenes/miscCutscenes.s"
+		.include "code/bank3ClockCutscenes.s"
 	.ends
 
 	.include "code/ages/garbage/bank03End.s"

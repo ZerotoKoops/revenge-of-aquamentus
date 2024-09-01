@@ -1,6 +1,7 @@
 ;;
 ; CUTSCENE_S_VOLCANO_ERUPTING
 cutsceneHandler_0b:
+/*
 	ld a,(wCutsceneState)
 	rst_jumpTable
 	.dw cutsceneHandler_0b_stage0
@@ -311,8 +312,9 @@ seasonsFunc_03_6dcb:
 seasonsFunc_03_6ddf:
 	ld hl,$cbb4
 	dec (hl)
+*/
 	ret
-
+/*
 seasonsFunc_03_6de4:
 	ld a,b
 	ld (wActiveGroup),a
@@ -326,3 +328,4 @@ seasonsFunc_03_6de4:
 seasonsFunc_03_6df8:
 	ld a,$ff
 	jp setScreenShakeCounter
+*/

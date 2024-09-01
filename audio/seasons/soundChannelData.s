@@ -65,6 +65,7 @@ bank39ChannelFallback:
 .include "audio/common/mus/essence.s"
 
 .include "audio/ages/sfx/switch2.s" ; CROSSITEMS: Added this
+.include "audio/custom/harpSongs/notes.s"
 
 .ifdef BUILD_VANILLA
 	.dsb 13 $ff
@@ -240,7 +241,8 @@ bank3bChannelFallback:
 .include "audio/seasons/mus/templeRemains.s"
 .include "audio/seasons/mus/unused1.s"
 .include "audio/seasons/mus/tarmRuins.s"
-.include "audio/seasons/mus/carnival.s"
+;.include "audio/seasons/mus/carnival.s"
+
 .include "audio/common/mus/ganon.s"
 .include "audio/seasons/mus/samasaDesert.s"
 .include "audio/common/sfx/splash.s"
@@ -271,17 +273,24 @@ bank3cChannelFallback:
 
 
 .include "audio/seasons/mus/makuTree.s"
+
+.include "audio/custom/mus/eRuberoPerTeLaLuna.s"
+.include "audio/custom/mus/bellaCiaoShort2.s"
+/*
 .include "audio/seasons/mus/swordAndShieldMaze.s"
 .include "audio/seasons/mus/gnarledRootDungeon.s"
 .include "audio/seasons/mus/snakesRemains.s"
+*/
 .include "audio/seasons/mus/herosCave.s"
+/*
 .include "audio/seasons/mus/explorersCrypt.s"
 .include "audio/seasons/mus/unicornsCave.s"
 .include "audio/seasons/mus/poisonMothsLair.s"
 .include "audio/seasons/mus/dancingDragonDungeon.s"
+*/
 .include "audio/common/mus/onoxCastle.s"
 .include "audio/seasons/mus/subrosianDance.s"
-.include "audio/seasons/mus/ancientRuins.s"
+;.include "audio/seasons/mus/ancientRuins.s"
 .include "audio/common/mus/sadness.s"
 .include "audio/common/mus/intro2.s"
 .include "audio/common/sfx/goron.s"
@@ -289,6 +298,17 @@ bank3cChannelFallback:
 .include "audio/common/sfx/becomeBaby.s"
 .include "audio/common/sfx/jingle.s"
 .include "audio/common/sfx/strike.s"
+
+.include "audio/custom/harpSongs/zeldasLullaby.s"
+.include "audio/custom/harpSongs/eponasSong.s"
+.include "audio/custom/harpSongs/sariasSong.s"
+.include "audio/custom/harpSongs/sunsSong.s"
+.include "audio/custom/harpSongs/songOfTime.s"
+.include "audio/custom/harpSongs/songOfStorms.s"
+.include "audio/custom/harpSongs/songOfHealing.s"
+.include "audio/custom/harpSongs/songOfSoaring.s"
+.include "audio/custom/harpSongs/songOfDoubleTime.s"
+.include "audio/custom/harpSongs/invertedSongOfTime.s"
 
 .ifdef BUILD_VANILLA
 	.dsb 4 $ff
@@ -481,6 +501,21 @@ mus3aChannel4:
 .endif
 
 .ends
+
+
+.BANK $79 SLOT 1
+.ORG 0
+
+m_section_superfree AudioData7
+
+bank79ChannelFallback:
+	cmdff
+
+.redefine MUSIC_CHANNEL_FALLBACK bank79ChannelFallback
+
+
+.ends
+
 
 
 .undefine MUSIC_CHANNEL_FALLBACK

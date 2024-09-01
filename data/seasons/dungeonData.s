@@ -27,7 +27,7 @@ dungeonDataTable:
 dungeonData00:
 	m_DungeonData >wGroup4RoomFlags, $04, dungeon00Layout, $01, $03, $00, $00, $00
 dungeonData01:
-	m_DungeonData >wGroup4RoomFlags, $1c, dungeon01Layout, $01, $03, $03, $00, $00
+	m_DungeonData >wGroup4RoomFlags, $1c, dungeon01Layout, $04, $01, $3e, $00, $00
 dungeonData02:
 	m_DungeonData >wGroup4RoomFlags, $39, dungeon02Layout, $01, $03, $01, $00, $00
 dungeonData03:

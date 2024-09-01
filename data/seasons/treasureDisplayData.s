@@ -213,7 +213,10 @@ treasureDisplayData_shooter:
 	.db TREASURE_MYSTERY_SEEDS,      $8a, $05, $87, $00, $01, <TX_09_SEED_SHOOTER,
 
 treasureDisplayData_harp:
+	.db $00, $a3, $00, $a4, $00, $05, <TX_09_HARP ; No song?
 	.db $00, $02, $04, $02, $00, $05, <TX_09_HARP ; No song?
-	.db $00, $a3, $00, $a4, $00, $05, <TX_09_HARP ; Tune of echoes
-	.db $00, $a7, $03, $a8, $03, $05, <TX_09_HARP ; Tune of currents
-	.db $00, $ab, $01, $ac, $01, $05, <TX_09_HARP ; Tune of ages
+	.db $00, $02, $04, $02, $00, $05, <TX_09_HARP ; No song?
+	.db $00, $02, $04, $02, $00, $05, <TX_09_HARP ; No song?
+	;.db $00, $a3, $00, $a4, $00, $05, <TX_09_HARP ; Tune of echoes
+	;.db $00, $a7, $03, $a8, $03, $05, <TX_09_HARP ; Tune of currents
+	;.db $00, $ab, $01, $ac, $01, $05, <TX_09_HARP ; Tune of ages

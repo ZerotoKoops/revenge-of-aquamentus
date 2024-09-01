@@ -652,7 +652,7 @@ func_5131:
 	ld l,$b0
 	bit 7,(hl)
 	ret z
-	ld a,($cca9)
+	ld a,(wNumTorchesLit)
 	cp $02
 	ld a,ENEMYCOLLISION_AGUNIMA_INVULNERABLE
 	ld b,$00

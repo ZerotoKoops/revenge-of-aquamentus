@@ -19,6 +19,7 @@ enemyCode38:
 	.dw greatFairy_state6
 	.dw greatFairy_state7
 	.dw greatFairy_state8
+	.dw greatFairy_state8_01
 	.dw greatFairy_state9
 
 
@@ -155,9 +156,20 @@ greatFairy_state7:
 	ld l,Enemy.counter1
 	ld (hl),30
 
-
 ; About to disappear; staying in place for 30 frames
 greatFairy_state8:
+	call ecom_decCounter1
+	jr nz,greatFairy_animate
+
+	ld (hl),60 ; [counter1]
+	ld l,e
+	inc (hl) ; [state]
+
+	ld bc,TX_4106
+	call showText
+
+greatFairy_state8_01:
+	call retIfTextIsActive
 	call ecom_decCounter1
 	jr nz,greatFairy_animate
 
@@ -175,6 +187,7 @@ greatFairy_state8:
 
 ; Disappearing
 greatFairy_state9:
+
 	call ecom_decCounter1
 	jp z,enemyDelete
 

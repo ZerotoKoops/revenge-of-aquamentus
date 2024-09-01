@@ -51,6 +51,8 @@
 		.include "code/seasons/cutscenes/volcanoErupting.s"
 		.include "code/seasons/cutscenes/linkedGameCutscenes.s"
 		.include "code/seasons/cutscenes/introCutscenes.s"
+		.include "code/bank3ClockCutscenes.s"
+		.include "code/seasons/cutscenes/wallRetraction.s"
 	.ends
 
 
@@ -469,6 +471,7 @@ m_section_free Enemy_Code_Bank0c NAMESPACE bank0c
 	.include "object_code/seasons/enemies/rollingSpikeTrap.s"
 	.include "object_code/seasons/enemies/pokey.s"
 	.include "object_code/common/enemies/ironMask.s"
+	;.include "object_code/seasons/interactions/treasureHunter.s"
 .ends
 
 m_section_superfree Enemy_Animations

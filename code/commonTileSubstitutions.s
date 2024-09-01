@@ -192,7 +192,7 @@ replaceSwitchTiles:
 .ifdef ROM_AGES
 	; Data format:
 	;   b0: Room
-	;   b1: Switch bit
+	;   b1: Switch bitmask
 	;   b2: New tile index
 	;   b3: Position of tile to replace
 
@@ -217,6 +217,11 @@ replaceSwitchTiles:
 .else; ROM_SEASONS
 
 	@group4SwitchData:
+		.db <ROOM_SEASONS_433 $01 TILEINDEX_TRACK_HORIZONTAL $46
+		.db <ROOM_SEASONS_433 $01 TILEINDEX_DUNGEON_SWITCH_ON $17
+		.db <ROOM_SEASONS_416 $02 TILEINDEX_TRACK_VERTICAL $69
+		.db <ROOM_SEASONS_416 $02 TILEINDEX_DUNGEON_SWITCH_ON $46
+	/*
 		.db $0f $01 $0b $33
 		.db $0f $01 $5a $74
 		.db $6f $01 $0b $8c
@@ -233,11 +238,14 @@ replaceSwitchTiles:
 		.db $a0 $02 $5e $37
 		.db $a0 $01 $0b $83
 		.db $a0 $02 $0b $78
+	*/
 		.db $00
 
 	@group5SwitchData:
+	/*
 		.db $7e $01 $5c $2b
 		.db $7e $01 $0b $78
+	*/
 		.db $00
 
 .endif

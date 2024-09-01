@@ -13,6 +13,7 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_caneOfSomaria
 	.dw uncmpGfxHeader_switchHook
 	.dw uncmpGfxHeader_seedShooter
+	.dw uncmpGfxHeaderWallRetraction
 
 
 uncmpGfxHeader00:
@@ -274,4 +275,9 @@ uncmpGfxHeader_switchHook:
 
 uncmpGfxHeader_seedShooter:
 	m_GfxHeader spr_seed_shooter, $8521
+	m_GfxHeaderEnd
+
+uncmpGfxHeaderWallRetraction:
+	m_GfxHeaderRam w3TileMappingIndices+$240, $9a41, $10
+	m_GfxHeaderRam w3VramTiles+$240, $9a40, $10
 	m_GfxHeaderEnd

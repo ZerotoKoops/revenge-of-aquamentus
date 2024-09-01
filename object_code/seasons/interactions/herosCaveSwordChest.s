@@ -82,4 +82,4 @@ interactionCodec6:
 	jp interactionDelete
 
 @warpDestVariables:
-	m_HardcodedWarpA ROOM_SEASONS_0d4 $00 $54 $83
+	m_HardcodedWarpA ROOM_SEASONS_055 $00 $17 $83

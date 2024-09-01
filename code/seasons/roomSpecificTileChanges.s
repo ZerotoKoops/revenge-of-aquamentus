@@ -4,8 +4,19 @@ applyRoomSpecificTileChanges:
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
-	.dw tileReplacement_group0Mapc5 ; $00
-	.dw tileReplacement_group0Mapd9 ; $01
+	;.dw tileReplacement_group0Mapc5 ; $00
+	.dw tileReplacement_group0Mapd9 ; $00
+	.dw tileReplacement_group0Map50 ; $01
+	.dw tileReplacement_group4Map12 ; $02
+	.dw tileReplacement_group4Map14 ; $03
+	.dw tileReplacement_group0Map52 ; $04
+	.dw tileReplacement_group0Map54 ; $05
+	.dw tileReplacement_group0Map04 ; $06
+	.dw tileReplacement_group0Map15 ; $07
+	.dw tileReplacement_group0Map02 ; $08
+	.dw tileReplacement_group0Map01 ; $09
+	.dw tileReplacement_group4Map0d ; $0a ;rupee room
+/*
 	.dw tileReplacement_group4Map78 ; $02
 	.dw tileReplacement_group2_3Mapb0 ; $03
 	.dw tileReplacement_group4Map2e ; $04
@@ -51,7 +62,7 @@ applyRoomSpecificTileChanges:
 	.dw tileReplacement_group5Map8e ; $2c
 	.dw tileReplacement_group5Map3b ; $2d
 	.dw tileReplacement_group4Map61 ; $2e
-
+*/
 roomTileChangerCodeGroupTable:
 	.dw roomTileChangerCodeGroup0Data
 	.dw roomTileChangerCodeGroup1Data
@@ -63,9 +74,17 @@ roomTileChangerCodeGroupTable:
 	.dw roomTileChangerCodeGroup7Data
 
 roomTileChangerCodeGroup0Data:
-	.db $c5 $00
-	.db $d9 $01
-	.db $54 $10
+	;.db $c5 $00
+	.db <ROOM_SEASONS_035 $00
+	.db <ROOM_SEASONS_050 $01
+	.db <ROOM_SEASONS_052 $04
+	.db <ROOM_SEASONS_054 $05
+	.db <ROOM_SEASONS_004 $06
+	.db <ROOM_SEASONS_015 $07
+	.db <ROOM_SEASONS_002 $08
+	.db <ROOM_SEASONS_001 $09
+/*
+	;.db $54 $10
 	.db $7f $11
 	.db $62 $12
 	.db $60 $13
@@ -74,43 +93,54 @@ roomTileChangerCodeGroup0Data:
 	.db $71 $16
 	.db $81 $17
 	.db $0d $18
-	.db $1d $19
+	;.db $1d $19
 	.db $63 $1e
 	.db $e4 $26
 	.db $f4 $1f
 	.db $6f $20
-	.db $42 $21
+	;.db $42 $21
 	.db $fc $22
 	.db $ee $25
-	.db $56 $28
-	.db $4b $1d
+	;.db $56 $28
+	;.db $4b $1d
 	.db $f6 $08
+*/
 	.db $00
 
 roomTileChangerCodeGroup1Data:
+/*
 	.db $35 $27
 	.db $64 $23
 	.db $74 $24
+*/
 	.db $00
 
 roomTileChangerCodeGroup2Data:
 roomTileChangerCodeGroup3Data:
+/*
 	.db $a4 $29
 	.db $ab $2a
 	.db $b0 $03
 	.db $b5 $1c
+*/
 	.db $00
 
 roomTileChangerCodeGroup4Data:
+	.db <ROOM_SEASONS_412 $02
+	.db <ROOM_SEASONS_414 $03
+	.db <ROOM_SEASONS_40d $0a
+/*
 	.db $61 $2e
 	.db $78 $02
 	.db $2e $04
 	.db $64 $05
 	.db $89 $06
 	.db $bb $07
+*/
 	.db $00
 
 roomTileChangerCodeGroup5Data:
+/*
 	.db $3b $2d
 	.db $65 $09
 	.db $66 $0a
@@ -123,6 +153,7 @@ roomTileChangerCodeGroup5Data:
 	.db $78 $1b
 	.db $8e $2c
 	.db $9e $2b
+*/
 	.db $00
 
 roomTileChangerCodeGroup6Data:
@@ -131,6 +162,7 @@ roomTileChangerCodeGroup7Data:
 
 	ret
 
+/*
 ; Adds a sign outside couple's house
 tileReplacement_group0Mapf6:
 	ld a,GLOBALFLAG_FINISHEDGAME
@@ -148,7 +180,7 @@ tileReplacement_group0Mapc5:
 	ld hl,wRoomLayout+$14
 	ld (hl),$ea
 	ret
-
+*/
 ; Open Maku tree gates
 tileReplacement_group0Mapd9:
 	call getThisRoomFlags
@@ -165,6 +197,142 @@ tileReplacement_group0Mapd9:
 	ld (hl),a
 	ret
 
+tileReplacement_group0Map50:
+	ret
+	call getThisRoomFlags
+	bit ROOMFLAG_BIT_80,(hl)
+	ret nz
+	ld hl,wRoomLayout+$23
+	ld a,$11;dirt
+	ldi (hl),a
+	ldi (hl),a
+	ld (hl),a
+
+	ld l,$33
+	ld a,$a3;tree closed
+	call @loadTiles
+	ld l,$43
+	ld a,$b6
+
+@loadTiles:
+	ldi (hl),a
+	inc a
+	ldi (hl),a
+	inc a
+	ld (hl),a
+	ret
+
+;;
+; Room with retracting wall
+tileReplacement_group4Map12:
+	call getThisRoomFlags
+	and ROOMFLAG_40;$40
+	ret nz
+
+
+	ld a,TILEINDEX_PUSHABLE_STATUE
+	ld hl,wRoomLayout+$25
+	ld (hl),a
+	ld l,<wRoomLayout+$33
+	ld (hl),a
+	ld l,<wRoomLayout+$62
+	ld (hl),a
+	ld l,<wRoomLayout+$75
+	ld (hl),a
+
+	ld l,<wRoomLayout+$97
+	ld (hl),$b5
+	ld l,<wRoomLayout+$a7
+	ld (hl),$b3
+	ld hl,@wallInterior
+	call fillRectInRoomLayout
+	ld hl,@wallEdge
+	jp fillRectInRoomLayout
+
+@wallInterior:
+	.db $a2 $01 $05 $a6
+@wallEdge:
+	.db $92 $01 $05 $b2
+
+;;
+; Room with retracting wall
+tileReplacement_group4Map14:
+	ld a,<ROOM_SEASONS_412
+	call getARoomFlags
+	and ROOMFLAG_40;$40
+	ret nz
+
+	ld hl,wRoomLayout+$07
+	ld (hl),$b7
+	ld hl,@wallEdge
+	jp fillRectInRoomLayout
+
+@wallEdge:
+	.db $02 $01 $05 $b0
+
+; Replace burnable stump with stairs to normal (before letting man see jewels)
+tileReplacement_group0Map52:
+	ld a,(wRoomStateModifier)
+	cp SEASON_AUTUMN
+	jr z,+
+	cp SEASON_WINTER
+	ret nz
++
+	ld a,>ROOM_SEASONS_382
+	ld b,<ROOM_SEASONS_382
+	call getRoomFlags
+	and ROOMFLAG_40
+	ret nz
+
+	ld hl,wRoomLayout+$61
+	ld (hl),$ca ;normal burnable stump
+	ret
+
+
+tileReplacement_group0Map01:
+	ldbc $15,$04
+	jr checkLinkPosition
+
+tileReplacement_group0Map02:
+	ld a,(wRoomStateModifier)
+	and $01;SEASON_SUMMER
+	ret z
+	ldbc $62,$04
+	jr checkLinkPosition
+
+tileReplacement_group0Map04:
+	ld a,(wRoomStateModifier)
+	and $01;SEASON_SUMMER
+	ret z
+	ldbc $45,$ea
+	jr checkLinkPosition
+
+tileReplacement_group0Map15:
+	ld a,(wRoomStateModifier)
+	and $01;SEASON_SUMMER
+	ret nz
+	ldbc $54,$ea
+	; fall through
+;;
+; @param[in]	b	Tile position
+; @param[in]	c	New tile replacement
+checkLinkPosition:
+	push bc
+	ld de,w1Link.yh
+	call getShortPositionFromDE
+
+	pop bc
+	cp b
+	ret nz
+
+	ld h,>wRoomLayout
+	ld l,a
+	ld (hl),c
+	ret
+
+
+
+/*
 ; Open Tarm gates
 tileReplacement_group0Map63:
 	call getThisRoomFlags
@@ -215,26 +383,28 @@ tileReplacement_group0Mape4:
 	.db $00
 
 ; Moldorm guarding jewel
-tileReplacement_group0Mapf4:
+*/
+tileReplacement_group0Map54:
 	call getThisRoomFlags
-	bit 6,(hl)
+	bit ROOMFLAG_BIT_40,(hl)
 	ret z
-	bit 5,(hl)
+	bit ROOMFLAG_BIT_ITEM,(hl)
 	jr nz,+
-	ld hl,wRoomLayout+$45
-	ld (hl),$f1
+	ld hl,wRoomLayout+$36
+	ld (hl),$f1;TILEINDEX_UNOPENED_CHEST
 +
-	ld hl,wRoomLayout+$22
+	ld hl,wRoomLayout+$12;$22
 	ld (hl),$0f
 	inc l
 	ld (hl),$11
-	ld l,$32
+	ld l,$22;$32
 	ld (hl),$11
 	inc l
 	ld (hl),$0f
 	inc l
 	ld (hl),$11
 	ret
+/*
 
 ; D4 - 1F stairs leading to 2-tile pits to stairs to B1
 tileReplacement_group4Map78:
@@ -285,11 +455,13 @@ tileReplacement_group4Map2e:
 
 ; D6 - hidden rupee room
 tileReplacement_group4Mapbb:
+*/
+tileReplacement_group4Map0d:
 	ld hl,wRoomLayout+$34
 	ld bc,$0808
 	ld de,wD6RupeeRoomRupees
 	jp replaceRupeeRoomRupees
-
+/*
 ; D5 - magnet glove chest
 tileReplacement_group4Map89:
 	call getThisRoomFlags
@@ -903,7 +1075,7 @@ tileReplacement_group2_3Mapab:
 	ld l,$17
 	ld (hl),a
 	ret
-
+*/
 ;;
 ; @param	hl	pointer to data structure
 ;			* starts with tile to replace with

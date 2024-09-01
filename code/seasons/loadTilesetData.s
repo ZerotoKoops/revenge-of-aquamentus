@@ -39,6 +39,7 @@ loadTilesetData_body:
 	ld h,(hl)
 	ld l,a
 	ld a,(wRoomStateModifier)
+	;and $01 ; clock
 	call multiplyABy8
 	add hl,bc
 

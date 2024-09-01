@@ -19,10 +19,9 @@ gnarledKeyholeScript:
 	wait 60
 	shakescreen 120
 	wait 60
-	orroomflag $80
+	orroomflag ROOMFLAG_80;$80
 	incstate
 	scriptend
-
 
 ; ==================================================================================================
 ; INTERAC_MAKU_CUTSCENES
@@ -105,6 +104,7 @@ script4e83: ; twinrova is behind onox
 
 
 makuTreeScript_gateHit:
+	playsound SNDCTRL_STOPMUSIC
 	setcollisionradii $14, $20
 @checkLinkHitGateWithSword:
 	asm15 scriptHelp.makuTree_checkGateHit
@@ -116,13 +116,54 @@ makuTreeScript_gateHit:
 	disableinput
 	wait 60
 	incstate
-	orroomflag $80
 	checkobjectbyteeq Interaction.state, $01
 	playsound SND_SOLVEPUZZLE
 	wait 60
+
+	asm15 hideStatusBar
+	asm15 scriptHelp.seasonsFunc_15_571a, $02
+	checkpalettefadedone
+
+	playsound SND_TRANSFORM
+	wait 15
 	enableinput
+	disableinput
+	wait 30
+	playsound MUS_ROOM_OF_RITES
+
+	writememory wTextboxFlags, TEXTBOXFLAG_ALTPALETTE1
+	showtext TX_173a
+	checktext
+	
+	playsound SNDCTRL_FAST_FADEOUT
+	asm15 showStatusBar
+	asm15 clearFadingPalettes
+	asm15 fadeinFromWhiteWithDelay, $02
+	checkpalettefadedone
+
+	;resetmusic ; done by the day change cutscene
+	enableinput
+	orroomflag ROOMFLAG_80;$80
+	setglobalflag GLOBALFLAG_INTRO_DONE
 	scriptend
 	
+outOfTime:
+	asm15 hideStatusBar
+	asm15 scriptHelp.seasonsFunc_15_571a, $02
+	checkpalettefadedone
+
+	playsound SND_TRANSFORM
+	wait 15
+	enableinput
+	disableinput
+	wait 30
+	playsound MUS_ROOM_OF_RITES
+
+	writememory wTextboxFlags, TEXTBOXFLAG_ALTPALETTE1
+	showtext TX_173a
+	checktext
+	
+	playsound SNDCTRL_FAST_FADEOUT
 	
 ; ==================================================================================================
 ; INTERAC_SEASON_SPIRITS_SCRIPTS
@@ -328,10 +369,12 @@ mayorsScript:
 	enableinput
 	checkabutton
 	disableinput
-	jumpifroomflagset $20, +
+	jumpifroomflagset ROOMFLAG_80, ++
+	jumpifroomflagset ROOMFLAG_ITEM, +
 	showtext TX_310b
 	wait 20
-	giveitem TREASURE_GASHA_SEED, $04
+	giveitem TREASURE_RUPEES, $0b
+	orroomflag ROOMFLAG_80
 	scriptjump ++
 +
 ; unused?
@@ -346,6 +389,8 @@ mayorsScript:
 
 
 mayorsHouseLadyScript:
+	rungenericnpc TX_310d
+/*
 	initcollisions
 @waitUntilTalkedTo:
 	enableinput
@@ -395,7 +440,7 @@ mayorsHouseLadyScript:
 	setglobalflag GLOBALFLAG_DONE_RUUL_SECRET
 	showtext TX_3107
 	scriptjump @waitUntilTalkedTo
-
+*/
 	
 ; ==================================================================================================
 ; INTERAC_MRS_RUUL
@@ -469,19 +514,21 @@ mrWriteScript:
 ; ==================================================================================================
 ; INTERAC_FICKLE_LADY
 ; ==================================================================================================
-fickleLadyScript_text1:
+fickleLadyScript_welcome:
 	rungenericnpc TX_1600
-fickleLadyScript_text2:
+fickleLadyScript_nightTerrors:
+	rungenericnpc TX_1601
+fickleLadyScript_monsters:
 	rungenericnpc TX_1602
-fickleLadyScript_text3:
+fickleLadyScript_membersCard:
 	rungenericnpc TX_1603
-fickleLadyScript_text4:
+fickleLadyScript_worldPeace:
 	rungenericnpc TX_1604
-fickleLadyScript_text5:
+fickleLadyScript_strongMan:
 	rungenericnpc TX_1605
-fickleLadyScript_text6:
+fickleLadyScript_EeeLink:
 	rungenericnpc TX_1606
-fickleLadyScript_text7:
+fickleLadyScript_gameBeat:
 	rungenericnpc TX_1607
 	
 	
@@ -556,8 +603,9 @@ bathingSubrosianScript_text3:
 ; INTERAC_MASTER_DIVERS_SON
 ; ==================================================================================================
 masterDiversSonScript:
-	settextid TX_1903
-	jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, @commonInit
+	;settextid TX_1903
+	;jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, @commonInit
+	;settextid TX_1900
 	settextid TX_1900
 @commonInit:
 	initcollisions
@@ -570,29 +618,30 @@ masterDiversSonScript:
 	enableallobjects
 	scriptjump @commonInitShowText
 	
-masterDiversSonScript_4thEssenceGotten:
-	jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, @moblinKeepDestroyed
-	initcollisions
--
-	settextid TX_1901
-	scriptjump masterDiversSonScript@commonInitShowText
+masterDiversSonScript_haveKey:
+	;jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, @moblinKeepDestroyed
+	;initcollisions
+;-
+	;settextid TX_1901
+	;scriptjump masterDiversSonScript@commonInitShowText
 @moblinKeepDestroyed:
-	setcoords $58, $38
+	;setcoords $58, $38
 	initcollisions
-	settextid TX_1903
+	settextid TX_1901
 	checkabutton
 	setdisabledobjectsto11
 	cplinkx $49
 	setanimationfromobjectbyte $49
 	showloadedtext
 	enableallobjects
-	scriptjump -
-	
-masterDiversSonScript_8thEssenceGotten:
 	settextid TX_1902
+	scriptjump masterDiversSonScript@commonInitShowText
+	
+masterDiversSonScript_haveFlippers:
+	settextid TX_1903
 	scriptjump masterDiversSonScript@commonInit
 	
-masterDiversSonScript_ZeldaKidnapped:
+masterDiversSonScript_haveCape:
 	settextid TX_1904
 	scriptjump masterDiversSonScript@commonInit
 	
@@ -604,28 +653,32 @@ masterDiversSonScript_gameFinished:
 ; ==================================================================================================
 ; INTERAC_FICKLE_MAN
 ; ==================================================================================================
-ficklManScript_text1:
+ficklManScript_gateHit:
 	rungenericnpc TX_0f00
-ficklManScript_text2:
+ficklManScript_shovelBeach:
 	rungenericnpc TX_0f01
-ficklManScript_text3:
+ficklManScript_jewelGeneral:
 	rungenericnpc TX_0f03
-ficklManScript_text4:
+ficklManScript_mapBeach:
 	rungenericnpc TX_0f02
-ficklManScript_text5:
+ficklManScript_flippers:
 	rungenericnpc TX_0f04
-ficklManScript_text6:
+ficklManScript_L2Sword:
 	rungenericnpc TX_0f05
-ficklManScript_text7:
+ficklManScript_cape:
 	rungenericnpc TX_0f06
-ficklManScript_text8:
+ficklManScript_bossKey:
 	rungenericnpc TX_0f07
-ficklManScript_text9:
+ficklManScript_gameBeat:
 	rungenericnpc TX_0f08
-ficklManScript_textA:
-	writeobjectbyte $5c, $02
+ficklManScript_galeSeeds:
+	rungenericnpc TX_0f0a
+ficklManScript_flowers:
+	rungenericnpc TX_0f0b
+/*
+	writeobjectbyte Interaction.oamFlags, $02
 	rungenericnpc TX_0e21
-	
+*/
 	
 ; ==================================================================================================
 ; INTERAC_DUNGEON_WISE_OLD_MAN
@@ -642,6 +695,55 @@ dungeonWiseOldManScript:
 ; ==================================================================================================
 ; INTERAC_TREASURE_HUNTER
 ; ==================================================================================================
+treasureHunterScript_givePyramidJewel:
+	setcollisionradii $06, $06
+	makeabuttonsensitive
+	jumpifroomflagset ROOMFLAG_40,@gavePyramidJewel
+-
+	checkabutton
+	disableinput
+	showtext TX_1b00
+	jumpifitemobtained TREASURE_ROUND_JEWEL,@haveRoundJewel
+	enableinput
+	scriptjump -
+
+@haveRoundJewel:
+	disableinput
+	wait 30
+-
+	showtext TX_1b01
+	jumpiftextoptioneq $00, @givingPyramidJewel
+	wait 30
+	showtext TX_1b02
+	enableinput
+	checkabutton
+	disableinput
+	scriptjump -
+
+@givingPyramidJewel:
+	wait 30
+	playsound SND_GETSEED
+	wait 45
+	showtext TX_1b03
+	giveitem TREASURE_PYRAMID_JEWEL, $00
+	disableinput
+	orroomflag ROOMFLAG_40
+	wait 45
+	showtext TX_1b05	
+	wait 30
+	playsound SND_GETSEED
+	enableinput
+@gavePyramidJewel:
+	checkabutton
+	showtext TX_1b04
+	scriptjump @gavePyramidJewel
+
+treasureHunterScript_text1:
+	rungenericnpc TX_1b06
+treasureHunterScript_text2:
+	rungenericnpc TX_1b07
+
+/*
 treasureHunterScript_text1:
 	rungenericnpc TX_1b00
 treasureHunterScript_text2:
@@ -650,7 +752,7 @@ treasureHunterScript_text3:
 	rungenericnpc TX_1b02
 treasureHunterScript_text4:
 	rungenericnpc TX_1b03
-	
+*/
 	
 ; ==================================================================================================
 ; INTERAC_OLD_LADY_FARMER
@@ -689,14 +791,16 @@ oldLadyFarmerScript_text6:
 	
 oldLadyFarmerScript_text7:
 	rungenericnpc TX_1208
-	
 
+oldLadyFarmerScript_text8:
+	rungenericnpc TX_1207	
+	
 ; ==================================================================================================
 ; INTERAC_FOUNTAIN_OLD_MAN
 ; ==================================================================================================
-fountainOldManScript_text1:
+fountainOldManScript_herosCave:
 	settextid TX_1000
-	jumpifmemoryeq wIsLinkedGame, $01, fountainOldManScript_text2
+	;jumpifmemoryeq wIsLinkedGame, $01, fountainOldManScript_text2
 fountainOldManScript_showText:
 	setcollisionradii $03, $0b
 	makeabuttonsensitive
@@ -705,39 +809,39 @@ fountainOldManScript_showText:
 	showloadedtext
 	scriptjump -
 	
-fountainOldManScript_text2:
+fountainOldManScript_gnarledRoot:
 	settextid TX_1001
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text3:
+fountainOldManScript_shovelBeach:
 	settextid TX_1002
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text4:
+fountainOldManScript_gate:
 	settextid TX_1003
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text5:
+fountainOldManScript_evilByTree:
 	settextid TX_1004
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text6:
+fountainOldManScript_tower:
 	settextid TX_1005
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text7:
+fountainOldManScript_L2Sword:
 	settextid TX_1006
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text8:
+fountainOldManScript_worried:
 	settextid TX_1007
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_text9:
+fountainOldManScript_rudeToLink:
 	settextid TX_1008
 	scriptjump fountainOldManScript_showText
 	
-fountainOldManScript_textA:
+fountainOldManScript_gameBeat:
 	settextid TX_1009
 	scriptjump fountainOldManScript_showText
 	
@@ -746,6 +850,53 @@ fountainOldManScript_textA:
 ; INTERAC_TICK_TOCK
 ; ==================================================================================================
 tickTockScript:
+	setcollisionradii $0f, $06
+	makeabuttonsensitive
+	jumpifroomflagset ROOMFLAG_80,@spokenOnce
+	checkabutton
+	showtext TX_0b43
+	orroomflag ROOMFLAG_80
+	wait 30
+	scriptjump +
+@spokenOnce:
+	jumpifitemobtained TREASURE_HARP, @alreadyGaveHarp
+	;jumpifmemoryset wTimeFlags $01 @timeAlreadySlow
+	checkabutton
++
+-
+	showtext TX_0b44
+	jumpiftextoptioneq $00,@agreed
+	wait 30
+	showtext TX_0b47
+	enableinput
+	checkabutton
+	scriptjump -
+
+@agreed:
+	asm15 scriptHelp.blossom_checkHasRupees, RUPEEVAL_080
+	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
+
+	;playsound SND_FILLED_HEART_CONTAINER
+	;wait 30
+	;ormemory wTimeFlags $01
+	giveitem TREASURE_HARP, $00
+	;asm15 scriptHelp.tickTockCopyTime
+	asm15 removeRupeeValue, RUPEEVAL_080
+	showtext TX_0b45
+	enableallobjects
+@alreadyGaveHarp:
+;@timeAlreadySlow:
+	checkabutton
+	showtext TX_0b45
+	scriptjump @alreadyGaveHarp
+
+@notEnoughRupees:
+	wait 30
+	showtext TX_0b46
+	enableallobjects
+	scriptjump @spokenOnce
+
+/*
 	setcollisionradii $0f, $06
 	makeabuttonsensitive
 	jumpifroomflagset $40, @gaveEngineGrease
@@ -776,6 +927,7 @@ tickTockScript:
 	checkabutton
 	showtext TX_0b46
 	scriptjump @gaveEngineGrease
+*/
 	
 	
 ; ==================================================================================================
@@ -2596,6 +2748,9 @@ horonVillageBoyScript_text7:
 	showtext TX_1409
 	writeobjectbyte $45, $00
 	scriptjump -
+
+horonVillageBoyScript_text8:
+	rungenericnpc TX_140a
 	
 springBloomBoyScript_text1:
 	jumptable_memoryaddress wRoomStateModifier
@@ -2614,11 +2769,13 @@ springBloomBoyScript_text3:
 	rungenericnpc TX_1304
 	
 sunkenCityBoyScript_text1:
-	jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, sunkenCityBoyScript_text1_moblinsKeepDestroyed
+	;jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, sunkenCityBoyScript_text1_moblinsKeepDestroyed
 	rungenericnpc TX_1a00
 sunkenCityBoyScript_text2:
-	jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, sunkenCityBoyScript_text2_moblinsKeepDestroyed
-	scriptjump sunkenCityBoyScript_text3
+	rungenericnpc TX_1a01
+	;jumpifglobalflagset GLOBALFLAG_MOBLINS_KEEP_DESTROYED, sunkenCityBoyScript_text2_moblinsKeepDestroyed
+	;scriptjump sunkenCityBoyScript_text3
+/*
 sunkenCityBoyScript_text2_moblinsKeepDestroyed:
 	initcollisions
 	checkabutton
@@ -2628,8 +2785,9 @@ sunkenCityBoyScript_text2_moblinsKeepDestroyed:
 	scriptjump sunkenCityBoyScript_text2_moblinsKeepDestroyed
 sunkenCityBoyScript_text1_moblinsKeepDestroyed:
 	rungenericnpc TX_1a02
+*/
 sunkenCityBoyScript_text3:
-	rungenericnpc TX_1a01
+	rungenericnpc TX_1a02
 sunkenCityBoyScript_text4:
 	rungenericnpc TX_1a03
 
@@ -3774,50 +3932,72 @@ ingoScript_yahoo:
 ; ==================================================================================================
 guruGuruScript:
 	initcollisions
-	jumpifroomflagset $40, @alreadyTradedGrease
--
+	jumpifroomflagset ROOMFLAG_40, @alreadyTradedSeeds
+	jumptable_objectbyte Interaction.var36
+	.dw @galeSeedsNotObtained
+	.dw @haveSeeds
+	.dw @haveSeeds
+
+@notEnoughSeeds:
+	writeobjectbyte Interaction.var3b, $00
+	showtextlowindex <TX_0b5a
+	writeobjectbyte Interaction.var3b, $01
+	enableinput
+
+@galeSeedsNotObtained:
 	checkabutton
 	disableinput
-	writeobjectbyte $7b, $00
+	writeobjectbyte Interaction.var3b, $00
 	showtextlowindex <TX_0b48
-	jumpiftradeitemeq $0a, @haveGrease
-	writeobjectbyte $7b, $01
+	writeobjectbyte Interaction.var3b, $01
 	enableinput
-	scriptjump -
-@haveGrease:
+	scriptjump @galeSeedsNotObtained
+
+@haveSeeds:
+	checkabutton
+	disableinput
 	wait 30
 -
 	showtextlowindex <TX_0b49
-	jumpiftextoptioneq $00, @tradingGrease
+	jumpiftextoptioneq $00, @tradingSeeds
 	wait 30
 	showtextlowindex <TX_0b4c
-	writeobjectbyte $7b, $01
+	writeobjectbyte Interaction.var3b, $01
 	enableinput
 	checkabutton
 	disableinput
-	writeobjectbyte $7b, $00
+	writeobjectbyte Interaction.var3b, $00
 	scriptjump -
-@tradingGrease:
+@tradingSeeds:
 	wait 30
+	jumpifobjectbyteeq Interaction.var36, $01, @notEnoughSeeds
+
 	showtextlowindex <TX_0b4a
 	disableinput
-	cplinkx $48
-	addobjectbyte $48, $06
-	setanimationfromobjectbyte $48
-	giveitem TREASURE_TRADEITEM, $0b
-	orroomflag $40
-	writeobjectbyte $79, $01
-	setcounter1 $32
-	writeobjectbyte $7b, $01
+	cplinkx Interaction.direction;$48
+	addobjectbyte Interaction.direction, $06
+	setanimationfromobjectbyte Interaction.direction;$48
+	asm15 scriptHelp.guruGuruGiveSeeds
+	giveitem TREASURE_GNARLED_KEY, $01 ;Instant grab
+	orroomflag ROOMFLAG_40;$40
+	writeobjectbyte Interaction.var39, $01
+	setcounter1 50;$32
+	writeobjectbyte Interaction.var3b, $01
 	enableinput
-@alreadyTradedGrease:
+@alreadyTradedSeeds:
 	checkabutton
 	disableinput
-	writeobjectbyte $7b, $00
-	showtextlowindex <TX_0b4b
-	writeobjectbyte $7b, $01
+	writeobjectbyte Interaction.var3b, $00
+	showtextlowindex <TX_0b5b
+	writeobjectbyte Interaction.var3b, $01
 	enableinput
-	scriptjump @alreadyTradedGrease
+
+	checkabutton
+	disableinput
+	writeobjectbyte Interaction.var3b, $00
+	showtextlowindex <TX_0b4b
+	writeobjectbyte Interaction.var3b, $01
+	scriptjump @alreadyTradedSeeds
 
 
 ; ==================================================================================================
@@ -5649,18 +5829,20 @@ sunkenCityBulliesScript3_bully3:
 ; ==================================================================================================
 ; INTERAC_FICKLE_OLD_MAN
 ; ==================================================================================================
-fickleOldManScript_text1:
+fickleOldManScript_gateSwordExpo:
 	rungenericnpc TX_1100
-fickleOldManScript_text2:
+fickleOldManScript_zeldaDream:
 	rungenericnpc TX_1101
-fickleOldManScript_text3:
+fickleOldManScript_hiddenTreasure:
 	rungenericnpc TX_1102
-fickleOldManScript_text4:
+fickleOldManScript_badClouds:
 	rungenericnpc TX_1103
-fickleOldManScript_text5:
+fickleOldManScript_vastWorld:
 	rungenericnpc TX_1104
-fickleOldManScript_text6:
+fickleOldManScript_gameBeat:
 	rungenericnpc TX_1105
+fickleOldManScript_towerExpo:
+	rungenericnpc TX_1106
 
 
 ; ==================================================================================================
@@ -6075,7 +6257,7 @@ masterDiverScript_text5:
 
 oldManWithJewelScript:
 	initcollisions
-	jumpifroomflagset $40, @alreadyGaveJewel
+	jumpifroomflagset ROOMFLAG_40, @alreadyGaveJewel
 	jumptable_objectbyte Interaction.var38
 	.dw @dontHaveEssences
 	.dw @haveEssences
@@ -6087,10 +6269,13 @@ oldManWithJewelScript:
 
 @haveEssences:
 	checkabutton
-	showtextlowindex $02
+	showtextlowindex <TX_3602;$02
 	disableinput
-	giveitem TREASURE_ROUND_JEWEL, $00
-	orroomflag $40
+	playsound SND_FAIRYCUTSCENE
+	wait 30
+	playsound SND_FAIRYCUTSCENE
+	;giveitem TREASURE_ROUND_JEWEL, $00
+	orroomflag ROOMFLAG_40;$40
 	enableinput
 
 @alreadyGaveJewel:
@@ -6104,7 +6289,7 @@ oldManWithJewelScript:
 ; ==================================================================================================
 
 jewelHelperScript_insertedJewel:
-	wait 60
+	wait 30;60
 	showtext TX_3600
 	scriptend
 

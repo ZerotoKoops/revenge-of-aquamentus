@@ -1,6 +1,6 @@
 ; See data/ages/uniqueGfxHeaders.s for documentation.
 
-.define NUM_UNIQUE_GFX_HEADERS $29
+.define NUM_UNIQUE_GFX_HEADERS $2b;$29
 
 uniqueGfxHeadersStart:
 
@@ -175,6 +175,13 @@ m_UniqueGfxHeaderStart $27, UNIQUE_GFXH_EXPLORERS_CRYPT_PALETTE_A
 m_UniqueGfxHeaderStart $28, UNIQUE_GFXH_EXPLORERS_CRYPT_PALETTE_B
 	m_GfxHeaderEnd PALH_TILESET_EXPLORERS_CRYPT_B
 
+m_UniqueGfxHeaderStart $29, UNIQUE_GFXH_TILESET_OVERWORLD_SPRING
+	m_GfxHeader gfx_tileset_spring_standard, $9201
+	m_GfxHeaderEnd
+
+m_UniqueGfxHeaderStart $2a, UNIQUE_GFXH_TILESET_OVERWORLD_SUMMER
+	m_GfxHeader gfx_tileset_summer_standard, $9201
+	m_GfxHeaderEnd
 
 uniqueGfxHeaderTable:
 	.repeat NUM_UNIQUE_GFX_HEADERS index COUNT

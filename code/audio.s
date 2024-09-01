@@ -2,6 +2,7 @@
 .include "include/macros.s"
 .include "include/rominfo.s"
 .include "include/musicMacros.s"
+.include "include/customMusicMacros.s"
 
 ; HACK-BASE: Bank of sound engine (and of data in "audio/{game}/soundChannelData.s") changed to
 ; allocate more space to the compressed data section (text, graphics, room layouts).
@@ -2416,7 +2417,9 @@ waveformTable:
 
 
 	.include {"audio/{GAME}/soundChannelPointers.s"}
+	.include "audio/common/harpSoundChannelPointers.s"
 	.include {"audio/{GAME}/soundPointers.s"}
+	.include "audio/common/harpSoundPointers.s"
 
 .ends ; End of section AudioCode
 

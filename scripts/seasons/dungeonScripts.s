@@ -13,6 +13,10 @@ enableLinkAndMenu:
 dungeonScript_end:
 	scriptend
 
+dungeonScript_checkActiveTriggersEq02:
+	stopifitemflagset
+	checkmemoryeq wActiveTriggers, $02
+	scriptjump spawnChestAfterPuff
 
 dungeonScript_checkActiveTriggersEq01:
 	stopifitemflagset
@@ -62,14 +66,14 @@ snakesRemainsScript_bossDeath:
 	orroomflag $80
 ++
 	stopifitemflagset
-	setcoords $88, $78
+	setcoords $80, $78
 
 spawnHeartContainerHere:
 	spawnitem TREASURE_HEART_CONTAINER, $00
 	writememory wDisableLinkCollisionsAndMenu, $00
 	scriptend
 
-
+/*
 poisonMothsLairScript_hallwayTrapRoom:
 	asm15 scriptHelp.D3spawnPitSpreader
 	checkmemoryeq wActiveTriggers, $01
@@ -92,8 +96,17 @@ poisonMothsLairScript_minibossDeath:
 	settilehere TILEINDEX_INDOOR_UPSTAIRCASE
 	spawninteraction INTERAC_MINIBOSS_PORTAL, $00, $00, $00
 	scriptjump enableLinkAndMenu
+*/
 
+dungeonScript_omuaiDeath:
+	jumpifroomflagset ROOMFLAG_80, omuaiDeath_coordsForHeartContainer
+	checknoenemies
 
+omuaiDeath_coordsForHeartContainer:
+	stopifitemflagset
+	scriptjump spawnHeartContainerHere
+
+/*
 poisonMothsLairScript_bossDeath:
 	jumpifroomflagset $80, poisonMothsLair_coordsForHeartContainer
 	checknoenemies
@@ -224,21 +237,25 @@ ancientRuinsScript_roomWithJustRopesSpawningButton:
 ancientRuinsScript_UShapePitToMagicBoomerangOrb:
 	setangle $04
 	scriptjump loopCheckToggleBlocks
-
+*/
 
 ancientRuinsScript_randomButtonRoom:
+	jumpifroomflagset ROOMFLAG_40 @puzzleDone
 	asm15 scriptHelp.D6getRandomButtonResult
 	jumptable_memoryaddress $cfc1
 	.dw ancientRuinsScript_randomButtonRoom
-	.dw @success
 	.dw @failed
+	.dw @success
 @success:
-	playsound SND_SOLVEPUZZLE
-	createpuff
+	;playsound SND_SOLVEPUZZLE
+	;createpuff
 	wait 30
-	settilehere TILEINDEX_INDOOR_UPSTAIRCASE
-	asm15 scriptHelp.D6setFlagBit7InFirst4FRoom
-	scriptend
+	;settilehere TILEINDEX_INDOOR_UPSTAIRCASE
+	orroomflag ROOMFLAG_40
+	ormemory wActiveTriggers $04
+	scriptjump spawnChestAfterPuff
+	;asm15 scriptHelp.D6setFlagBit7InFirst4FRoom
+	;scriptend
 @failed:
 	wait 60
 	playsound SND_ERROR
@@ -248,7 +265,11 @@ ancientRuinsScript_randomButtonRoom:
 	checknoenemies
 	scriptjump ancientRuinsScript_randomButtonRoom
 
-
+@puzzleDone:
+	ormemory wActiveTriggers $04
+	stopifitemflagset
+	scriptjump spawnChestAfterPuff
+/*
 ancientRuinsScript_4F3OrbsRoom:
 	setangle $38
 	scriptjump loopCheckToggleBlocks
@@ -459,7 +480,7 @@ swordAndShieldMazeScript_spawnFireKeeseAtLavaHoles:
 	asm15 scriptHelp.D8SpawnLimitedFireKeese
 	scriptjump @loop
 
-
+*/
 swordAndShieldMazeScript_pushableIceBlocks:
 	stopifroomflag80set
 @waitUntilIceBlocksInPlace:
@@ -469,14 +490,15 @@ swordAndShieldMazeScript_pushableIceBlocks:
 	.dw @waitUntilIceBlocksInPlace
 	.dw @success
 @success:
-	orroomflag $80
+	orroomflag ROOMFLAG_80
 	playsound SND_SOLVEPUZZLE
 	createpuff
 	wait 20
-	settilehere TILEINDEX_INDOOR_DOWNSTAIRCASE
+	settilehere $52
 	scriptend
 
 
+/*
 swordAndShieldMazeScript_horizontalBridgeByMoldorms:
 	stopifroomflag80set
 	checkmemoryeq wActiveTriggers, $01
@@ -533,3 +555,196 @@ herosCaveScript_allButtonsPressedAndEnemiesDefeated:
 	checknoenemies
 	spawnitem TREASURE_SMALL_KEY, $01
 	scriptend
+*/
+
+shoreCave_spawnBridges:
+	checkmemoryeq wActiveTriggers, $01
+	jumpifroomflagset ROOMFLAG_80, @spawnKey
+
+	asm15 scriptHelp.D0spawnBridge_0
+	wait 30
+	asm15 scriptHelp.D0spawnBridge_1
+	wait 30
+	asm15 scriptHelp.D0spawnBridge_2
+	wait 36
+	asm15 scriptHelp.D0spawnBridge_3
+	orroomflag ROOMFLAG_80
+@spawnKey:
+	checknoenemies
+	stopifitemflagset
+	spawnitem TREASURE_SMALL_KEY, $01
+	scriptend
+
+dungeonScript_fourTorchRoom:
+	checkmemoryeq wNumTorchesLit, $04
+	ormemory wActiveTriggers $02
+	scriptend
+
+dungeonScript_owlPuzzle:
+	stopifitemflagset
+	checktile $45 TILEINDEX_RED_PUSHABLE_BLOCK
+	checktile $47 TILEINDEX_RED_PUSHABLE_BLOCK
+	checktile $36 TILEINDEX_YELLOW_PUSHABLE_BLOCK
+	checktile $56 TILEINDEX_BLUE_PUSHABLE_BLOCK
+@spawnChest:
+	scriptjump spawnChestAfterPuff	
+
+dungeonScript_torchesSpawnKey:
+	jumpifroomflagset ROOMFLAG_80 @spawnKey
+	maketorcheslightable
+	checktile $75 TILEINDEX_LIT_TORCH
+	checktile $95 TILEINDEX_LIT_TORCH
+@spawnKey:
+	stopifitemflagset
+	orroomflag ROOMFLAG_80
+	spawnitem TREASURE_SMALL_KEY, $01
+	scriptend
+
+dungeonScript_spawnKeyInWater:
+	stopifitemflagset
+	spawnitem TREASURE_SMALL_KEY, $02
+	scriptend
+
+dungeonScript_spawnFacade:
+	jumpifroomflagset ROOMFLAG_80 @facadeDead
+	jumpifobjectbyteeq Interaction.state $01 @state1
+
+@state0:
+	spawnenemyhere ENEMY_FACADE $00
+	writeobjectbyte Interaction.state $01
+@state1:
+	checknoenemies
+	orroomflag ROOMFLAG_80
+@spawnChest:
+	stopifitemflagset
+	scriptjump spawnChestAfterPuff
+
+@facadeDead:
+	spawnenemy ENEMY_BEETLE $01 $78 $28
+	spawnenemy ENEMY_BEETLE $01 $48 $58
+	spawnenemy ENEMY_BEETLE $01 $68 $a8
+	scriptjump @spawnChest
+
+dungeonScript_spawnPyramidBridge:
+	jumptable_objectbyte Interaction.substate
+	.dw @state0
+	.dw @spawnBridge
+	.dw @state2
+	.dw @despawnBridge
+
+@state0:
+@state2:
+	asm15 scriptHelp.checkActiveTriggersChanged
+	scriptjump dungeonScript_spawnPyramidBridge
+
+@spawnBridge:
+	asm15 scriptHelp.spawnPyramidBridge
+	setsubstate $02
+	scriptjump dungeonScript_spawnPyramidBridge
+
+@despawnBridge:
+	wait 60
+	playsound SND_BIGSWORD
+	settileat $3c, $b0
+	wait 10
+	settileat $4c, $f4
+	wait 10
+	playsound SND_BIGSWORD
+	settileat $5c, $f4
+	wait 10
+	settileat $6c, $f4
+	wait 10
+	playsound SND_BIGSWORD
+	settileat $7c, $b2
+	playsound SND_BIGSWORD
+	setsubstate $00
+	scriptjump dungeonScript_spawnPyramidBridge
+
+; Spawn stairs to the bracelet room when the two torches are lit.
+spiritsGraveScript_stairsToBraceletRoom:
+	stopifroomflag80set
+	;asm15 scriptHelp.makeTorchesLightable
+	checkmemoryeq wNumTorchesLit, $02
+	orroomflag ROOMFLAG_80;$80
+	playsound SND_SOLVEPUZZLE
+	asm15 objectCreatePuff
+	settilehere TILEINDEX_INDOOR_DOWNSTAIRCASE
+	scriptend
+
+ancientTombScript_retractWall:
+	stopifroomflag40set
+	;checkmemoryeq wActiveTriggers, $01
+	disableinput
+	wait 30
+	asm15 scriptHelp.ancientTomb_startWallRetractionCutscene
+	scriptend
+
+dungeonScript_activeTriggerIfTorchLit:
+@checkTorchesLit:
+	jumptable_memoryaddress wNumTorchesLit
+	.dw @unlitTorches
+	.dw @litTorches
+	.dw @litTorches
+
+@litTorches:
+	ormemory wActiveTriggers $01
+	scriptjump @checkTorchesLit
+@unlitTorches:
+	writememory wActiveTriggers $00
+	scriptjump @checkTorchesLit
+
+dungeonScript_checkActiveTriggersEq01_spawnStaircase:
+	stopifroomflag80set
+	checkmemoryeq wActiveTriggers $01
+	wait 30
+	checktext
+
+	wait 60
+	playsound SND_DOORCLOSE
+	wait 60
+	playsound SND_DOORCLOSE
+	wait 60
+	createpuff
+	playsound SND_SOLVEPUZZLE
+	orroomflag ROOMFLAG_80
+	settilehere $47;TILEINDEX_INDOOR_DOWNSTAIRCASE
+	scriptend
+
+dungeonScript_bossKeyRoom:
+	stopifitemflagset
+	jumpifroomflagset ROOMFLAG_80, @spawnBossKey
+	checkmemoryeq wActiveTriggers $0e ;bits 1-3
+	checkmemoryeq wNumTorchesLit $04
+
+	orroomflag ROOMFLAG_80
+@spawnBossKey:
+	playsound SND_SOLVEPUZZLE
+	spawnitem TREASURE_BOSS_KEY $01
+	wait 30
+	stopifitemflagset
+	spawnitem TREASURE_BOSS_KEY $02
+	scriptend
+	
+dungeonScript_checkActiveTriggersEq01_spawnHole:
+	stopifroomflag40set
+	checkmemoryeq wActiveTriggers, $01
+	playsound SND_SOLVEPUZZLE
+	createpuff
+	wait 15
+	settilehere $45 ; fallable hole
+	orroomflag ROOMFLAG_40
+	scriptend
+
+
+/*
+spiritsGraveScript_spawnMovingPlatform:
+	checkflagset $01, wActiveTriggers
+	setcoords $58, $20;$48, $78
+	asm15 objectCreatePuff
+	setcoords $68, $20;$58, $78
+	asm15 objectCreatePuff
+	wait 30
+	spawninteraction INTERAC_MOVING_PLATFORM, $05, $60, $20 ;$50, $78
+	playsound SND_SOLVEPUZZLE
+	scriptend
+*/

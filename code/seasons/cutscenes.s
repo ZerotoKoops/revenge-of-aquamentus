@@ -89,3 +89,16 @@ cutscene11:
 cutscene12:
 	call zeldaKidnappedCutsceneCaller
 	jp func_5d41
+
+;;
+; CUTSCENE_WALL_RETRACTION
+cutsceneWallRetraction:
+	callab bank3Cutscenes.wallRetraction
+	jp updateAllObjects
+
+warpToRoom642:
+	ld hl,@warpDestVars
+	jp setWarpDestVariables
+
+@warpDestVars:
+	m_HardcodedWarpA ROOM_SEASONS_642, $05, $6b, $03

@@ -38,6 +38,7 @@ rickyStateB:
 
 	ld l,SpecialObject.var39
 	ld (hl),$10
+	jr @setAnimation17 ;HACK: skip talking to Ricky
 	ld a,(wRickyState)
 
 .ifdef ROM_AGES

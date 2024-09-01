@@ -36,9 +36,9 @@ interactionCode90:
 
 @subid0Init:
 	call @spawnJewelGraphics
-	call getThisRoomFlags
-	bit 7,(hl)
-	jp nz,interactionDelete
+	;call getThisRoomFlags
+	;bit ROOMFLAG_BIT_80,(hl)
+	;jp nz,interactionDelete
 	ret
 
 @subid1Init:
@@ -143,18 +143,24 @@ interactionCode90:
 	call @checkJewelInserted
 	ret nc
 
-	ld a,(hl)
+	ld a,c;ld a,(hl)
 	call loseTreasure
-	ld a,(hl)
+	ld a,c;ld a,(hl)
 	call @insertJewel
 
 	ld a,DISABLE_LINK|DISABLE_ALL_BUT_INTERACTIONS
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
 
+/*
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_414
+	jr z,+
 	ld a,SND_SOLVEPUZZLE
 	call playSound
 
++
+*/
 	call setLinkForceStateToState08
 	xor a
 	ld (w1Link.direction),a
@@ -171,11 +177,11 @@ interactionCode90:
 
 	ld a,(wInsertedJewels)
 	cp $0f
-	jr z,@insertedAllJewels
+	;jr z,@insertedAllJewels
 	xor a
 	ld e,Interaction.substate
 	ld (de),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
 	ret
 
@@ -341,6 +347,22 @@ interactionCode90:
 
 ;;
 @spawnJewelGraphics:
+	ld e,Interaction.var03
+	ld a,(de)
+	ld c,a
+	ld hl,wInsertedJewels
+	call checkFlag
+	ret z
+
+	ld a,c
+	ld hl,wJewelRooms
+	rst_addAToHl
+	ld a,(wActiveRoom)
+	cp (hl)
+
+	jr z, @spawnJewelGraphic
+	ret
+/*
 	ld c,$00
 @@next:
 	ld hl,wInsertedJewels
@@ -356,54 +378,114 @@ interactionCode90:
 	cp $04
 	jr c,@@next
 	ret
-
+*/
 ;;
 ; @param[out]	hl	Address of treasure index?
 ; @param[out]	cflag	c if inserted jewel
 @checkJewelInserted:
 	call checkLinkID0AndControlNormal
 	ret nc
-
-	ld hl,w1Link.direction
-	ldi a,(hl)
-	or a
+	ld a,(w1WeaponItem.id)
+	cp ITEM_SWORD
+	ret z
+	ld a,(wcc63)
+	cpa $00
 	ret nz
 
+	;ld hl,w1Link.direction
+	;ldi a,(hl)
+	;cpa DIR_UP
+	ld hl,w1Link.angle
+	ld a,(hl)
+	cpa $ff
+	ret z
+	add $04
+	and $1f
+	cpa $09
+	ret nc
+
+	ld e,Interaction.yh
+	ld l,<w1Link.yh
+	ld a,(de)
+	add $06
+	sub (hl)
+	cp $15
+	ret nc
+
+	ld e,Interaction.xh
+	ld l,<w1Link.xh
+	ld a,(de)
+	inc a
+	sub (hl)
+	cp $03
+	ret nc
+
+	ld e,Interaction.var03
+	ld a,(de)
+	add TREASURE_ROUND_JEWEL
+	ld c,a
+	jp checkTreasureObtained
+
+
+/*
 	ld l,<w1Link.yh
 	ld a,$36
 	sub (hl)
 	cp $15
 	ret nc
 
+	ld l,<w1Link.yh
+	ld b,(hl)
+
 	ld l,<w1Link.xh
 	ld c,(hl)
-	ld hl,@jewelPositions-1
 
-@nextJewel:
+	ld hl,@jewelPositions-3;1
+
+@nextJewelRoom:
+	inc hl
+@nextJewelX:
+	inc hl
+@nextJewelY:
 	inc hl
 	ldi a,(hl)
-	or a
+	or a ; end check if reached end with no match
 	ret z
 	add $01
 	sub c
-	cp $03
-	jr nc,@nextJewel
-	ld a,(hl)
+	cp $03 ; 
+	jr nc,@nextJewelX
+
+	ldi a,(hl)
+	sub b
+	cp $15
+	jr nc,@nextJewelY
+
+	ld a,(wActiveRoom)
+	cp (hl)
+	jr nz,@nextJewelRoom
+
+	ld a,(hl) ; jewel that fit
 	jp checkTreasureObtained
 
 @jewelPositions:
-	.db $24, TREASURE_ROUND_JEWEL
-	.db $34, TREASURE_PYRAMID_JEWEL
-	.db $6c, TREASURE_SQUARE_JEWEL
-	.db $7c, TREASURE_X_SHAPED_JEWEL
+	.db $2c, $16, <ROOM_SEASONS_437, TREASURE_ROUND_JEWEL ;$24
+	.db $34, $ff, <ROOM_SEASONS_400, TREASURE_PYRAMID_JEWEL
+	.db $6c, $ff, <ROOM_SEASONS_400, TREASURE_SQUARE_JEWEL
+	.db $7c, $ff, <ROOM_SEASONS_400, TREASURE_X_SHAPED_JEWEL
 	.db $00
-
+*/
 ;;
 @insertJewel:
 	sub TREASURE_ROUND_JEWEL
 	ld c,a
 	ld hl,wInsertedJewels
 	call setFlag
+	ld a,c
+	ld hl,wJewelRooms
+	rst_addAToHl
+	ld a,(wActiveRoom)
+	ld (hl),a
 
 ;;
 ; @param	c	Jewel index
@@ -413,7 +495,8 @@ interactionCode90:
 	ld (hl),INTERAC_JEWEL
 	inc l
 	ld (hl),c
-	ret
+	jp objectCopyPosition
+	;ret
 
 ;;
 ; @param	a	Which puffs to spawn (0 or 4)

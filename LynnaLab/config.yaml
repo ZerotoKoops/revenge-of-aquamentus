@@ -3,7 +3,7 @@
 
 # Leave this field blank to have LynnaLab prompt for which game to edit every time; or set it to
 # "ages" or "seasons" to automatically edit said game.
-EditingGame:
+EditingGame: seasons
 
 # Normally each tileset has "Main Gfx", "Unique Gfx", "Palette", and "Tilemap" variables. These all
 # mix together to define how the tileset looks.  This adds a confusing layer of indirection when

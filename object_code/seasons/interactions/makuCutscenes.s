@@ -59,8 +59,9 @@ interactionCode22:
 
 @atMakuTreeGate:
 	call getThisRoomFlags
-	and $80
+	and ROOMFLAG_80
 	jp nz,interactionDelete
+
 	call @setScript
 	jr @runScript
 

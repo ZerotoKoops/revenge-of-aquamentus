@@ -271,6 +271,16 @@ findWarpSourceAndDest:
 .ifdef AGES_ENGINE
 
 @warpSourceNotFound:
+	ld hl,wFallDownHoleWarp
+	ld a,$01
+	cp (hl)
+	jr nz,+
+	ld a,(w1Link.state)
+	cp LINK_STATE_RESPAWNING
+	jr nz,+
+	inc (hl)
+	ret
++
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_DUNGEON
 	jr z,setWarpDestDefault

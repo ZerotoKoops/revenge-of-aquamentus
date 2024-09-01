@@ -1673,6 +1673,42 @@ groups:
     text: |2-
        The Black Tower
 
+  - name: TX_0210
+    index: 0x10
+    text: |2-
+       Dawn of the
+           First Day
+
+  - name: TX_0211
+    index: 0x11
+    text: |2-
+       Night of the
+           First Day
+
+  - name: TX_0212
+    index: 0x12
+    text: |2-
+       Dawn of the
+          Second Day
+
+  - name: TX_0213
+    index: 0x13
+    text: |2-
+       Night of the
+          Second Day
+
+  - name: TX_0214
+    index: 0x14
+    text: |2-
+       Dawn of the
+           Third Day
+
+  - name: TX_0215
+    index: 0x15
+    text: |2-
+       Night of the
+           Third Day
+
 - group: 0x03
   data:
   - name: TX_0300

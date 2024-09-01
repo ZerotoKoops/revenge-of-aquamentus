@@ -150,7 +150,7 @@ interactionCode7e:
 	.db $82 $aa
 .else
 	.db $01 $01
-	.db $0b $15
+	.db <ROOM_SEASONS_428, <ROOM_SEASONS_413;$0b $15
 	.db $21 $39
 	.db $48 $4b
 	.db $6a $81

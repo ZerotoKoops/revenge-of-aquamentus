@@ -341,8 +341,15 @@ warpTransition5_00:
 	ld l,<w1Link.zh
 	ld (hl),a
 	ld l,<w1Link.yh
+
+	ld b,$04
+	ld a,(wActiveGroup)
+	cp $06
+	jr c,+
+	ld b,$00
++
 	ld a,(hl)
-	sub $04
+	sub b;$04
 	ld (hl),a
 	ld l,<w1Link.direction
 	ld (hl),DIR_DOWN
@@ -686,12 +693,17 @@ warpTransition9:
 @substate0:
 	call itemIncSubstate
 
+	ld a,(wLinkInAir)
+	or a
+	jr z,+
+
 	ld l,SpecialObject.yh
 	ld a,$08
 	add (hl)
 	ld (hl),a
 
 	call objectCenterOnTile
++
 	call clearAllParentItems
 
 	ld a,LINK_ANIM_MODE_FALLINHOLE
@@ -742,12 +754,13 @@ warpTransitionB:
 
 	; Done falling. Set Link's initial state depending on the game.
 
-.ifdef ROM_AGES
+;.ifdef ROM_AGES
 	call itemIncSubstate
 	call animateLinkStanding
 	ld a,SND_SPLASH
 	jp playSound
-.else
+/*
+.else ; ROM_SEASONS
 	xor a
 	ld (wDisabledObjects),a
 	ld a,SPECIALOBJECT_LINK_CUTSCENE
@@ -756,6 +769,7 @@ warpTransitionB:
 	ld (hl),$02
 	ret
 .endif
+*/
 
 @warpVar2:
 	ld a,(wDisabledObjects)
@@ -763,7 +777,8 @@ warpTransitionB:
 	ret nz
 
 	call objectSetVisiblec2
-	jp initLinkStateAndAnimateStanding
+	call initLinkStateAndAnimateStanding
+	jpab bank1.checkPlayRoomMusic
 
 
 ;;
@@ -1409,15 +1424,40 @@ linkState02:
 	ld (de),a
 ++
 	; Disable collisions
-	ld h,d
 	ld l,SpecialObject.collisionType
 	res 7,(hl)
 
+	ld a,(wFallDownHoleWarp)
+	dec a
+	jr z,@holeWarp
+-
 	; Do the "fall in hole" animation
 	ld a,LINK_ANIM_MODE_FALLINHOLE
 	call specialObjectSetAnimation
 	ld a,SND_LINK_FALL
 	jp playSound
+
+@holeWarp:
+	ld a,(wActiveTileIndex)
+	ldh (<hFF8C),a
+	ld a,(wActiveTilePos)
+	ldh (<hFF8D),a
+	callab bank4.findWarpSourceAndDest
+
+	ld a,(wFallDownHoleWarp)
+	cp $02
+	jr z,-
+
+	lda $00
+	ld (wScrollMode),a
+	ld (<w1Link.substate),a
+	ld a,$ff
+	ld (wFallDownHoleWarp),a
+	ld a,$1e
+	ld (wDisabledObjects),a
+	ld a,LINK_STATE_WARPING
+	jp linkSetState
+
 
 
 ; Doing a "falling down hole" animation, waiting for it to finish
@@ -1444,6 +1484,14 @@ linkState02:
 	jpab bank1.warpToMoblinKeepUnderground
 +
 .else
+	ld a,(wActiveGroup)
+	cp >ROOM_SEASONS_411
+	jr nz,+
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_411
+	jr nz,+
+	jpab bank1.warpToRoom642
++
 	; start CUTSCENE_S_ONOX_FINAL_FORM
 	ld a,(wDungeonIndex)
 	cp $09
@@ -2097,7 +2145,7 @@ linkState05:
 .ifdef ROM_AGES
 	ld l,$18
 .else
-	ld l,$13
+	ld l,$12;$13
 .endif
 	ld a,$02
 	call specialObjectSetVar37AndVar38
@@ -2145,6 +2193,7 @@ linkState05:
 	ret
 
 @animParameter2:
+; heal Link
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a
@@ -2169,9 +2218,9 @@ linkState05:
 	; [SpecialObject.angle] = $18
 	inc l
 .ifdef ROM_AGES
-	ld (hl),$18
+	ld (hl),ANGLE_LEFT;$18
 .else
-	ld (hl),$08
+	ld (hl),ANGLE_RIGHT;$08
 .endif
 
 	ld l,SpecialObject.speed
@@ -3090,6 +3139,9 @@ overworldSwimmingState1:
 .ifdef ROM_AGES
 	call checkSwimmingOverSeawater
 	jr z,@drown
+.else ; ROM_SEASONS
+	call checkSwimmingOverSeawater
+	jr z,@drown
 .endif
 
 	ld a,TREASURE_FLIPPERS
@@ -3148,6 +3200,17 @@ checkSwimmingOverSeawater:
 	ret nz
 	ld a,(wActiveTileType)
 	sub TILETYPE_SEAWATER
+	ret
+.else ; ROM_SEASONS
+checkSwimmingOverSeawater:
+	ld a,(w1Link.var2f)
+	bit 6,a
+	ret nz
+	ld a,(wActiveGroup)
+	cpa >ROOM_SEASONS_050
+	ret nz
+	ld a,(wActiveTileIndex)
+	sub $d1 ;overworld sea water (in erie plain)
 	ret
 .endif
 
@@ -5024,7 +5087,7 @@ checkLinkPushingAgainstBed:
 	ldbc <ROOM_AGES_39e, $17
 	ld l,DIR_RIGHT
 .else
-	ldbc <ROOM_SEASONS_382, $14
+	ldbc <ROOM_SEASONS_393, $13;<ROOM_SEASONS_382, $14
 	ld l,DIR_LEFT
 .endif
 	ld a,(wActiveRoom)

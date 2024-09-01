@@ -16,14 +16,20 @@ interactionCode9c:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($cc4e)
-	or a
-	jp nz,interactionDelete
+	;ld a,(wRoomStateModifier)
+	;cpa SEASON_SPRING ;or a
+	;jp nz,interactionDelete
 	ld a,$06
 	call objectSetCollideRadius
 	call interactionInitGraphics
 	call objectSetVisible83
 @state1:
+	ld a,(wTimeOfDay)
+	and TIME_NIGHT
+	jr z,+
+	jp objectSetInvisible
++
+	call objectSetVisible83
 	ld a,($ccc3)
 	or a
 	jr z,+

@@ -29,11 +29,14 @@ interactionCodec7:
 
 	ld e,Interaction.yh
 	ld a,(de)
-	ldi (hl),a
+	ldi (hl),a ;[Object.id]
 	ld e,Interaction.xh
 	ld a,(de)
 	and $0f
-	ld (hl),a
+	ldi (hl),a ;[Object.subid]
+	ld e,Interaction.var03
+	ld a,(de)
+	ldd (hl),a ;[Object.var03]
 
 	ld a,l
 	add Object.yh-Object.subid

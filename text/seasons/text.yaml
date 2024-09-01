@@ -1019,7 +1019,8 @@ groups:
     index: auto
     text: |-
       You got the
-      \col(1)Harp of Ages\col(0)!
+      \col(1)Harp of Time\col(0)!
+      Press \up, \down, \left, \right or \abtn to play a note! Press \bbtn to exit.
 
   - name: TX_00_GET_ECHOES
     index: auto
@@ -1224,9 +1225,8 @@ groups:
   - name: TX_0201
     index: 0x01
     text: |2-
-       Level 1
-       Gnarled Root
-        Dungeon
+       Aquamentus
+         Fortress
 
   - name: TX_0202
     index: 0x02
@@ -1284,6 +1284,103 @@ groups:
     text: |2-
        Room of Rites
 
+  - name: TX_020b
+    index: 0x0b
+    text: |2-
+       Dawn of the
+           First Day
+
+  - name: TX_020c
+    index: 0x0c
+    text: |2-
+       Night of the
+           First Day
+
+  - name: TX_020d
+    index: 0x0d
+    text: |2-
+       Dawn of the
+          Second Day
+
+  - name: TX_020e
+    index: 0x0e
+    text: |2-
+       Night of the
+          Second Day
+
+  - name: TX_020f
+    index: 0x0f
+    text: |2-
+       Dawn of the
+           Third Day
+
+  - name: TX_0210
+    index: 0x10
+    text: |2-
+       Night of the
+           Third Day
+
+  - name: TX_0211
+    index: 0x11
+    text: |-
+      Would you like to return to \col(1)Dawn of the First Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_0212
+    index: 0x12
+    text: |-
+      Would you like to slow down the passage of time?
+        \opt()Yes \opt()No
+
+  - name: TX_0213
+    index: 0x13
+    text: |-
+      Would you like to speed up the passage of time?
+        \opt()Yes \opt()No
+
+  - name: TX_0214
+    index: 0x14
+    text: |-
+      Would you like to skip to
+      \call(0xff)
+      ?
+        \opt()Yes \opt()No
+
+  - name: TX_0215
+    index: 0x15
+    text: |2-
+      Would you like to skip forward to \col(1)Night of the First Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_0216
+    index: 0x16
+    text: |2-
+      Would you like to skip forward to \col(1)Dawn of the Second Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_0217
+    index: 0x17
+    text: |2-
+      Would you like to skip forward to \col(1)Night of the Second Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_0218
+    index: 0x18
+    text: |2-
+      Would you like to skip forward to \col(1)Dawn of the Third Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_0219
+    index: 0x19
+    text: |2-
+      Would you like to skip forward to \col(1)Night of the Third Day\col(0)?
+        \opt()Yes \opt()No
+
+  - name: TX_021a
+    index: 0x1a
+    text: |-
+      You can no longer skip forward.
+
 - group: 0x03
   data:
   - name: TX_0300
@@ -1301,37 +1398,37 @@ groups:
   - name: TX_0302
     index: 0x02
     text: |-
-      Northern Peak
+      Erie Plain
 
   - name: TX_0303
     index: 0x03
     text: |-
-      Temple Remains
+      Nennet Seaside
 
   - name: TX_0304
     index: 0x04
     text: |-
-      Goron Mountain
+      Verdant Wood
 
   - name: TX_0305
     index: 0x05
     text: |-
-      Mt. Cucco
+      Nennet Village
 
   - name: TX_0306
     index: 0x06
     text: |-
-      Lost Woods
+      Dark Forest
 
   - name: TX_0307
     index: 0x07
     text: |-
-      Holodrum Plain
+      Offshore Islands
 
   - name: TX_0308
     index: 0x08
     text: |-
-      Natzu Prairie
+      Aquamentus Fortress
 
   - name: TX_0309
     index: 0x09
@@ -1477,7 +1574,7 @@ groups:
   - name: TX_0323
     index: 0x23
     text: |-
-      Clock Shop
+      Tick Tock Shop
 
   - name: TX_0324
     index: 0x24
@@ -1497,13 +1594,12 @@ groups:
   - name: TX_0327
     index: 0x27
     text: |-
-      Bipin's &
-      Blossom's House
+      Common House
 
   - name: TX_0328
     index: 0x28
     text: |-
-      Biologist's Home
+      Old Man Phineas's Hut
 
   - name: TX_0329
     index: 0x29
@@ -1907,9 +2003,6 @@ groups:
       bag! The Great
       Witch will be
       mad!
-      I can't find any
-      \col(1)Lon Lon Eggs\col(0),
-      and now this...
       I'll just take
       the stuff you
       dropped, too!
@@ -2768,8 +2861,8 @@ groups:
     index: 0x44
     text: |-
       Gnarled Key
-      Key the Maku
-      Tree gave you.
+      Key that Guru
+      Guru gave you.
 
   - name: TX_0945
     index: 0x45
@@ -2958,7 +3051,7 @@ groups:
   - name: TX_09_HARP
     index: auto
     text: |-
-      Harp of Ages
+      Harp of Time
       A harp used to
       navigate time.
 
@@ -3630,66 +3723,60 @@ groups:
   - name: TX_0b43
     index: 0x43
     text: |-
-      \pos(2)I want to make
-      a Cuckoo Clock
-      better than
-      any before, but
-      I can't find a
-      \col(1)Wooden Bird\col(0)
-      that I like...
-      One that's just
-      breathtaking...
+      \pos(2)Welcome in! Want to know what I sell?\stop
+      Time! Have all you want, for the right price.
 
   - name: TX_0b44
     index: 0x44
     text: |-
-      \pos(2)You! That's an
-      amazing bird you
-      have! May I?
-        \opt()Sure \opt()No way
+      \pos(2)You! Would you like to purchase a magical musical instrument that can alter time?
+      It's 80 rupees.
+        \opt()OK \opt()No way
 
   - name: TX_0b45
     index: 0x45
     text: |-
-      \pos(2)Breathtaking!
-      Here! Take this!
+      \pos(2)Thank you for your business!
 
   - name: TX_0b46
     index: 0x46
     text: |-
-      \pos(2)Everyone loves
-      fiddling with
-      engines!
+      \pos(2)It looks like
+      you don't have
+      enough Rupees.
 
   - name: TX_0b47
     index: 0x47
     text: |-
       \pos(2)I don't mean to
-      ask too much...
+      ask for much...
 
   - name: TX_0b48
     index: 0x48
     text: |-
       Go around,
       go around!
-      If I could just
-      oil it, it
-      would go around
+      There are some
+      mystical seeds
+      that would make
+      it go around
       more quickly...
+      Give them to me and I might help you.
 
   - name: TX_0b49
     index: 0x49
     text: |-
-      \col(1)Engine Grease\col(0) \col(0x84)\item(0x0b)\col(0)?
+      \col(1)Gale Seeds\col(0)?
       Will that make
-      it go quickly?
+      it go quickly?\stop
+      Do you have 10?
       \opt()Sure \opt()Maybe not
 
   - name: TX_0b4a
     index: 0x4a
     text: |-
       Really? Take
-      my \col(1)Phonograph\col(0)!
+      my \col(1)Key\col(0)!
 
   - name: TX_0b4b
     index: 0x4b
@@ -3824,6 +3911,18 @@ groups:
       \sfx(0xc7)Come back if you
       forget the
       \col(1)secret\col(0).
+
+  - name: TX_0b5a
+    index: 0x5a
+    text: |-
+      Come back when you find more \col(1)seeds\col(0).
+
+  - name: TX_0b5b
+    index: 0x5b
+    text: |-
+      I learned this \col(1)song\col(0) that will take you far away:
+      \down \left \up  \down \left \up\stop
+      Understood?
 
 - group: 0x0c
   data:
@@ -4504,7 +4603,7 @@ groups:
   - name: TX_0e1d
     index: 0x1d
     text: |-
-      \col(1)Gasha Seed\col(0)\stop
+      \col(1)Heart Container\col(0)\stop
       \num1 Rupees
         \opt()OK \opt()No thanks
 
@@ -4618,96 +4717,94 @@ groups:
        80 Rupees
         \opt()OK \opt()No thanks\cmd8(0x0f)
 
+  - name: TX_0e2b
+    index: 0x2b
+    text: |-
+      \col(1)Iron Shield\col(0)\stop
+      Stronger than your current shield.
+       80 Rupees
+        \opt()OK \opt()No thanks\cmd8(0x0f)
+
+  - name: TX_0e2c
+    index: 0x2c
+    text: |-
+      \pos(2)\col(1)Magic Potion\col(0)
+      \num1 Rupees each.
+        \opt()OK \opt()No thanks\cmd8(0x0d)
+
 - group: 0x0f
   data:
   - name: TX_0f00
     index: 0x00
     text: |-
-      The seasons are
-      a mess! Winter
-      goes straight
-      into summer...
-      What's going on?
+      Were you the one to open our protective gate?
+      You better go see the mayor!
 
   - name: TX_0f01
     index: 0x01
     text: |-
-      I saw an odd
-      girl in strange
-      garb carrying a
-      \col(1)Ribbon\col(0).\stop
-      She was east
-      of town...
-      I think.
+      I saw a shady guy digging in the sand at the \col(1)beach\col(0) yes-
+      terday.
+      \jump(TX_0f09)
+    null_terminator: False
 
   - name: TX_0f02
     index: 0x02
     text: |-
-      I hear some
-      animals in the
-      wild are used
-      to people.
-      Maybe you can
-      make friends!
+      Is that an old map?
+      What are those sparkles?
+      Reminds me of the \col(1)guy\col(0) I saw at the beach yesterday.
+      \jump(TX_0f09)
+    null_terminator: False
 
   - name: TX_0f03
     index: 0x03
     text: |-
-      Maybe she's a
-      princess from
-      a foreign land.
-      I told her it's
-      dangerous beyond
-      the village, but
-      she left anyway.
+      There are four things called \col(1)jewels\col(0) hidden accross this land.
+      What happens when they're brought together?
 
   - name: TX_0f04
     index: 0x04
     text: |-
-      There are eight
-      things called
-      \col(1)essences\col(0)
-      hidden across
-      this land.
-      What happens if
-      they're brought
-      together?
+      There are \col(1)drainage areas\col(0) in the forest.
+      They might be \col(1)filled with water\col(0) one day, and \col(1)just empty holes\col(0) the next! 
 
   - name: TX_0f05
     index: 0x05
     text: |-
-      How long will
-      the seasons stay
-      like this? It
-      makes me so
-      depressed.
+      What a magnificent sword! Give me a spin!
 
   - name: TX_0f06
     index: 0x06
     text: |-
-      I feel a little
-      better, thanks
-      to \col(3)Princess
-      Zelda\col(0)!
+      The forest has many large gaps and \col(1)holes\col(0).
+      What could be across them?
 
   - name: TX_0f07
     index: 0x07
     text: |-
-      \col(3)Princess Zelda\col(0)
-      was taken away
-      by some beast...
-      What's going to
-      happen now?
+      Are you going to save us?
 
   - name: TX_0f08
     index: 0x08
     text: |-
       I'm so glad the
-      village is back
-      to normal. But
-      who changed the
-      seasons around,
-      and why?
+      village is safe again. Did you save us?
+
+  - name: TX_0f09
+    index: 0x09
+    text: |-
+      He ran off to the \col(1)west\col(0) with something shiny in his hand, and I haven't seen him since.
+
+  - name: TX_0f0a
+    index: 0x0a
+    text: |-
+      There's a strange man who lives out-side of the village. I hope a strong \col(1)gale\col(0) doesn't pick up his windmill.
+
+  - name: TX_0f0b
+    index: 0x0b
+    text: |-
+      When I went for a walk yesterday morning, I saw a large \col(1)flower\col(0) open up! I was afraid to touch it, as it seemed to want to suck me in! 
 
 - group: 0x10
   data:
@@ -4716,122 +4813,168 @@ groups:
     text: |-
       Do you know of
       the \col(3)Hero's Cave\col(0)
-      near the Western
+      at the Southern
       Coast?
       The \col(1)Hero's Sword\col(0)
       is said to be
-      hidden there,
-      but no one has
-      ever found it.
+      hidden there, but there might be other treasures in there as well.
 
   - name: TX_1001
     index: 0x01
     text: |-
-      There's a \col(3)giant
-      root\col(0) north of
-      town. I wonder
-      what it's from.
+      Every few days, a \col(1)giant root\col(0) south-west of town appears out of the sea.\stop
+      I wonder what \col(3)dark evils\col(0) are keeping it alive.      
 
   - name: TX_1002
     index: 0x02
     text: |-
-      The area to the
-      east is awash in
-      green! I'd go
-      paint it if I
-      were younger...
+      The beach down south is so beautiful at sunset. 
+      I'd go paint it if I were younger.
 
   - name: TX_1003
     index: 0x03
     text: |-
-      I guess seeing
-      scenery from all
-      the seasons is
-      kind of nice...
+      I wish the gate had never opened. I guess seeing scenery from the southeast is kind of nice...
 
   - name: TX_1004
     index: 0x04
     text: |-
       I recently saw a
-      beautiful girl
-      I'd never seen
-      before. Is she
-      from this town?
+      withered tree by the \col(1)ember seed tree\col(0). I was tempted to clear the brush.
+      I didn't because I couldn't shoot the seed \col(1)long-range\col(0).
 
   - name: TX_1005
     index: 0x05
     text: |-
-      Up north is a
+      Northwest is a
       place of strange
       power that stops
       any who would
       approach.\stop
-      But it was never
-      there before.
+      It's ancient but only the \col(1)guardian\col(0) has been there.
+      I heard that there might be \col(1)multiple ways\col(0) to enter it.
 
   - name: TX_1006
     index: 0x06
     text: |-
       Before we knew
-      it, our guardian
-      grew so big...
-      It's so strange.
+      it, our \col(1)guardian\col(0)
+      grew so strong...
+      It's strange. He then went to the \col(1)tower\col(0) and came back speaking of \col(1)four statues\col(0) and moving walls!
 
   - name: TX_1007
     index: 0x07
     text: |-
-      \col(3)Zelda\col(0) is with
-      you.\stop
-      Everything will
-      be fine now.
+      I'm sure everything will be fine now.\stop
+      Right?
 
   - name: TX_1008
     index: 0x08
     text: |-
-      It was my only
-      wish, but with
-      \col(3)Zelda\col(0) kidnapped,
-      it's too late...
+      Who are you anyway? \Link?
+      Maybe you shouldn't have come.
 
   - name: TX_1009
     index: 0x09
     text: |-
-      The seasons seem
-      to have returned
-      to normal. It's
-      another gift
-      from the town's
-      guardian!
+      The evil forces seem to have gone away.
+      It's another gift from the town's guardian!
+
+  - name: TX_100a
+    index: 0x0a
+    text: |-
+      Hi, \Link! This is the \col(2)Zelda\col(0)!
+      Although you are far away, we can still talk to each other!
+      Did you need some advice?
+        \opt()Yes \opt()Not now
+
+  - name: TX_100b
+    index: 0x0b
+    text: |-
+      \Link? You got the \col(1)Hero's Sword\col(0), right?
+      Did you find anything else in the \col(1)Cave\col(0)?
+
+  - name: TX_100c
+    index: 0x0c
+    text: |-
+      You found the \col(1)satchel!\col(0)
+      I sense a musical man in the \col(1)west\col(0) that might be looking for some \col(3)seeds\col(0)...
+
+  - name: TX_100d
+    index: 0x0d
+    text: |-
+      A \col(1)key\col(0), huh? I feel great evil emanating from the \col(1)south-
+      western\col(0) waters, but it only comes up \col(1)every few days\col(0).
+
+  - name: TX_100e
+    index: 0x0e
+    text: |-
+      \Link! The \col(1)great tower\col(0) hides many secrets! What you are seeking is in a \col(1)large pit\col(0). It doesn't seem like there are any other access points other than in the \col(1)above room\col(0)!
+
+  - name: TX_100f
+    index: 0x0f
+    text: |-
+      I'm sensing conflict... you should go down to the \col(1)beach\col(0), but the villagers might have \col(1)seen something\col(0).
+
+  - name: TX_1010
+    index: 0x10
+    text: |-
+      A \col(1)treasure map\col(0)!! What do you need me for?
+
+  - name: TX_1011
+    index: 0x11
+    text: |-
+      \Link, I feel that the \col(1)jewels\col(0) want to return to the \col(1)great fortress\col(0).
+
+  - name: TX_1012
+    index: 0x12
+    text: |-
+      The great fortress has \col(1)multiple entrances\col(0) throughout Nennet!
+      Whatever you have might help you find \col(1)another way in\col(0).
+
+  - name: TX_1013
+    index: 0x13
+    text: |-
+      Did you meet anyone on the \col(1)plains\col(0)?
+      He might help you, but always keep your eye on the \col(1)tide\col(0).
+
+  - name: TX_1014
+    index: 0x14
+    text: |-
+      You finally have all the \col(1)jewels\col(0)! Somewhere in the \col(1)great fortress\col(0), you must bring them all together.
+
+  - name: TX_1015
+    index: 0x15
+    text: |-
+      \Link, you might have been able explore much of the \col(1)fortress\col(0), but remember there are areas \col(1)outside\col(0) that you might not have been able to reach before!
+
+  - name: TX_1016
+    index: 0x16
+    text: |-
+      \Link!! It's time!! Defeat the \col(1)Great Beast\col(0)!! Beware of his strength! He can \col(1)fly\col(0)!
+
+  - name: TX_1017
+    index: 0x17
+    text: |-
+      Congratulations, \Link! You did it!! You saved all of \col(1)Nennet\col(0)!
 
 - group: 0x11
   data:
   - name: TX_1100
     index: 0x00
     text: |-
-      Our guardian,
-      the \col(3)Maku Tree\col(0),
-      stands beyond
-      the gate to the
-      east of town.\stop
-      It's said a hero
-      with a sword
-      will come to
-      speak with him.
-      I wonder if it's
-      true...
+      Our \col(1)guardian\col(0) erected the gate that stands south of town.
+      It's said anyone with the hero's \col(1)sword\col(0) could open the gate, but the sword was lost to the waves eons ago.
+      Should we have gone looking for it if we'd known somebody would find it and release the \col(3)evil spirits\col(0) to us?
 
   - name: TX_1101
     index: 0x01
     text: |-
-      The world seems
-      so vast...
-      Here in \col(3)Horon
-      Village\col(0), the
-      seasons have all
-      run amuck. I
-      wonder if it's
-      the same in
-      other lands...
+      The other night, I dreamt of a beautiful young woman with \col(2)golden hair\col(0).
+      She said, "\Link, \Link! Please hear me!"
+      Below her were these \col(1)symbols\col(0):
+      \left \up \right  \left \up \right\stop
+      What could it mean?
 
   - name: TX_1102
     index: 0x02
@@ -4840,8 +4983,8 @@ groups:
       curious object
       carefully hidden
       deep within
-      the \col(3)Moblin's\col(0)
-      \col(3)Keep\col(0).
+      \col(3)Aquamentus\col(0)
+      \col(3)Fortress\col(0).
 
   - name: TX_1103
     index: 0x03
@@ -4855,9 +4998,15 @@ groups:
   - name: TX_1104
     index: 0x04
     text: |-
-      I knew
-      something bad
-      would happen...
+      The world seems
+      so vast...
+      Here in \col(3)Nennet
+      Village\col(0), the
+      spirits have all
+      run amuck. I
+      wonder if it's
+      the same in
+      other lands...
 
   - name: TX_1105
     index: 0x05
@@ -4867,16 +5016,20 @@ groups:
       truly appreciate
       nature's gifts.
 
+  - name: TX_1106
+    index: 0x06
+    text: |-
+      Legend says that the great \col(1)tower\col(0) has hidden its secrets throughout the land of Nennet.
+      Our \col(1)guardian\col(0) had to leave it many times to find the proper path again!
+      Once he found something, he ran straight back to the \col(1)tower\col(0) to continue.
+
 - group: 0x12
   data:
   - name: TX_1200
     index: 0x00
     text: |-
-      It goes from hot
-      to cold in a
-      flash. The
-      seasons are
-      in utter chaos!
+      We were protected from evil spirits from the southern gate.
+      Now that it's gone, they can freely come and terrorize us.
       What will it do
       to this year's
       harvest..?
@@ -4886,7 +5039,7 @@ groups:
     text: |-
       Do you know of
       this land's
-      mystical \col(1)rings\col(0)?
+      mystical \col(1)jewels\col(0)?
         \opt()Yes \opt()No
 
   - name: TX_1202
@@ -4901,19 +5054,17 @@ groups:
     index: 0x03
     text: |-
       Well... If you
-      don't wear your
-      \col(1)rings\col(0), their
-      powers won't
-      help you. If you
-      want to know
-      more, go see
-      the jeweler.
+      find the four
+      \col(1)jewels\col(0), their
+      powers will
+      help you infiltrate the great tower.
+      I don't know much more than that.
 
   - name: TX_1204
     index: 0x04
     text: |-
       To the north
-      is a huge beast
+      is a huge tower
       like none other.
       Have you seen
       it?
@@ -4931,7 +5082,7 @@ groups:
     text: |-
       I must work hard
       to prepare for
-      the day \col(3)Zelda\col(0)
+      the day the \col(3)hero\col(0)
       returns.
 
   - name: TX_1207
@@ -5000,20 +5151,12 @@ groups:
   - name: TX_1400
     index: 0x00
     text: |-
-      This is the
-      house of the
-      wise \col(3)Know-It-All
-      Birds\col(0).
-      See them if you
-      have questions!
+      Hiding in the grass felt like such a great idea...
 
   - name: TX_1401
     index: 0x01
     text: |-
-      The seasons
-      here change
-      like the wind.
-      It's strange...
+      I like to visit the beach to look at the sea. But my mom says never to go into caves!
 
   - name: TX_1402
     index: 0x02
@@ -5046,28 +5189,18 @@ groups:
     text: |-
       When I grow up,\stop
       I'm gonna beat
-      that Dark
-      General guy
-      to a pulp!
+      that Dark Beast guy to a pulp!
 
   - name: TX_1406
     index: 0x06
     text: |-
-      They say a
-      princess named
-      \col(3)Zelda\col(0) lives
-      far away. I hope
-      to meet her.
-      I wonder if she
-      dances as well
-      as \col(3)Din\col(0) does?
+      They say that a hero will come to save us from the Dark Beast guy.
+      But who could he be? Does he have a cool haircut?
 
   - name: TX_1407
     index: 0x07
     text: |-
-      Seeing \col(3)Princess
-      Zelda\col(0) makes me
-      happy somehow.
+      I love playing games with my friends.
 
   - name: TX_1408
     index: 0x08
@@ -5078,23 +5211,22 @@ groups:
   - name: TX_1409
     index: 0x09
     text: |-
-      It's terrible!
-      My dear \col(3)Princess
-      Zelda\col(0) is gone!
-      My dreams have
-      all faded!!!
+      My mom won't stop crying at night. She's so scared.
+      Does she know I can see it?
+
+  - name: TX_140a
+    index: 0x0a
+    text: |-  
+      They say that a hero came to save us from the Dark Beast guy.
+      But who was he? Did he have a cool haircut?
 
 - group: 0x15
   data:
   - name: TX_1500
     index: 0x00
     text: |-
-      In the west part
-      of town are the
-      \col(3)Know-It-All
-      Birds\col(0).
-      See them if you
-      have a question.
+      The adults are all talkin' about the open \col(1)gate\col(0).
+      But I have Flash! Why should I be afraid?
 
   - name: TX_1501
     index: 0x01
@@ -5108,9 +5240,7 @@ groups:
     index: 0x02
     text: |-
       Some trees bear
-      \col(1)Seeds\col(0) other
-      seasons, not
-      just spring.
+      \col(1)Seeds\col(0) at night, not just during the day.
 
   - name: TX_1503
     index: 0x03
@@ -5153,20 +5283,18 @@ groups:
   - name: TX_1600
     index: 0x00
     text: |-
-      This is \col(3)Horon
+      This is \col(3)Nennet
       Village\col(0)!\stop
       Hey! I've never
       seen you before.
-      The \col(3)Maku Tree\col(0)?
-      Head east.
+      The \col(3)mayor\col(0)?
+      Head north.
 
   - name: TX_1601
     index: 0x01
     text: |-
-      The seasons are
-      all messed up.
-      It's bad for my
-      skin...
+      The monsters are giving me all kinds of night-terrors.
+      It's bad for my skin...
 
   - name: TX_1602
     index: 0x02
@@ -5199,26 +5327,30 @@ groups:
   - name: TX_1605
     index: 0x05
     text: |-
-      I have to see
-      \col(3)Princess Zelda\col(0)!
-      I'll never give
-      up hope!
+      Someday a strong man will come and save me from this provin-
+      cial life.
+      I'll never give up hope!
 
   - name: TX_1606
     index: 0x06
     text: |-
-      It's just AWFUL!
-      \col(3)Princess Zelda\col(0)
-      was kidnapped!
-      What do we do?
+      Did you hear of this man, \Link?
+      He might be the guardian we've been waiting for!
+      I wonder what he's doing now.
 
   - name: TX_1607
     index: 0x07
     text: |-
-      This is \col(3)Horon
+      This is \col(3)Nennet
       Village\col(0)! Hey!
       I haven't seen
       you in a while!
+
+
+  - name: TX_1608
+    index: 0x08
+    text: |-
+      Hi!
 
 - group: 0x17
   data:
@@ -5836,6 +5968,28 @@ groups:
       so I return to
       peaceful rest!
 
+  - name: TX_173a
+    index: 0x3a
+    text: |-
+      \slow()Ho ho ho ho!\stop
+      You...
+      have...\stop
+      released...
+      \col(3)us\col(4)...\stop
+      We...
+      come...\stop
+      \col(2)seventy-two\col(4)...
+      \col(2)hours\col(4)...
+
+  - name: TX_173b
+    index: 0x3b
+    text: |-
+      \slow()Ho ho ho ho!\stop
+      You...
+      were...\stop
+      too...
+      late...
+
 - group: 0x18
   data:
   - name: TX_1800
@@ -5898,73 +6052,45 @@ groups:
   - name: TX_1900
     index: 0x00
     text: |-
-      My pop's a
-      master diver!
-      He had a secret
-      diving spot, but
-      he never told me
-      where it was.\stop
-      Stingy guy...
+      I'm playing hide and seek with other boys, and they haven't found me yet.\stop
+      I hope they're still looking for me...
 
   - name: TX_1901
     index: 0x01
     text: |-
-      I'll find his
-      secret spot
-      someday! You
-      don't know,
-      do you?
+      The boys forgot me and now I'm planning how to get them back.
 
   - name: TX_1902
     index: 0x02
     text: |-
-      Pop finally
-      approved my
-      skills and let
-      in on his
-      secret! Now I
-      can be the new
-      master!
+      I decided to forgive them.
+      But what do you have?
+      I want it...      
 
   - name: TX_1903
     index: 0x03
     text: |-
-      Recently some
-      monsters settled
-      in the village.
-      They just sit
-      there mumbling,
-      making \col(1)Bombs\col(0)...
+      We've had some rain, and now the western forest is flooded with \col(1)pools\col(0) of water.
+      Some are so deep, you have to \col(1)swim\col(0) across!
 
   - name: TX_1904
     index: 0x04
     text: |-
-      Just when my
-      time comes,
-      \col(3)Princess Zelda\col(0)
-      gets kidnapped?\stop
-      I'm so worried,
-      I can't swim!
+      I'm playing hide and seek, but it's my turn to find!
+      Where could they have gone?
 
   - name: TX_1905
     index: 0x05
     text: |-
-      I'm gonna learn
-      to hold my
-      breath the way
-      Pop did!
+      Winning hide and seek is so much harder than I thought...
 
 - group: 0x1a
   data:
   - name: TX_1a00
     index: 0x00
     text: |-
-      I hear there's a
-      creature that
-      can swim up
-      waterfalls!
-      What kind of
-      creature is it?
+      My friends and I are playing hide and seek, but the village is so big.
+      How could I find them?
 
   - name: TX_1a01
     index: 0x01
@@ -5972,27 +6098,17 @@ groups:
       I want a pet--
       one that will
       always be at my
-      side!
+      side! He would help me find the other boys!
 
   - name: TX_1a02
     index: 0x02
     text: |-
-      I wonder where
-      the monster that
-      came to town
-      came from?
-      I hope we can
-      be friends!
+      It's my turn to hide, but I bet my friend could never find me! Haha
 
   - name: TX_1a03
     index: 0x03
     text: |-
-      They said a bad
-      guy kidnapped
-      \col(3)Princess Zelda\col(0).
-      If I'd been
-      there, I'd have
-      stopped it!
+      Do you know how to jump? I want to jump like that! I'm gonna become a ninja!
 
 - group: 0x1b
   data:
@@ -6001,44 +6117,56 @@ groups:
     text: |-
       Legends say
       some sort of
-      treasure sleeps
-      on the summit!
+      \col(3)treasure\col(0) sleeps
+      inside that huge
+      terrible tower!
       It's a boy's
       dream! I think
       about it so much
       I can't sleep!
+      If you go there, please let me see what trea-
+      sures you find!
 
   - name: TX_1b01
     index: 0x01
     text: |-
-      The \col(3)mysterious
-      tree\col(0) on the edge
-      of town bears
-      \col(1)Gale Seeds\col(0).
-      They'll take you
-      anywhere in a
-      flash! They're
-      a big help!
+      You! That's it!
+      I want to see your \col(3)jewel\col(0)!
+        \opt()Sure \opt()No way
 
   - name: TX_1b02
     index: 0x02
     text: |-
-      They say there's
-      a huge tree in
-      \col(3)Horon Village\col(0).
-      Someday I'm
-      gonna use \col(1)Gale
-      Seeds\col(0) to go
-      see it...
+      Don't worry kid, I won't take it!
 
   - name: TX_1b03
     index: 0x03
     text: |-
-      I heard \col(3)Twinrova\col(0)
-      kidnapped
-      \col(3)Princess Zelda\col(0),
-      but what on
-      earth for..?
+      Breathtaking!\stop
+      In return for letting me see it, I want you to have this.
+
+  - name: TX_1b04
+    index: 0x04
+    text: |-
+      I found that \col(1)jewel\col(0) down on the \col(1)beach\col(0).
+      I'm sure it's not worth much.
+
+  - name: TX_1b05
+    index: 0x05
+    text: |-
+      Oh!
+      Here's your \col(3)jewel\col(0) back!
+
+  - name: TX_1b06
+    index: 0x06
+    text: |-
+      Did you find anything more in that \col(1)tower\col(0)?
+      Maybe someday I'll visit it?
+
+  - name: TX_1b07
+    index: 0x07
+    text: |-    
+      Hey, I visited the \col(1)tower\col(0), but I couldn't figure out how to get past those large rollers...
 
 - group: 0x1c
   data:
@@ -6046,27 +6174,24 @@ groups:
     index: 0x00
     text: |-
       The whole city's
-      flooded, but
-      since I can't
-      swim, I'm just
-      here blowing
-      bubbles.
+      in panic since that gate opened.
+      Who opened it?
 
   - name: TX_1c01
     index: 0x01
     text: |-
-      What's essence?
+      What's jewel?
       What's darkness?
       What's an evil
-      king?
+      serpent?
       It's so hard...
 
   - name: TX_1c02
     index: 0x02
     text: |-
       Who's the
-      oracle? Who's
-      \col(3)Din\col(0)? Who's \col(3)Onox\col(0)?
+      monster?
+      Who's \col(3)\Link\col(0)?
       It's so deep...
 
   - name: TX_1c03
@@ -6074,7 +6199,7 @@ groups:
     text: |-
       Can I still show
       this bubble to
-      \col(3)Princess Zelda\col(0)?
+      \col(3)\Link\col(0)?
 
 - group: 0x1d
   data:
@@ -8048,15 +8173,16 @@ groups:
   - name: TX_2e00
     index: 0x00
     text: |-
-      Maku Tree Gate\stop
+      Nennet Village Gate\stop
       Show courage to
       gain passage!
 
   - name: TX_2e01
     index: 0x01
     text: |-
-      Vases wanted!
-       Ingo, Collector
+      \left Erie Plain
+      \up Dark Forest
+      \right Nennet Village
 
   - name:
     - TX_2e02
@@ -8067,17 +8193,12 @@ groups:
     - 0x03
     - 0x04
     text: |-
-      Flying Cucco\stop
-      Flaps when held.
-      Otherwise,
-      it's dangerous.
+      A dive in the depths of the river brings riches of the tower.
 
   - name: TX_2e05
     index: 0x05
     text: |-
-      \up Spool Swamp
-      \right Eyeglass Lake
-      \down Horon Village
+      Wait until night to watch the vines grow!
 
   - name:
     - TX_2e06
@@ -8086,89 +8207,113 @@ groups:
     - 0x06
     - 0x07
     text: |-
-      \up Subrosian
-         Hot Springs
-      \down Subrosian
-         Seaside
+      \up Beware of cliffs!
+      \left Erie Plain
+      \down Old Man Phineas's Hut
 
   - name: TX_2e08
     index: 0x08
     text: |-
-      \right Furnaces
+      \up Nennet Village
+      \left Nennet Seaside
 
   - name: TX_2e09
     index: 0x09
     text: |-
-      \left Subrosian
-         Hot Springs
-      \down Subrosian
-         Dance Hall
+      \left Dark Forest
+      Beware of cliffs!
 
   - name: TX_2e0a
     index: 0x0a
     text: |-
-      \up Tarm Ruins
-      \left Spool Swamp
+      Revenge of 
+        Aquamentus
+      Hack made by ZerotoKoops for the 1st Oracles Hackathon.
+      LynnaLab editor made by Stewmat, and main contributor for the Oracles disassembly.
+      Credits go to those who helped me out on the Oracles Hacking Discord server.
+      You can find all the resources on the Wiki page.
+      \call(TX_2e0b)
+      Thank you so much for playing!!
 
   - name: TX_2e0b
     index: 0x0b
     text: |-
-      Samasa Desert
-      Ahead
+      I didn't quite reach the deadline we had, but thanks for bearing with me, guys!
+      Let me know if there are any bugs! I can be reached on the Discord server.
+      You can also message me about anything you liked in the hack too! :)
 
   - name: TX_2e0c
     index: 0x0c
     text: |-
-      Temple of
-      Seasons
+      Nothing wastes time quite like this song!
+      \right \down \up  \right \down \up
 
   - name: TX_2e0d
     index: 0x0d
     text: |-
-      Santa Welcome!!!
+      ZerotoKoops:
+      I know there were a few bugs but I got it out again pretty quickly!
+      \jump(TX_2e0b)
+    null terminator: false
 
   - name: TX_2e0e
     index: 0x0e
     text: |-
-      \left Spool Swamp
-         Shortcut
+      Left with not much time?
+      \right \abtn \down  \right \abtn \down
+      -Tick Tock Shop
 
   - name: TX_2e0f
     index: 0x0f
     text: |-
-      \up My Secret\stop
-      Read in summer
-      when vines grow.
+      Common House
+      All welcome in!
 
   - name: TX_2e10
     index: 0x10
     text: |-
-      \Link...
-      You're my best
-      customer!
-      Take this
-      special gift.
-       Vasu
+      Tick Tock Shop
+      We sell in-
+      struments as well!
 
   - name: TX_2e11
     index: 0x11
     text: |-
-      \right Winter Forest
-      \down Horon Village
+      Wanting to slow the few moments you have?
+      \abtn \down \up  \abtn \down \up
+      -Tick Tock Shop
 
   - name: TX_2e12
     index: 0x12
     text: |-
-      We carry
-      Treasure Maps.
-       Horon Shop
+      Since you've reached the end of the hack, here is a list of all the harp songs:\stop
+      Zelda's Lullaby
+      \left \up \right  \left \up \right\stop
+      Epona's Song
+      \up \left \right  \up \left \right\stop
+      Saria's Song
+      \down \right \left  \down \right \left\stop
+      Sun's Song
+      \right \down \up  \right \down \up\stop
+      Song of Time
+      \right \abtn \down  \right \abtn \down\stop
+      Song of Storms
+      \abtn \down \up  \abtn \down \up\stop
+      Song of Healing
+      \left \right \down  \left \right \down\stop
+      Song of Soaring
+      \down \left \up  \down \left \up\stop
+      Song of Double Time
+      \right \right  \abtn \abtn  \down \down\stop
+      Inverted Song of Time
+      \down \abtn \right  \down \abtn \right
 
   - name: TX_2e13
     index: 0x13
     text: |-
-      Now entering my
-      domain!
-       Great Moblin
+      Need more time?
+      \down \abtn \right  \down \abtn \right
+      -Tick Tock Shop
 
   - name: TX_2e14
     index: 0x14
@@ -8251,6 +8396,7 @@ groups:
     text: |-
       Growrrr!
       You cannot pass!
+      We will haunt you!
 
   - name: TX_2f01
     index: 0x01
@@ -9933,41 +10079,20 @@ groups:
     index: 0x00
     text: |-
       I'm \col(3)Ruul\col(0), mayor
-      of \col(3)Horon
+      of \col(3)Nennet
       Village\col(0).\stop
-      Do you have any
-      \col(1)Gasha Seeds\col(0)?\stop
-      If you plant one
-      in soft earth,
-      it will grow
-      into a tree that
-      bears \col(1)nuts\col(0)!
-      Inside those
-      \col(1)nuts\col(0),you'll
-      find all sorts
-      of things!
-      It's so fun I
-      can't help
-      myself.\stop
-      \jump(TX_310c)
-    null_terminator: False
+      What? You came through the southern gate?\stop
+      Without the gate our guardian erected, evil spirits will come and end us all!\stop
+      According to our tradition, the guardian told us to climb the western \col(1)tower\col(0) to stop this ca-
+      lamity.\stop
+      Seeing that you're the one who opened the gate, it seems fitting that you do this for us.\stop
+      \col(1)\Link\col(0)? I don't know who that is, but you can bring him too!
 
   - name: TX_3101
     index: 0x01
     text: |-
       \call(TX_310a)\stop
-      The mayor is
-      fascinated with
-      \col(1)Gasha Nuts\col(0) now.
-      The place,
-      planter and the
-      planter's deeds
-      affect what the
-      nut produces.\stop
-      The mayor found
-      a good place
-      recently, so he
-      is quite happy.
+      The mayor may speak with you now, but remember he is very busy.
 
   - name: TX_3102
     index: 0x02
@@ -10044,22 +10169,20 @@ groups:
     index: 0x0b
     text: |-
       \call(TX_3100)\stop
-      You don't know
-      about \col(1)Gasha
-      Seeds\col(0)??? You're
-      missing out!\stop
-      I'll give you my
-      prized \col(1)Gasha
-      Seed\col(0) to welcome
-      you to town.
+      As a down payment for your kindness, take this!
 
   - name: TX_310c
     index: 0x0c
     text: |-
-      There's some
-      soft earth just
-      outside. Plant
-      it there.
+      The shop is south-west of here.
+      Please save us!
+
+  - name: TX_310d
+    index: 0x0d
+    text: |-   
+      \Link! Thank you so much for saving us! As a reward, I wanted to tell you that a friend stopped by! He said if you want to call or talk to him for anything, play this song:
+      \up \left \down  \up \left \down\stop
+      I hope you can reach him!   
 
 - group: 0x32
   data:
@@ -10284,14 +10407,23 @@ groups:
   - name: TX_3300
     index: 0x00
     text: |-
-      Return light to
-      unlit torches!
+      Hello, \Link! I heard of your misadventure to come here!\stop
+      Here is a poem passed down for many genera-
+      tions, for the \col(1)hero\col(0) to hear again!
+      \call(TX_3301)
+      Finally, heed my advice!\stop
+      A swipe of your sword and pre-
+      cious stones will return to you!
 
   - name: TX_3301
     index: 0x01
     text: |-
-      What you seek
-      is in the eye.
+      Although \col(4)I\col(0) rest here, my bro-
+      thers have fled.
+      \col(1)One\col(0) attempted the sea, but was buried in the wave-thrashed \col(1)sands\col(0).\stop
+      The \col(3)next\col(0) refuged in a village, but hid deep \col(3)underground\col(0).\stop
+      The \col(2)final\col(0) followed his elder, but was lost to the \col(2)tide\col(0) after consulting an old man.\stop
+      That is all!
 
   - name: TX_3302
     index: 0x02
@@ -10482,20 +10614,18 @@ groups:
   - name: TX_3601
     index: 0x01
     text: |-
-      Soil, time, sun,
-      rain, warmth...
-      I await one who
-      knows many
-      \col(1)essences\col(0)...
+      \col(4)Sphere\col(0), \col(1)pyramid\col(0), \col(3)cube\col(0)...
+      I await one who knows these \col(1)shapes\col(0) and has harnessed the strength of a mighty \col(1)blade\col(0).
 
   - name: TX_3602
     index: 0x02
     text: |-
       Oh keeper of
-      the \col(1)essences\col(0)!
+      the \col(1)shapes\col(0)!
       I have awaited
       your arrival!
-      I give you this!
+      I shall grant you passage!
+      Seek outside to continue your quest.
 
   - name: TX_3603
     index: 0x03
@@ -10877,6 +11007,45 @@ groups:
     text: |-
       Blue seeds will
       give you speed.
+
+  - name: TX_391e
+    index: 0x1e
+    text: |-
+      My hands, \col(1)blood\col(0)-stained.
+      My crown, a brilliant \col(2)light\col(0).
+      My feet,
+      tread \col(3)darkness\col(0).
+
+  - name: TX_391f
+    index: 0x1f
+    text: |-
+      A constant flame
+      and a room free
+      of evil lights the path.
+
+  - name: TX_3920
+    index: 0x20
+    text: |-   
+      When in the depths of the waves, remember where Facade held the key.  
+
+  - name: TX_3921
+    index: 0x21
+    text: |-
+      The great beast has become immune to attack, all but in flight.
+
+  - name: TX_3922
+    index: 0x22
+    text: |-
+      Although \col(4)I\col(0) rest here, my brothers have fled.
+      One buried in the \col(1)sands\col(0).
+      One in the depths of the \col(3)ground\col(0).
+      One across the waves on a small \col(2)island\col(0).
+
+  - name: TX_3923
+    index: 0x23
+    text: |-   
+      At the receding of the wall, I act as my \col(1)twin\col(0) so that you may bring all the precious stones together.
+
 
 - group: 0x3a
   data:
@@ -12476,6 +12645,13 @@ groups:
       whenever your
       quest has made
       you weary.
+
+  - name: TX_4106
+    index: 0x06
+    text: |-
+      \pos(2)If you have need of me far away from here, call me with this:
+      \left \right \down  \left \right \down\stop
+      I only have enough power to heal you remotely \col(1)every three days\col(0). 
 
 - group: 0x42
   data:

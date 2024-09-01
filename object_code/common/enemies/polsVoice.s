@@ -131,6 +131,10 @@ polsVoice_checkLinkPlayingInstrument:
 	ld a,(wLinkPlayingInstrument)
 	or a
 	jr z,+
+; skip also if just playing the instrument
+; need Link to actually play a correct song
+	cpa $ff 
+	jr z,+
 	ld b,ENEMYSTATUS_NO_HEALTH
 +
 	ld a,b

@@ -1315,72 +1315,94 @@ strangeBrother2Script_finishedScreenPattern2:
 jewelHelperScript_jewelMoldorm_body:
 	stopifroomflag40set
 	checkcfc0bit 0
-	writememory $ccab, $01
+	writememory wDisableScreenTransitions, $01
 	delay 8
-	playsound $4d
+	playsound SND_SOLVEPUZZLE;$4d
 	delay 8
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $04
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $05
 	asm15 scriptHelp.jewelHelper_createPuff, $03
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $01
 	asm15 scriptHelp.jewelHelper_createPuff, $07
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $00
 	asm15 scriptHelp.jewelHelper_createPuff, $08
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $02
 	asm15 scriptHelp.jewelHelper_createPuff, $06
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $01
 	asm15 scriptHelp.jewelHelper_createPuff, $05
 	asm15 scriptHelp.jewelHelper_createPuff, $03
 	asm15 scriptHelp.jewelHelper_createPuff, $07
 	delay 3
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $04
 	asm15 scriptHelp.jewelHelper_createPuff, $00
 	asm15 scriptHelp.jewelHelper_createPuff, $02
 	asm15 scriptHelp.jewelHelper_createPuff, $06
 	asm15 scriptHelp.jewelHelper_createPuff, $08
-	settileat $22, $0f
-	settileat $23, $11
-	settileat $32, $11
-	settileat $33, $0f
-	settileat $34, $11
+	settileat $12, $0f;$22, $0f
+	settileat $13, $11;$23
+	settileat $22, $11;$32
+	settileat $23, $0f;$33
+	settileat $24, $11;$34
+
+	asm15 scriptHelp.jewelHelper_createPuff, $09
+	asm15 scriptHelp.jewelHelper_createPuff, $0a
+	asm15 scriptHelp.jewelHelper_createPuff, $0b
+	asm15 scriptHelp.jewelHelper_createPuff, $0c
+	settileat $31, $52
+	settileat $41, $52
+	settileat $51, $52
+	settileat $40, $fd
+
 	delay 4
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $01
 	asm15 scriptHelp.jewelHelper_createPuff, $05
 	asm15 scriptHelp.jewelHelper_createPuff, $03
 	asm15 scriptHelp.jewelHelper_createPuff, $07
 	setcounter1 $06
-	playsound $67
+	playsound SND_BOSS_DEAD;$67
 	writememory $cfc0, $00
 	asm15 scriptHelp.jewelHelper_createMoldorm
-	playsound $73
+	playsound SND_KILLENEMY;$73
 	asm15 scriptHelp.jewelHelper_createPuff, $04
 	asm15 scriptHelp.jewelHelper_createPuff, $00
 	asm15 scriptHelp.jewelHelper_createPuff, $02
 	asm15 scriptHelp.jewelHelper_createPuff, $06
 	asm15 scriptHelp.jewelHelper_createPuff, $08
-	setmusic $2d
-	writememory $ccab, $00
-	checkcfc0bit 0
-	playsound $4d
+	setmusic MUS_MINIBOSS;$2d
+	writememory wDisableScreenTransitions, $00
+	checkmemoryeq wNumEnemies $00
+	;checkcfc0bit 0
+	playsound SND_SOLVEPUZZLE;$4d
 	resetmusic
 	createpuff
 	delay 5
 	disablemenu
-	settilehere $f1
-	orroomflag $40
+	settilehere $f1;closed chest
+	orroomflag ROOMFLAG_40;$40
+
+	asm15 scriptHelp.jewelHelper_createPuff, $09
+	asm15 scriptHelp.jewelHelper_createPuff, $0a
+	asm15 scriptHelp.jewelHelper_createPuff, $0b
+	asm15 scriptHelp.jewelHelper_createPuff, $0c
+	settileat $31, $37
+	settileat $41, $2f
+	settileat $51, $47
+	settileat $40, $2f
+
+
 	enablemenu
 	scriptend
 

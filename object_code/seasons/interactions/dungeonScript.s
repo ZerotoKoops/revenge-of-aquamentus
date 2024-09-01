@@ -46,6 +46,7 @@ interactionCode20:
 @scriptTable:
 	.dw @dungeon0
 	.dw @dungeon1
+/*
 	.dw @dungeon2
 	.dw @dungeon3
 	.dw @dungeon4
@@ -56,17 +57,35 @@ interactionCode20:
 	.dw @dungeon9
 	.dw @dungeonA
 	.dw @dungeonB
+*/
 
 @dungeon0:
 	.dw mainScripts.dungeonScript_end
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
+	.dw mainScripts.shoreCave_spawnBridges
 
 @dungeon1:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
-	.dw mainScripts.dungeonScript_bossDeath
+	/*$00*/ .dw mainScripts.dungeonScript_minibossDeath
+	/*$01*/ .dw mainScripts.dungeonScript_bossDeath
+	/*$02*/ .dw mainScripts.ancientRuinsScript_randomButtonRoom
+	/*$03*/ .dw mainScripts.snakesRemainsScript_bossDeath
+	/*$04*/ .dw mainScripts.dungeonScript_omuaiDeath
+	/*$05*/ .dw mainScripts.dungeonScript_fourTorchRoom
+	/*$06*/ .dw mainScripts.dungeonScript_owlPuzzle
+	/*$07*/ .dw mainScripts.dungeonScript_torchesSpawnKey
+	/*$08*/ .dw mainScripts.dungeonScript_spawnKeyInWater
+	/*$09*/ .dw mainScripts.dungeonScript_spawnFacade
+	/*$0a*/ .dw mainScripts.dungeonScript_checkActiveTriggersEq02
+	/*$0b*/ .dw mainScripts.dungeonScript_spawnPyramidBridge
+	/*$0c*/ .dw mainScripts.spiritsGraveScript_stairsToBraceletRoom
+	/*$0d*/ .dw mainScripts.dungeonScript_activeTriggerIfTorchLit
+	/*$0e*/ .dw mainScripts.dungeonScript_checkActiveTriggersEq01_spawnStaircase
+	/*$0f*/ .dw mainScripts.swordAndShieldMazeScript_pushableIceBlocks
+	/*$10*/ .dw mainScripts.dungeonScript_bossKeyRoom
+	/*$11*/ .dw mainScripts.dungeonScript_checkActiveTriggersEq01
+	/*$12*/ .dw mainScripts.dungeonScript_checkActiveTriggersEq01_spawnHole
+	;.dw mainScripts.dungeonScript_checkActiveTriggersEq01
 
+/*
 @dungeon2:
 	.dw mainScripts.snakesRemainsScript_timerForChestDisappearing
 	.dw mainScripts.dungeonScript_minibossDeath
@@ -156,3 +175,4 @@ interactionCode20:
 	.dw mainScripts.herosCaveScript_check6OrbsHit
 	.dw mainScripts.herosCaveScript_allButtonsPressedAndEnemiesDefeated
 	.dw mainScripts.herosCaveScript_spawnChestOn2TorchesLit
+*/

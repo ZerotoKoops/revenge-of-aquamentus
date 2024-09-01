@@ -1032,7 +1032,16 @@
 .ENDM
 
 .MACRO maketorcheslightable
+	.if NARGS == 1
+	asm15 scriptHelp.makeTorchesLightable \1
+	.else
+	.if NARGS == 0
 	asm15 scriptHelp.makeTorchesLightable
+	.else
+		.PRINTT "SCRIPT ERROR: only one argument at most.\n"
+		.FAIL
+	.endif
+	.endif	
 .ENDM
 
 .MACRO createpuffnodelay

@@ -12,6 +12,7 @@ interactionCode1f:
 	.dw specialWarp_subid4
 	.dw specialWarp_subid5
 	.dw specialWarp_subid6
+/*
 	.dw specialWarp_subid7
 	.dw specialWarp_subid8
 	.dw specialWarp_subid9
@@ -19,29 +20,56 @@ interactionCode1f:
 	.dw specialWarp_subidB
 	.dw specialWarp_subidC
 	.dw specialWarp_subidD
+*/
 
+;ROOM_SEASONS_414
 specialWarp_subid0:
+	ld a,(wActiveTilePos)
+	cp $19
+	ret nz
+	ld a,$03
+	ld (wWarpDestRoom),a
+	ret
+
+/*
+;ROOM_SEASONS_411
+specialWarp_subid4:
+	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
+	ret nc
+	ld hl,@forcedWarpData
+	call setForcedWarp
+@fadeoutTransition:
+	ld a,$03
+	ld (wWarpTransition2),a
+	jp interactionDelete
+
+; Room, position, group
+@forcedWarpData:
+	.db <ROOM_SEASONS_642, $05, >ROOM_SEASONS_600
+*/
+/*
 specialWarp_subid1:
 	call checkInteractionState
-	jr nz,+
-	ld a,($cd00)
+	jr nz,@state1
+	ld a,(wScrollMode)
 	and $01
 	ret z
 	ld a,$01
 	ld (de),a
 	call objectGetTileAtPosition
-	ld (hl),$20
-+
-	ld a,($cc77)
+	ld (hl),TILEINDEX_STUMP;$20
+@state1:
+	ld a,(wLinkInAir)
 	or a
 	ret nz
+initiateFallDownHoleWarp:
 	call objectGetTileAtPosition
-	ld a,($ccb3)
+	ld a,(wActiveTilePos)
 	cp l
 	ret nz
-	ld (hl),$eb
-	ld a,$81
-	ld ($cca4),a
+	ld (hl),$eb;chimney tile
+	ld a,$81 ;disable Link, companions, items, enemies and interactions
+	ld (wDisabledObjects),a
 	jp interactionDelete
 
 specialWarp_subid2:
@@ -152,49 +180,76 @@ specialWarp_subid7:
 	ld ($cca4),a
 	ld (wActiveMusic),a
 	jr specialWarp_subid4@setWarpVariables
-
+*/
+/*
 specialWarp_subid8:
 specialWarp_subid9:
 specialWarp_subidA:
 specialWarp_subidB:
 specialWarp_subidC:
+*/
+specialWarp_subid1:
+specialWarp_subid2:
+specialWarp_subid3:
+specialWarp_subid4:
+specialWarp_subid5:
+specialWarp_subid6:
 	call checkInteractionState
 	jr nz,+
 	ld a,$01
-	ld (de),a
+	ld (de),a ; [Interaction.state == $01]
 	ld a,$02
 	call objectSetCollideRadius
 +
-	ld a,($cc78)
+	ld a,(wLinkSwimmingState)
 	rlca
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
 	ret nc
-	ld e,$42
+	ld e,Interaction.subid;$42
 	ld a,(de)
-	sub $08
+	dec a;sub $01;$08
+	ld e,a
+	add a
+	add e
 	ld hl,table_52a4
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld (wWarpDestRoom),a
-	ld a,(hl)
-	ld (wWarpDestPos),a
-	ld a,$87
-	ld (wWarpDestGroup),a
-	ld a,$01
-	ld (wWarpTransition),a
+	rst_addAToHl;rst_addDoubleIndex
+	call setForcedWarp
 @fadeoutTransition:
 	ld a,$03
 	ld (wWarpTransition2),a
 	jp interactionDelete
 
+; destination
+; position
+; group
 table_52a4:
+	.db <ROOM_SEASONS_63f, $0b, $80|>ROOM_SEASONS_63f
+	.db <ROOM_SEASONS_63e, $02, $80|>ROOM_SEASONS_63e
+	.db <ROOM_SEASONS_7e6, $02, $80|>ROOM_SEASONS_7e6
+	.db <ROOM_SEASONS_7e7, $0d, $80|>ROOM_SEASONS_7e7
+	.db <ROOM_SEASONS_653, $07, $80|>ROOM_SEASONS_653
+	.db <ROOM_SEASONS_643, $0d, $80|>ROOM_SEASONS_643
+
+setForcedWarp:
+	ldi a,(hl)
+	ld (wWarpDestRoom),a
+	ldi a,(hl)
+	ld (wWarpDestPos),a
+	ld a,(hl);$87
+	ld (wWarpDestGroup),a
+	ld a,$01
+	ld (wWarpTransition),a
+	ret
+
+/*
 	.db $e0 $02
 	.db $e1 $0b
 	.db $e4 $02
 	.db $e6 $02
 	.db $e7 $0d
-
+*/
+/*
 specialWarp_subidD:
 	call checkInteractionState
 	jr nz,+
@@ -217,3 +272,4 @@ specialWarp_subidD:
 	inc l
 	ld (hl),$29
 	jr specialWarp_subidC@fadeoutTransition
+*/

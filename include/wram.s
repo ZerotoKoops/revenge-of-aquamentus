@@ -369,10 +369,52 @@ wUnappraisedRings: ; $c5c0
 ; List of unappraised rings. each byte always seems to have bit 6 set, indicating that the
 ; ring is unappraised. It probably gets unset the moment you appraise it, but only for
 ; a moment because then it disappears from this list.
-	dsb $40
+	dsb $40-8-4-1
 
 wUnappraisedRingsEnd: ; $c600
 	.db
+
+wSecond:
+	db
+wClock:
+	.dw
+wMinute:
+	db
+wHour:
+	db
+wDay:
+	db
+
+wTimeOfDay:
+	db
+; $00 == day
+; $01 == dusk
+; $02 == night
+; $03 == dawn
+
+wTimeFlags:
+	db
+; bit 0 set if slower time
+wClock2:
+	.dw
+wMinute2:
+	db
+wHour2:
+	db
+
+wJewelRooms:
+	.db
+wRoundJewelRoom:
+	db
+wPyramidJewelRoom:
+	db
+wSquareJewelRoom:
+	db
+wXShapedJewelRoom:
+	db
+
+wFallDownHoleWarp:
+	db
 
 ; ==================================================================================================
 ; C6xx block: deals largely with inventory, also global flags
@@ -1428,6 +1470,56 @@ wMenuUnionStart:
 	wTmpcbc2: ; $cbc2
 		db
 
+.nextu wWallRetraction
+
+	cbb3: ; $cbb3
+	; A counter, often used with "flashScreen" function?
+		db
+
+	cbb4: ; $cbb4
+		db
+
+	cbb5: ; $cbb5
+		db
+
+	cbb6: ; $cbb6
+		db
+
+	retractionCounter: ; $cbb7
+		db
+
+	cbb8: ; $cbb8
+		db
+
+	cbb9: ; $cbb9
+		db
+
+	statuePositions: ; $cbba
+		dsb 4
+/*
+	cbbb: ; $cbbb
+		db
+
+	cbbc: ; $cbbc
+		db
+
+	cbbd: ; $cbbd
+		db
+*/
+	cbbe: ; $cbbe
+		db
+
+	cbbf: ; $cbbf
+		db
+
+	cbc0: ; $cbc0
+		db
+
+	cbc1: ; $cbc1
+		db
+
+	cbc2: ; $cbc2
+		db
 .endu
 
 wMenuUnionEnd:
@@ -2118,6 +2210,7 @@ wDisabledObjects: ; $cc8a/$cca4
 ; Bit 0 disables link.
 ; Bit 1 disables interactions.
 ; Bit 2 disables enemies.
+; Bit 3 disables parts
 ; Bit 4 disables items.
 ; Bit 5 set when being shocked? disables companions?
 ; Bit 7 disables link, companions, items, enemies, not interactions.

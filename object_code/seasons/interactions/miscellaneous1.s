@@ -40,10 +40,13 @@ interactionCode6b:
 	/* $20 */ .dw sidescrollingStaticSeedSatchel
 	/* $21 */ .dw mtCuccoBananaTree
 	/* $22 */ .dw hardOre
-	.dw interactionCode6bSubid23
-	.dw interactionCode6bSubid24
-	.dw interactionCode6bSubid25
-	.dw interactionCode6bSubid26
+	/* $23 */ .dw interactionCode6bSubid23
+	/* $24 */ .dw interactionCode6bSubid24
+	/* $25 */ .dw interactionCode6bSubid25
+	/* $26 */ .dw interactionCode6bSubid26
+	/* $27 */ .dw sideScrollingStaticShovel
+	/* $28 */ .dw villageCaveBridgeSpawner
+	/* $29 */ .dw sideScrollingStaticSmallKey
 
 floodgateKeeper:
 	call checkInteractionState
@@ -462,29 +465,33 @@ masterDiverPuzzle:
 	call getThisRoomFlags
 	bit 5,(hl)
 	jp nz,interactionDelete
+; temp comment out for testing
+	;ld a,(wSwordLevel)
+	;cp $02
+	;jp c,interactionDelete
 	ld h,d
-	ld l,$44
+	ld l,Interaction.state;$44
 	ld (hl),$01
-	ld l,$70
+	ld l,Interaction.var30;$70
 	ld b,$06
 	jp clearMemory
 @state1:
 	call @checkLinkSwordSpin
 	ret nz
 	ld a,$02
-	ld (de),a
+	ld (de),a ;[Interaction.state == $02]
 @state2:
 	call @checkLinkSwordSpin
 	jr nz,@state0
-	ld a,(wccaf)
+	ld a,(wccaf) ; last tile poked/slashed with sword
 	cp $2b
 	jr z,+
 	cp TILEINDEX_PUSHABLE_STATUE
 	ret nz
 +
 	ld h,d
-	ld l,$70
-	ld a,(wccb0)
+	ld l,Interaction.var30;$70
+	ld a,(wccb0) ; tile position being poked/slashed
 	ld c,a
 -
 	ldi a,(hl)
@@ -495,13 +502,13 @@ masterDiverPuzzle:
 	dec l
 	ld (hl),c
 	ld a,l
-	cp $73
+	cp Interaction.var33;$73
 	jr nc,+
 	ret
 +
-	ld l,$44
+	ld l,Interaction.state;$44
 	ld (hl),$03
-	ld hl,mainScripts.masterDiverPuzzleScript_solved
+	ld hl,mainScripts.ancientTombScript_retractWall;mainScripts.masterDiverPuzzleScript_solved
 	call interactionSetScript
 @state3:
 	call interactionRunScript
@@ -668,6 +675,8 @@ stolenFeatherGottenHandler:
 horonVillagePortalBridgeSpawner:
 	call checkInteractionState
 	jr nz,@state1
+
+@state0:
 	xor a
 	ld (wSwitchState),a
 	call getThisRoomFlags
@@ -693,13 +702,41 @@ horonVillagePortalBridgeSpawner:
 	call getFreePartSlot
 	ret nz
 	ld (hl),PART_BRIDGE_SPAWNER
-	ld l,$c7
+	ld l,Part.counter2;$c7
 	ld (hl),e
-	ld l,$c9
+	ld l,Part.angle;$c9
 	ld (hl),b
-	ld l,$cb
+	ld l,Part.yh;$cb
 	ld (hl),c
 	ret
+
+villageCaveBridgeSpawner:
+	call checkInteractionState
+	jr nz,@state1
+
+	call getThisRoomFlags
+	and ROOMFLAG_40
+	jp nz,interactionDelete
+
+	call getFreePartSlot
+	ret nz
+	ld (hl),PART_LIGHTABLE_TORCH
+	call objectCopyPosition
+	call interactionIncState
+@state1:
+	ld a,(wNumTorchesLit)
+	cpa $00
+	ret z
+
+	call getThisRoomFlags
+	set ROOMFLAG_BIT_40,(hl)
+	ld a,SND_SOLVEPUZZLE
+	call playSound
+	ldbc DIR_RIGHT,$86
+	ld e,$06
+	call horonVillagePortalBridgeSpawner@spawnBridge
+	jp interactionDelete
+
 
 ; Under Vasu's sign, and by wilds ore
 randomRingDigSpot:
@@ -800,12 +837,26 @@ sentBackFromOnoxCastleBarrier:
 	jp interactionDelete
 	
 sidescrollingStaticGashaSeed:
-	ldbc TREASURE_GASHA_SEED $04
-	jp misc1_spawnTreasureBCifRoomFlagBit5NotSet
+	ldbc TREASURE_RUPEES $0e;TREASURE_GASHA_SEED $04
+	jr loadTreasure
+	;jp misc1_spawnTreasureBCifRoomFlagBit5NotSet
 
 sidescrollingStaticSeedSatchel:
+	ld a,TREASURE_SEED_SATCHEL
+	call checkTreasureObtained
 	ldbc TREASURE_SEED_SATCHEL $00
+	jr nc,loadTreasure
+	inc c ; Level 2 satchel
+loadTreasure:
 	jp misc1_spawnTreasureBCifRoomFlagBit5NotSet
+
+sideScrollingStaticShovel:
+	ldbc TREASURE_SHOVEL $00
+	jr loadTreasure
+
+sideScrollingStaticSmallKey:
+	ldbc TREASURE_SMALL_KEY $04
+	jr loadTreasure
 
 mtCuccoBananaTree:
 	ld a,($cc4e)
@@ -856,8 +907,8 @@ interactionCode6bSubid23:
 	and $07
 	cp $07
 	ret nz
-	ld a,$1e
-	ld e,$46
+	ld a,30;$1e
+	ld e,Interaction.counter1;$46
 	ld (de),a
 	jp interactionIncState
 @state1:

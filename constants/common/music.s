@@ -386,13 +386,49 @@
 .else
 	SND_d4                  db ; $d4 (blank)
 .endif
-
+	;SNDCTRL_DE			db ; $d2 was $de
 .ende
 
 ; Aside from $de, $d5-$ef are undefined?
 
 ; Part of the implementation for "SNDCTRL_STOPMUSIC"?
-.define SNDCTRL_DE		$de
+.define SNDCTRL_DE		$d2;$de
+
+.enum $d3
+	SND_ZELDAS_LULLABY		db ; $d3
+	SND_EPONAS_SONG			db ; $d4
+	SND_SARIAS_SONG			db ; $d5
+	SND_SUNS_SONG			db ; $d6
+	SND_SONG_OF_TIME		db ; $d7
+	SND_SONG_OF_STORMS		db ; $d8
+	SND_SONG_OF_HEALING		db ; $d9
+	SND_SONG_OF_SOARING		db ; $da
+	SND_SONG_OF_DOUBLE_TIME db ; $db
+	SND_INVERTED_SONG_OF_TIME db ; $dc
+.ende
+.enum $dd
+	SND_NOTE_B3				db ; $dd
+	SND_NOTE_C4				db ; $de
+	SND_NOTE_Cs4			db ; $df
+	SND_NOTE_D4				db ; $e0
+	SND_NOTE_Ds4			db ; $e1
+	SND_NOTE_E4				db ; $e2
+	SND_NOTE_F4				db ; $e3
+	SND_NOTE_Fs4			db ; $e4
+	SND_NOTE_G4				db ; $e5
+	SND_NOTE_Gs4			db ; $e6
+	SND_NOTE_A4				db ; $e7
+	SND_NOTE_As4			db ; $e8
+	SND_NOTE_B4				db ; $e9
+	SND_NOTE_C5				db ; $ea
+	SND_NOTE_Cs5			db ; $eb
+	SND_NOTE_D5				db ; $ec
+	SND_NOTE_Ds5			db ; $ed
+	SND_NOTE_E5				db ; $ee
+	SND_NOTE_F5				db ; $ef
+.ende
+
+
 
 ; The following are "pseudo-sound effects" with special behaviour.
 

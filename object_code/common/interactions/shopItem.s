@@ -413,35 +413,35 @@ shopItemGetTilesForRupeeDisplay:
 	ret
 
 @itemPricePositions:
-	.dw w3VramTiles+$66
-	.dw w3VramTiles+$6f
-	.dw w3VramTiles+$6a
-	.dw w3VramTiles+$6c
-	.dw w3VramTiles+$69
-	.dw w3VramTiles+$6e
-	.dw w3VramTiles+$6a
-	.dw w3VramTiles+$68
-	.dw w3VramTiles+$6d
-	.dw w3VramTiles+$6b
-	.dw w3VramTiles+$6f
-	.dw w3VramTiles+$67
-	.dw $ffff
-	.dw w3VramTiles+$6f
-	.dw w3VramTiles+$67
-	.dw w3VramTiles+$6b
-	.dw w3VramTiles+$6f
-	.dw w3VramTiles+$6c
-	.dw w3VramTiles+$6c
-	.dw w3VramTiles+$6c
+	/*$00*/ .dw w3VramTiles+$66
+	/*$01*/ .dw w3VramTiles+$6f
+	/*$02*/ .dw w3VramTiles+$6a
+	/*$03*/ .dw w3VramTiles+$6c
+	/*$04*/ .dw w3VramTiles+$69
+	/*$05*/ .dw w3VramTiles+$6e
+	/*$06*/ .dw w3VramTiles+$67;$6a
+	/*$07*/ .dw w3VramTiles+$6a;$68
+	/*$08*/ .dw w3VramTiles+$6d
+	/*$09*/ .dw w3VramTiles+$6a;$6b
+	/*$0a*/ .dw w3VramTiles+$6f
+	/*$0b*/ .dw w3VramTiles+$67
+	/*$0c*/ .dw $ffff
+	/*$0d*/ .dw w3VramTiles+$6f
+	/*$0e*/ .dw w3VramTiles+$67
+	/*$0f*/ .dw w3VramTiles+$6b
+	/*$10*/ .dw w3VramTiles+$6f
+	/*$11*/ .dw w3VramTiles+$6c
+	/*$12*/ .dw w3VramTiles+$6c
+	/*$13*/ .dw w3VramTiles+$6c
 .ifdef ROM_AGES
-	.dw w3VramTiles+$66
-	.dw w3VramTiles+$6e
+	/*$14*/ .dw w3VramTiles+$66
+	/*$15*/ .dw w3VramTiles+$6e
 .endif
 
 shopItemPrices:
 	/* $00 */ .db RUPEEVAL_300
 	/* $01 */ .db RUPEEVAL_010
-	/* $02 */ .db RUPEEVAL_300
+	/* $02 */ .db RUPEEVAL_200
 	/* $03 */ .db RUPEEVAL_030
 	/* $04 */ .db RUPEEVAL_020
 .ifdef ROM_AGES
@@ -449,10 +449,10 @@ shopItemPrices:
 .else
 	/* $05 */ .db RUPEEVAL_200
 .endif
-	/* $06 */ .db RUPEEVAL_500
-	/* $07 */ .db RUPEEVAL_300
+	/* $06 */ .db RUPEEVAL_080
+	/* $07 */ .db RUPEEVAL_200
 	/* $08 */ .db RUPEEVAL_300
-	/* $09 */ .db RUPEEVAL_300
+	/* $09 */ .db RUPEEVAL_200
 	/* $0a */ .db RUPEEVAL_300
 	/* $0b */ .db RUPEEVAL_100
 	/* $0c */ .db RUPEEVAL_010
@@ -498,7 +498,7 @@ shopItemCheckGrabbed:
 	; Check that Link's facing the selection area (DIR_UP)
 	ld l,<w1Link.direction
 	ld a,(hl)
-	or a
+	cpa DIR_UP;or a
 	ret
 
 @dontGrab:
@@ -516,7 +516,7 @@ shopItemTreasureToGive:
 	/* $00 */ .db  TREASURE_SEED_SATCHEL  $01
 .endif
 	/* $01 */ .db  TREASURE_HEART_REFILL  $0c
-	/* $02 */ .db  TREASURE_GASHA_SEED    $01
+	/* $02 */ .db  TREASURE_HEART_CONTAINER $04;TREASURE_GASHA_SEED    $01
 	/* $03 */ .db  TREASURE_SHIELD        $01
 	/* $04 */ .db  TREASURE_BOMBS         $10
 .ifdef ROM_AGES
@@ -524,7 +524,7 @@ shopItemTreasureToGive:
 .else
 	/* $05 */ .db  TREASURE_TREASURE_MAP  $01
 .endif
-	/* $06 */ .db  TREASURE_GASHA_SEED    $01
+	/* $06 */ .db  TREASURE_SHIELD $02;TREASURE_GASHA_SEED    $01
 	/* $07 */ .db  TREASURE_POTION        $01
 	/* $08 */ .db  TREASURE_GASHA_SEED    $01
 	/* $09 */ .db  TREASURE_POTION        $01
@@ -557,16 +557,16 @@ shopItemTreasureToGive:
 ;   b2: Item to sell if the first one is unavailable (or $ff to sell nothing)
 ;   b3: Value to add to x position if the first item was sold out
 shopItemReplacementTable:
-	/* $00 */ .db <wBoughtShopItems1  $01 $ff $00
+	/* $00 */ .db <wBoughtShopItems1  $01 $06 $00
 	/* $01 */ .db <wBoughtShopItems2  $08 $0d $04
-	/* $02 */ .db <wBoughtShopItems1  $02 $06 $00
+	/* $02 */ .db <wBoughtShopItems1  $02 $07 $00;18
 	/* $03 */ .db <wShieldLevel       $02 $11 $00
 	/* $04 */ .db <wBoughtShopItems1  $00 $ff $00
 	/* $05 */ .db <wBoughtShopItems1  $08 $ff $00
 	/* $06 */ .db <wBoughtShopItems1  $04 $ff $00
-	/* $07 */ .db <wBoughtShopItems2  $10 $09 $18
-	/* $08 */ .db <wBoughtShopItems2  $10 $0a $10
-	/* $09 */ .db <wBoughtShopItems1  $00 $ff $00
+	/* $07 */ .db <wBoughtShopItems1  $10 $09 $00;$18
+	/* $08 */ .db <wBoughtShopItems2  $10 $0a $00;$10
+	/* $09 */ .db <wBoughtShopItems1  $20 $ff $00
 	/* $0a */ .db <wBoughtShopItems1  $40 $ff $00
 	/* $0b */ .db <wBoughtShopItems2  $20 $ff $00
 	/* $0c */ .db <wBoughtShopItems1  $00 $ff $00
@@ -591,7 +591,7 @@ shopItemTextTable:
 	/* $00 */ .db <TX_0046
 .endif
 	/* $01 */ .db <TX_004c
-	/* $02 */ .db <TX_004b
+	/* $02 */ .db <TX_0016;<TX_004b
 	/* $03 */ .db <TX_001f
 	/* $04 */ .db <TX_004d
 .ifdef ROM_AGES
@@ -599,7 +599,7 @@ shopItemTextTable:
 .else
 	/* $05 */ .db <TX_006c
 .endif
-	/* $06 */ .db <TX_004b
+	/* $06 */ .db <TX_0020;<TX_004b
 	/* $07 */ .db <TX_006d
 	/* $08 */ .db <TX_004b
 	/* $09 */ .db <TX_006d

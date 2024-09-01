@@ -8,6 +8,7 @@ movingSidescrollPlatformScriptTable:
 	.dw @subid03
 	.dw @subid04
 	.dw @subid05
+/*
 	.dw @subid06
 	.dw @subid07
 	.dw @subid08
@@ -23,9 +24,57 @@ movingSidescrollPlatformScriptTable:
 	.dw @subid12
 	.dw @subid13
 	.dw @subid14
+*/
 
 
 @subid00:
+	.db SPEED_80
+	.db $00
+--
+	ms_right $c0
+	ms_left	 $60
+	ms_loop  --
+
+@subid01:
+	.db SPEED_080
+	.db $01
+--
+	ms_down $98
+	ms_up   $68
+	ms_loop --
+
+@subid02:
+	.db SPEED_080
+	.db 00
+--
+	ms_right $b0
+	ms_left  $80
+	ms_loop  --
+
+@subid03:
+	.db SPEED_80
+	.db $00
+--
+	ms_up    $48
+---
+	ms_down  $98
+	ms_loop  --
+
+
+@subid04:
+	.db SPEED_80
+	.db $00
+	ms_loop  ---
+
+@subid05:
+	.db SPEED_80
+	.db $01
+--
+	ms_right $88
+	ms_left  $58
+	ms_loop  --
+
+/*
 	.db SPEED_80
 	.db $00
 --
@@ -218,14 +267,32 @@ movingSidescrollPlatformScriptTable:
 	ms_down  $88
 	ms_up    $28
 	ms_loop  --
-
+*/
 
 movingSidescrollConveyorScriptTable: ; INTERAC_MOVING_SIDESCROLL_CONVEYOR
 	.dw @subid00
 	.dw @subid01
 	.dw @subid02
+/*
 	.dw @subid03
 	.dw @subid04
+*/
+
+@subid02:
+	.db SPEED_80
+	.db $01
+--
+	ms_right $b0
+	ms_up    $48
+---
+	ms_left  $40
+	ms_down  $78
+	ms_loop  --
+
+@subid01:
+	.db SPEED_80
+	.db $00
+	ms_loop  ---
 
 @subid00:
 	.db SPEED_80
@@ -237,7 +304,7 @@ movingSidescrollConveyorScriptTable: ; INTERAC_MOVING_SIDESCROLL_CONVEYOR
 	ms_up    $38
 	ms_loop  --
 
-
+/*
 @subid01:
 	.db SPEED_80
 	.db $00
@@ -276,3 +343,4 @@ movingSidescrollConveyorScriptTable: ; INTERAC_MOVING_SIDESCROLL_CONVEYOR
 	ms_down  $78
 	ms_right $a0
 	ms_loop  --
+*/

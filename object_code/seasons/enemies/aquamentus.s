@@ -457,6 +457,7 @@ aquamentus_subid3:
 
 
 aquamentus_subid3_state9:
+	call setHornCollision
 	; Only draw the horn if the main sprite is also visible
 	ld a,Object.visible
 	call objectGetRelatedObject2Var
@@ -528,6 +529,25 @@ aquamentus_subid3_state8:
 	ld a,(hl)
 	ld (de),a
 	jp objectSetVisible81
+
+setHornCollision:
+	ld b,ENEMYCOLLISION_AQUAMENTUS_BODY
+	ld a,(wLinkInAir)
+	or a
+	jr z,+
+	ld a,(w1Link.zh)
+	sub $04
+	ld h,d
+	ld l,Enemy.zh
+	cp (hl)
+	jr c,+
+
+	ld b,ENEMYCOLLISION_AQUAMENTUS_HORN
++
+	ld a,b
+	ld e,Enemy.enemyCollisionMode
+	ld (de),a
+	ret
 
 
 ;;

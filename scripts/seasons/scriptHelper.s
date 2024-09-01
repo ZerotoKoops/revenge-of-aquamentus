@@ -1,6 +1,27 @@
 ; ==================================================================================================
 ; INTERAC_DUNGEON_SCRIPT
 ; ==================================================================================================
+;;
+; Creates a part object (PART_LIGHTABLE_TORCH) at each unlit torch, allowing them to be lit.
+makeTorchesLightable:
+	call getFreeInteractionSlot
+	ret nz
+
+	ld (hl),INTERAC_CREATE_OBJECT_AT_EACH_TILEINDEX
+	inc l
+	ld (hl),TILEINDEX_UNLIT_TORCH
+
+	ld l,Interaction.yh
+	ld (hl),PART_LIGHTABLE_TORCH
+	ld l,Interaction.xh
+	ld (hl),$10
+/*
+	ld a,$10
+	or e
+	ld (hl),a
+*/
+	ret
+
 D3spawnPitSpreader:
 	; Part $0a, subid $00, yh $72
 	ld bc,$0072
@@ -8,6 +29,7 @@ D3spawnPitSpreader:
 
 
 D3StatuePuzzleCheck:
+/*
 	xor a
 	ld ($ccba),a
 	ld l,$84
@@ -34,8 +56,8 @@ D3StatuePuzzleCheck:
 	ret nz
 	ld a,$01
 	ld ($ccba),a
+*/
 	ret
-
 
 solvedPuzzleSetRoomFlag07:
 	call getThisRoomFlags
@@ -375,14 +397,14 @@ D8checkAllIceBlocksInPlace:
 	xor a
 	ld ($cfc1),a
 	ld h,>wRoomLayout
-	ld l,$4d
+	ld l,<wRoomLayout+$99
 	ld a,TILEINDEX_PUSHABLE_ICE_BLOCK
 	cp (hl)
 	ret nz
-	ld l,$5d
+	inc l;ld l,$5d
 	cp (hl)
 	ret nz
-	ld l,$6d
+	inc l;ld l,$6d
 	cp (hl)
 	ret nz
 	ld a,$01
@@ -404,13 +426,17 @@ D6RandomButtonSpawnRopes:
 	ret
 @spawnRopeAtRandomPosition:
 	call getRandomNumber
-	and $07
-	inc a
-	swap a
+	and $07 ; 0 - 7
+	add $06 ; 6 - 13
+
+	cp 10
+	jr nc,@spawnRopeAtRandomPosition
+	;inc a ; 1 - 8
+	swap a ; 10 - 80
 	ld b,a
-	bit 7,a
-	jr nz,@spawnRopeAtRandomPosition
-	; b is 1 - 7
+	;bit 7,a ; restart if $80 chosen
+	;jr nz,@spawnRopeAtRandomPosition
+	; b is 1 - 7 (wrong)
 	call getRandomNumber
 	and $07
 	add $03
@@ -418,9 +444,11 @@ D6RandomButtonSpawnRopes:
 	or b
 	ld b,$ce
 	ld c,a
+; check room collisions; try again if tile is solid
 	ld a,(bc)
 	or a
 	jr nz,@spawnRopeAtRandomPosition
+
 	ld l,Enemy.yh
 	jp setShortPosition_paramC
 
@@ -491,6 +519,85 @@ createLightableTorches:
 	ret
 
 
+
+D0spawnBridge_0:
+	ldbc $04, DIR_LEFT
+	ld e,$59
+	jr ztk_createBridgeSpawner
+
+D0spawnBridge_1:
+	ldbc $04, DIR_DOWN
+	ld e,$37
+	jr ztk_createBridgeSpawner
+
+D0spawnBridge_2:
+	ldbc $04, DIR_RIGHT
+	ld e,$55
+	jr ztk_createBridgeSpawner
+
+D0spawnBridge_3:
+	ldbc $06, DIR_UP
+	ld e,$77
+	
+ztk_createBridgeSpawner:
+	jp createBridgeSpawner
+
+spawnPyramidBridge:
+	ldbc $0a, DIR_UP
+	ld e,$7c
+	jr ztk_createBridgeSpawner
+
+checkActiveTriggersChanged:
+	ld e,Interaction.var03
+	ld a,(de)
+	ld hl,wActiveTriggers
+	cp (hl)
+	ret z
+@changed:
+	ld a,(hl)
+	ld (de),a
+	jp interactionIncSubstate
+
+ancientTomb_startWallRetractionCutscene:
+	ld a,CUTSCENE_S_WALL_RETRACTION
+	ld (wCutsceneTrigger),a
+	jp resetLinkInvincibility
+
+
+;create puffs (split between reload)
+	ld a,TILEINDEX_PUSHABLE_STATUE
+	call findTileInRoom
+-
+	ld a,l
+	ldh (<hFF8C),a
+	push hl
+	call objectCreatePuff
+	ldh a,(<hFF8C)
+	call setShortPosition
+	ldh a,(<hFF8C)
+	ld c,a
+	ld a,TILEINDEX_STANDARD_FLOOR
+	call setTileInAllBuffers
+
+	ld a,TILEINDEX_PUSHABLE_STATUE
+	pop hl
+	dec l
+	call backwardsSearch
+	jr z,-	
+	ret
+
+tickTockCopyTime:
+	ld hl,wClock
+	ld de,wClock2
+	ldi a,(hl)
+	ld (de),a
+	inc de
+	ld a,(hl)
+	sub $01
+	daa
+	ld (de),a
+	ret
+
 ; ==================================================================================================
 ; INTERAC_MAKU_CUTSCENES
 ; ==================================================================================================
@@ -550,6 +657,7 @@ makuTree_checkGateHit:
 	ld a,$01
 	ld ($cfc0),a
 	ret
+
 
 
 seasonsFunc_15_576c:
@@ -2121,24 +2229,38 @@ trampoline_couldntFindRoom:
 	ret
 
 trampoline_group4Warps:
-	dbw $3e trampoline_group4Room3e
-	dbw $3f trampoline_group4Room3f
-	dbw $43 trampoline_group4Room43
-	dbw $b4 trampoline_group4Roomb4
-	dbw $c1 trampoline_group4Roomc1
-	dbw $c2 trampoline_group4Roomc2
-	dbw $d3 trampoline_group4Roomd3
+	dbw <ROOM_SEASONS_40b trampoline_group4Room0b
+	;dbw $3e trampoline_group4Room3e
+	;dbw $3f trampoline_group4Room3f
+	;dbw $43 trampoline_group4Room43
+	;dbw $b4 trampoline_group4Roomb4
+	;dbw $c1 trampoline_group4Roomc1
+	;dbw $c2 trampoline_group4Roomc2
+	;dbw $d3 trampoline_group4Roomd3
 	.db $00
 
 trampoline_group5Warps:
-	dbw $37 trampoline_group5Room37
-	dbw $38 trampoline_group5Room38
-	dbw $3a trampoline_group5Room3a
-	dbw $45 trampoline_group5Room45
-	dbw $49 trampoline_group5Room49
-	dbw $4d trampoline_group5Room4d
+	;dbw $37 trampoline_group5Room37
+	;dbw $38 trampoline_group5Room38
+	;dbw $3a trampoline_group5Room3a
+	;dbw $45 trampoline_group5Room45
+	;dbw $49 trampoline_group5Room49
+	;dbw $4d trampoline_group5Room4d
 	.db $00
 
+trampoline_group4Room0b:
+	.dw %1111111111111111 ; $0
+	.dw %1111100110001111 ; $1
+	.dw %1111100110001111 ; $2
+	.dw %1000000110001111 ; $3
+	.dw %1000000001111111 ; $4
+	.dw %1111111111111011 ; $5
+	.dw %1000111101111111 ; $6
+	.dw %1111111111111111 ; $7
+	.dw %1000100111111111 ; $8
+	.dw %1000100111111111 ; $9
+	.dw %1111111111111111 ; $a
+/*
 trampoline_group4Room3e:
 	.dw %1111111111111111
 	.dw %1111111111111111
@@ -2331,7 +2453,7 @@ trampoline_group5Room4d:
 	.dw %1111111111111111
 	.dw %1111111111111111
 	.dw %1111111111111111
-
+*/
 
 ; ==================================================================================================
 ; INTERAC_MAKU_TREE
@@ -2496,6 +2618,21 @@ jewelHelper_createPuff:
 	ld (hl),a
 	ret
 table_61ca:
+	/*$00*/ .db $16 $26
+	/*$01*/ .db $16 $30
+	/*$02*/ .db $16 $3a
+	/*$03*/ .db $20 $26
+	/*$04*/ .db $20 $30
+	/*$05*/ .db $20 $3a
+	/*$06*/ .db $2a $26
+	/*$07*/ .db $2a $30
+	/*$08*/ .db $2a $3a
+
+	/*$09*/ .db $38 $18
+	/*$0b*/ .db $48 $18
+	/*$0b*/ .db $58 $18
+	/*$0c*/ .db $48 $08
+/*
 	.db $26 $26
 	.db $26 $30
 	.db $26 $3a
@@ -2505,13 +2642,14 @@ table_61ca:
 	.db $3a $26
 	.db $3a $30
 	.db $3a $3a
+*/
 
 jewelHelper_createMoldorm:
 	call getFreeEnemySlot
 	ret nz
 	ld (hl),ENEMY_MOLDORM
 	ld l,Enemy.yh
-	ld (hl),$30
+	ld (hl),$20;$30
 	ld l,Enemy.xh
 	ld (hl),$30
 	ret
@@ -3258,3 +3396,13 @@ dekuScrub_upgradeSatchel:
 	ret
 table_65cf:
 	.db $20 $50 $99
+
+; Guru Guru
+guruGuruGiveSeeds:
+	ld a,$ff
+	ld (wStatusBarNeedsRefresh),a
+	ld a,(wNumGaleSeeds)
+	sub $10
+	daa
+	ld (wNumGaleSeeds),a
+	ret
