@@ -1381,6 +1381,12 @@ groups:
     text: |-
       You can no longer skip forward.
 
+  - name: TX_021b
+    index: 0x1b
+    text: |-    
+      Warp to the \col(1)entrance\col(0)?
+        \opt()Yes \opt()No
+
 - group: 0x03
   data:
   - name: TX_0300

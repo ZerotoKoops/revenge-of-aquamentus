@@ -381,29 +381,56 @@ parentItemCode_harp:
 	.dw @state5_songOfDoubleTime ;Song of Double Time
 	.dw @state5_invertedSongOfTime ;Inverted Song of Time
 
-@state5_stub:
-	call @playSong
-@goToState3:
-	ld a,$03
-	jp @setState
-
 ;;
 ; Brings Link up to Gale Seed menu
 ; Really just spawns a gale seed for Link
 @state5_songOfSoaring:
 	call @playSong
 
+
+	ld a,(wActiveGroup)
+	cpa >ROOM_SEASONS_000
+	jr z,@@overworld
+
+	ld a,(wDungeonIndex)
+	cpa $ff
+	jr z,@@songJustEchoes
+
+;dungeon
+	call itemIncState
+	ld bc,TX_021b
+	jp showText
+
+@@overworld:
 	ld a,(wNumGaleSeeds)
 	sub $01
-	jr c,@goToState3
+	jr c,@@songJustEchoes
 	daa
 	ld (wNumGaleSeeds),a
 
 	ldbc ITEM_GALE_SEED,$00
 	ld e,$01
 	call itemCreateChildWithID
-
 	jr @goToState3
+
+@@songJustEchoes:
+	ld bc,TX_510f
+	call showText
+	jr @goToState3
+
+@state6_songOfSoaring:
+; assumes only in dungeon
+
+	call @state6_checkTextOptions
+	jr nz,@goToState3
+
+	ld a,LINK_STATE_GRABBED_BY_WALLMASTER
+	ld (wLinkForceState),a
+
+	ld e,Item.state
+	ld a,$03
+	ld (de),a
+	jp @state3
 
 ;;
 ;Skip to the next half day incrementally
@@ -423,6 +450,12 @@ parentItemCode_harp:
 	ld c,a
 	ld b,>TX_0215
 	jp showText
+
+@state5_stub:
+	call @playSong
+@goToState3:
+	ld a,$03
+	jp @setState
 
 @state6_sunsSong:
 	call @state6_checkTextOptions
@@ -559,7 +592,7 @@ parentItemCode_harp:
 	.dw @state6_songOfTime
 	.dw @state6_songOfStorms
 	.dw @state5_stub ;Song of Healing
-	.dw @state5_stub ;Song of Soaring
+	.dw @state6_songOfSoaring ;Song of Soaring
 	.dw @state6_songOfDoubleTime
 	.dw @state5_stub ;Inverted Song of Time
 

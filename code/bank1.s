@@ -2629,6 +2629,24 @@ loadDungeonLayout_b01:
 	or b
 	ld (hl),a
 @end:
+	ld a,(wActiveRoom)
+	cp <ROOM_SEASONS_43a
+	jr z,@@setWallmasterRoom
+
+	cp <ROOM_SEASONS_422
+	jr z,+
+
+	cp <ROOM_SEASONS_438
+	jr z,+
+
+	cp <ROOM_SEASONS_423
+	jr nz,++
++
+	ld a,<ROOM_SEASONS_423
+@@setWallmasterRoom:
+	ld (wDungeonWallmasterDestRoom),a
+++
+
 	xor a
 	ld ($ff00+R_SVBK),a
 	jp setVisitedRoomFlag

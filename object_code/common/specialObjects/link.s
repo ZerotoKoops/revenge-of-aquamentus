@@ -1896,6 +1896,10 @@ linkState0c:
 
 	call linkCancelAllItemUsage
 
+	ld a,(wLinkPlayingInstrument)
+	cp (SND_SONG_OF_SOARING-SND_ZELDAS_LULLABY+1)
+	ret z
+
 	ld a,SND_BOSS_DEAD
 	jp playSound
 
@@ -1907,6 +1911,10 @@ linkState0c:
 
 	ld hl,wWarpDestGroup
 	ld a,(wActiveGroup)
+	cp >ROOM_SEASONS_398
+	jr nz,+
+	inc a;ld a,>ROOM_SEASONS_41c
++
 	or $80
 	ldi (hl),a
 
@@ -1925,8 +1933,21 @@ linkState0c:
 	; wWarpDestTransition2
 	ld (hl),$03
 
+	ld a,(wLinkPlayingInstrument)
+	cp (SND_SONG_OF_SOARING-SND_ZELDAS_LULLABY+1)
+	ret nz
+
+	ld a,LINK_STATE_WARPING
+	jp linkSetState
+
 ; Substate 1: waiting for the wallmaster to increment w1Link.substate.
 @substate1:
+	ld a,(wLinkPlayingInstrument)
+	cp (SND_SONG_OF_SOARING-SND_ZELDAS_LULLABY+1)
+	ret nz
+
+	ld a,$02
+	ld (de),a
 	ret
 
 ;;
